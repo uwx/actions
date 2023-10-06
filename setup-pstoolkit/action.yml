@@ -1,0 +1,15 @@
+name: Setup PowerShell Github Actions Toolkit
+description: Setup PowerShell Github Actions Toolkit in all PowerShell Core shells
+
+runs:
+  using: composite
+  steps:
+    - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@v1.6.0"
+      with:
+        sudo: true
+        scope: AllUsers
+
+    - name: Add Github Actions Toolkit import to PowerShell Core profile
+      shell: pwsh
+      run: |
+        echo "Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Global" | Out-File -FilePath $PROFILE.AllUsersAllHosts -Encoding utf8 -Append
