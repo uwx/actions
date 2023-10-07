@@ -79,22 +79,12 @@ runs:
   steps:
     - id: step
       shell: pwsh
+      env: # serialize inputs
+        serialized_inputs: ${{ toJSON(inputs) }}
       run: |
-        $env:INPUT_tarball-artifact-name = ${{ inputs.tarball-artifact-name }}
-        $env:INPUT_tarball-file-name = ${{ inputs.tarball-file-name }}
-        $env:INPUT_tarball-root = ${{ inputs.tarball-root }}
-        $env:INPUT_tarball-pattern = ${{ inputs.tarball-pattern }}
-        $env:INPUT_before-run = ${{ inputs.before-run }}
-        $env:INPUT_run = ${{ inputs.run }}
-        $env:INPUT_after-run = ${{ inputs.after-run }}
-        $env:INPUT_cwd = ${{ inputs.cwd }}
-        $env:INPUT_timeout = ${{ inputs.timeout }}
-        $env:INPUT_inputs = ${{ inputs.inputs }}
-        $env:INPUT_input-encoding = ${{ inputs.input-encoding }}
-        $env:INPUT_ignore-exit-codes = ${{ inputs.ignore-exit-codes }}
-        $env:INPUT_fail-on-stderr = ${{ inputs.fail-on-stderr }}
-        $env:INPUT_load-tarball-artifact-if-exists = ${{ inputs.load-tarball-artifact-if-exists }}
-        $env:INPUT_save-tarball-artifact = ${{ inputs.save-tarball-artifact }}
-        $env:INPUT_shell = ${{ inputs.shell }}
-        $env:INPUT_key = ${{ inputs.key }}
+        # deserialize inputs
+        ($env:serialized_inputs | ConvertFrom-Json -AsHashtable).GetEnumerator() | ForEach-Object {
+          Set-Item -Path "env:INPUT_$($_.Key)" -Value $_.Value
+        }
+
         . $env:GITHUB_ACTION_PATH/index.ps1
