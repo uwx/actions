@@ -377,10 +377,10 @@ function Get-DateTimeFromUnixTimeMilliseconds {
     return [DateTimeOffset]::FromUnixTimeMilliseconds($UnixTimeMilliseconds).DateTime
 }
 function Invoke-GitHubActionsLogGroup {
-    param {
+    param (
         [Parameter(Mandatory = $true)] [string] $Name,
         [Parameter(Mandatory = $true)] [scriptblock] $Action
-    }
+    )
 
     Enter-GitHubActionsLogGroup $Name
     Try
@@ -414,12 +414,9 @@ $Shell = Get-GitHubActionsInput shell
 $Input = Get-GitHubActionsInput input -EmptyStringAsNull
 $InputEncoding = (Get-GitHubActionsInput input-encoding -EmptyStringAsNull) ?? 'utf-8'
 $FailOnStdErr = Get-GitHubActionsInputBoolean fail-on-stderr
-$IgnoreExitCodes = (Get-GitHubActionsInput "ignore-exit-codes") -Split ',' | ForEach-Object {
-    if ([int]::TryParse($_, [ref]$ConvertedInt)) {
-        return $ConvertedInt
-    }
-    return $Null
-} | Where-Object { $_ -ne $Null }
+$IgnoreExitCodes = (Get-GitHubActionsInput "ignore-exit-codes") -Split ','
+    | ForEach-Object { [int]::TryParse($_, [ref]$ConvertedInt) ? $ConvertedInt : $Null }
+    | Where-Object { $_ -ne $Null }
 
 # timeout
 $TimeoutKey = Get-GitHubActionsInput key
