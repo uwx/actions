@@ -72,4 +72,4 @@ outputs:
     description: "One of: 'failure', 'timeout', 'success', 'skipped'"
 runs:
   using: node20
-  main: index.js
+  main: bundle.js

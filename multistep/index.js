@@ -1,4 +1,4 @@
-const exec = require('@actions/exec');
-const path = require('path');
+import * as exec from '@actions/exec';
+import { resolve } from 'path';
 
-exec('pwsh', path.resolve(__dirname, 'index.ps1'));
+exec('pwsh', resolve(__dirname, 'index.ps1'));

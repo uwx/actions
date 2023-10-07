@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@actions/exec": "^1.1.1",
     "@actions/core": "^1.10.1"
   }
 }
