@@ -79,4 +79,4 @@ runs:
   steps:
     - id: step
       shell: pwsh
-      run: '& $env:GITHUB_ACTION_PATH/psversion.ps1'
+      run: '& $env:GITHUB_ACTION_PATH/index.ps1'
