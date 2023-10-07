@@ -1,4 +1,4 @@
-name: 'Multistep build stage'
+name: 'Stage'
 description: 'Stage build'
 inputs:
   tarball-artifact-name:
@@ -61,17 +61,40 @@ inputs:
     description: Used for splitting timed actions across multiple steps, while inheriting the same timeout. All stage actions with the same key within a job \
       will timeout when the timeout for the first action with a key is reached.
     required: false
-#outputs:
-#  results-per-command:
-#    description: JSON-stringified array of exit codes ordered per command (each line in 'run'), or a 'timeout' instead of an entry if execution timed out.
-#  outcome:
-#    description: "One of: 'failed', 'timeout', 'success'"
-#  before-run-outcome:
-#    description: "One of: 'failed', 'timeout', 'success', 'skipped'"
-#  after-run-outcome:
-#    description: "One of: 'failed', 'timeout', 'success', 'skipped'"
+outputs:
+  results-per-command:
+    value: ${{ steps.step.outputs.results-per-command }}
+    description: JSON-stringified array of exit codes ordered per command (each line in 'run'), or a 'timeout' instead of an entry if execution timed out.
+  outcome:
+    value: ${{ steps.step.outputs.outcome }}
+    description: "One of: 'failure', 'timeout', 'success'"
+  before-run-outcome:
+    value: ${{ steps.step.outputs.before-run-outcome }}
+    description: "One of: 'failure', 'timeout', 'success', 'skipped'"
+  after-run-outcome:
+    value: ${{ steps.step.outputs.after-run-outcome }}
+    description: "One of: 'failure', 'timeout', 'success', 'skipped'"
 runs:
   using: composite
   steps:
-    - shell: pwsh
-      run: '& $env:GITHUB_ACTION_PATH/index.ps1'
+    - id: step
+      shell: pwsh
+      run: '& $env:GITHUB_ACTION_PATH/psversion.ps1'
+      with:
+        tarball-artifact-name: ${{ inputs.tarball-artifact-name }}
+        tarball-file-name: ${{ inputs.tarball-file-name }}
+        tarball-root: ${{ inputs.tarball-root }}
+        tarball-pattern: ${{ inputs.tarball-pattern }}
+        before-run: ${{ inputs.before-run }}
+        run: ${{ inputs.run }}
+        after-run: ${{ inputs.after-run }}
+        cwd: ${{ inputs.cwd }}
+        timeout: ${{ inputs.timeout }}
+        inputs: ${{ inputs.inputs }}
+        input-encoding: ${{ inputs.input-encoding }}
+        ignore-exit-codes: ${{ inputs.ignore-exit-codes }}
+        fail-on-stderr: ${{ inputs.fail-on-stderr }}
+        load-tarball-artifact-if-exists: ${{ inputs.load-tarball-artifact-if-exists }}
+        save-tarball-artifact: ${{ inputs.save-tarball-artifact }}
+        shell: ${{ inputs.shell }}
+        key: ${{ inputs.key }}
