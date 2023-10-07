@@ -27,7 +27,7 @@ function Get-GitHubActionsInputBoolean {
     )
 
     $Value = Get-GitHubActionsInput $Name
-    return $Value -ieq "true"
+    return $Value -ieq "true" || $Value -ieq "on" || $Value -ieq "yes" || $Value -ieq "1"
 }
 
 # https://stackoverflow.com/a/42108420
@@ -188,7 +188,7 @@ function Get-WrapInShell {
         'pwsh' {
             if (Test-CommandExists pwsh) {
                 $pwshPath = (Get-Command pwsh).Path
-                Write-Output Using pwsh at path: $pwshPath
+                Write-Output "Using pwsh at path: $pwshPath"
                 return [PSCustomObject]@{
                     Command = $pwshPath
                     Arguments = @(
@@ -203,7 +203,7 @@ function Get-WrapInShell {
                 }
             } else {
                 $powershellPath = (Get-Command powershell).Path
-                Write-Output Using powershell at path: $powershellPath
+                Write-Output "Using powershell at path: $powershellPath"
                 return [PSCustomObject]@{
                     Command = $powershellPath
                     Arguments = @(
@@ -376,6 +376,22 @@ function Get-DateTimeFromUnixTimeMilliseconds {
 
     return [DateTimeOffset]::FromUnixTimeMilliseconds($UnixTimeMilliseconds).DateTime
 }
+function Invoke-GitHubActionsLogGroup {
+    param {
+        [Parameter(Mandatory = $true)] [string] $Name,
+        [Parameter(Mandatory = $true)] [scriptblock] $Action
+    }
+
+    Enter-GitHubActionsLogGroup $Name
+    Try
+    {
+        . $Action
+    }
+    Finally
+    {
+        Exit-GitHubActionsLogGroup
+    }
+}
 
 # commands
 $Run = Get-GitHubActionsInput run -Mandatory
@@ -409,27 +425,27 @@ $IgnoreExitCodes = (Get-GitHubActionsInput "ignore-exit-codes") -Split ',' | For
 $TimeoutKey = Get-GitHubActionsInput key
 $Timeout = Get-GitHubActionsInput timeout
 
-Enter-GitHubActionsLogGroup Downloading and extracting artifact
-if ($LoadTarballArtifactIfExists) {
-    $Ok = $False
-    Try {
-        Import-GitHubActionsArtifact -Name $TarballArtifactName -Destination $TarballRoot
-        $Ok = $True
-    } Catch {
-        if ($_.Reason -ne "Unable to find any artifacts for the associated workflow" && $_.Reason -ne "Unable to find an artifact with the name: $TarballArtifactName") {
-            Throw
-            Write-Host $_
+Invoke-GitHubActionsLogGroup "Downloading and extracting artifact" {
+    if ($LoadTarballArtifactIfExists) {
+        $Ok = $False
+        Try {
+            Import-GitHubActionsArtifact -Name $TarballArtifactName -Destination $TarballRoot
+            $Ok = $True
+        } Catch {
+            if ($_.Reason -ne "Unable to find any artifacts for the associated workflow" && $_.Reason -ne "Unable to find an artifact with the name: $TarballArtifactName") {
+                Throw
+                Write-Host $_
+            }
+        }
+
+        if ($Ok) {
+            Push-Location $TarballRoot
+            7z x -y (Join-Path $TarballRoot $TarballFileName)
+            Remove-Item -Force (Join-Path $TarballRoot $TarballFileName)
+            Pop-Location
         }
     }
-
-    if ($Ok) {
-        Push-Location $TarballRoot
-        7z x -y (Join-Path $TarballRoot $TarballFileName)
-        Remove-Item -Force (Join-Path $TarballRoot $TarballFileName)
-        Pop-Location
-    }
 }
-Exit-GitHubActionsLogGroup
 
 $EndTime = $Null
 
@@ -530,8 +546,7 @@ function Save-BuildArtifacts {
         #console.timeEnd('glob');
         Write-Output Globbed $($globbed.Length) files
 
-        Enter-GitHubActionsLogGroup Tarballing build files
-        {
+        Invoke-GitHubActionsLogGroup "Tarballing build files" {
             # Write source directories to manifest.txt to avoid command length limits
             $manifestFilename = "manifest.txt"
             $globbed | Out-File -FilePath (Join-Path $tarballRoot $manifestFilename)
@@ -543,22 +558,21 @@ function Save-BuildArtifacts {
 
             Remove-Item (Join-Path $tarballRoot $manifestFilename)
         }
-        Exit-GitHubActionsLogGroup
 
-        Enter-GitHubActionsLogGroup Upload artifact
-        $maxRetries = 5
-        for ($i = 0; $i -lt $maxRetries; $i++) {
-            try
-            {
-                Export-GitHubActionsArtifact -Name $tarballArtifactName -Path (Join-Path $TarballRoot, $TarballFileName) -RootDirectory $TarballRoot -RetentionDays 3
-                break
-            }
-            catch
-            {
-                Start-Sleep -Seconds 3
-                Write-Error Exporting artifact failed: $_. Attempt $($i + 1) of $maxRetries
+        Invoke-GitHubActionsLogGroup "Upload artifact" {
+            $maxRetries = 5
+            for ($i = 0; $i -lt $maxRetries; $i++) {
+                try
+                {
+                    Export-GitHubActionsArtifact -Name $tarballArtifactName -Path (Join-Path $TarballRoot, $TarballFileName) -RootDirectory $TarballRoot -RetentionDays 3
+                    break
+                }
+                catch
+                {
+                    Start-Sleep -Seconds 3
+                    Write-Error "Exporting artifact failed: $_. Attempt $($i + 1) of $maxRetries"
+                }
             }
         }
-        Exit-GitHubActionsLogGroup
     }
 }
