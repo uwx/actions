@@ -80,21 +80,3 @@ runs:
     - id: step
       shell: pwsh
       run: '& $env:GITHUB_ACTION_PATH/psversion.ps1'
-      with:
-        tarball-artifact-name: ${{ inputs.tarball-artifact-name }}
-        tarball-file-name: ${{ inputs.tarball-file-name }}
-        tarball-root: ${{ inputs.tarball-root }}
-        tarball-pattern: ${{ inputs.tarball-pattern }}
-        before-run: ${{ inputs.before-run }}
-        run: ${{ inputs.run }}
-        after-run: ${{ inputs.after-run }}
-        cwd: ${{ inputs.cwd }}
-        timeout: ${{ inputs.timeout }}
-        inputs: ${{ inputs.inputs }}
-        input-encoding: ${{ inputs.input-encoding }}
-        ignore-exit-codes: ${{ inputs.ignore-exit-codes }}
-        fail-on-stderr: ${{ inputs.fail-on-stderr }}
-        load-tarball-artifact-if-exists: ${{ inputs.load-tarball-artifact-if-exists }}
-        save-tarball-artifact: ${{ inputs.save-tarball-artifact }}
-        shell: ${{ inputs.shell }}
-        key: ${{ inputs.key }}
