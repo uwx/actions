@@ -9,24 +9,9 @@ var require$$0$1 = require('assert');
 var require$$0 = require('fs');
 var require$$6 = require('timers');
 
-function _mergeNamespaces(n, m) {
-	m.forEach(function (e) {
-		e && typeof e !== 'string' && !Array.isArray(e) && Object.keys(e).forEach(function (k) {
-			if (k !== 'default' && !(k in n)) {
-				var d = Object.getOwnPropertyDescriptor(e, k);
-				Object.defineProperty(n, k, d.get ? d : {
-					enumerable: true,
-					get: function () { return e[k]; }
-				});
-			}
-		});
-	});
-	return Object.freeze(n);
-}
-
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
-var exec$2 = {};
+var exec$1 = {};
 
 var toolrunner = {};
 
@@ -1162,8 +1147,8 @@ var __awaiter = (commonjsGlobal && commonjsGlobal.__awaiter) || function (thisAr
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exec$2, "__esModule", { value: true });
-var getExecOutput_1 = exec$2.getExecOutput = exec_2 = exec$2.exec = void 0;
+Object.defineProperty(exec$1, "__esModule", { value: true });
+exec$1.getExecOutput = exec_2 = exec$1.exec = void 0;
 const string_decoder_1 = require$$0$3;
 const tr = __importStar(toolrunner);
 /**
@@ -1189,7 +1174,7 @@ function exec(commandLine, args, options) {
         return runner.exec();
     });
 }
-var exec_2 = exec$2.exec = exec;
+var exec_2 = exec$1.exec = exec;
 /**
  * Exec a command and get the output.
  * Output will be streamed to the live console.
@@ -1234,13 +1219,9 @@ function getExecOutput(commandLine, args, options) {
         };
     });
 }
-getExecOutput_1 = exec$2.getExecOutput = getExecOutput;
+exec$1.getExecOutput = getExecOutput;
 
-var exec$1 = /*#__PURE__*/_mergeNamespaces({
-	__proto__: null,
-	default: exec$2,
-	get exec () { return exec_2; },
-	get getExecOutput () { return getExecOutput_1; }
-}, [exec$2]);
+// @ts-check
 
-exec$1('pwsh', require$$1.resolve(__dirname, 'index.ps1'));
+
+exec_2('pwsh', [require$$1.resolve(__dirname, 'index.ps1')]);

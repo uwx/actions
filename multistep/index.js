@@ -1,4 +1,6 @@
-import * as exec from '@actions/exec';
+// @ts-check
+
+import { exec } from '@actions/exec';
 import { resolve } from 'path';
 
-exec('pwsh', resolve(__dirname, 'index.ps1'));
+exec('pwsh', [resolve(__dirname, 'index.ps1')]);
