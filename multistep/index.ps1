@@ -60,11 +60,10 @@ function Using-Object
     }
 }
 
-enum ExecutionResult {
-    Success = "success"
-    Timeout = "timeout"
-    Failure = "failure"
-}
+$ExecutionResult_Success = "success"
+$ExecutionResult_Timeout = "timeout"
+$ExecutionResult_Failure = "failure"
+$ExecutionResult_Skipped = "skipped"
 
 # https://devblogs.microsoft.com/scripting/use-a-powershell-function-to-see-if-a-command-exists/
 Function Test-CommandExists {
@@ -130,7 +129,7 @@ function Start-RunProcessWithTimeout {
         if ($Timeout -eq 0) {
             $proc::WaitForExit()
             $exitCode = $proc.ExitCode
-            return [ExecutionResult]::Success
+            return $ExecutionResult_Success
         }
 
         # keep track of timeout event
@@ -152,7 +151,7 @@ function Start-RunProcessWithTimeout {
                 if (-not $didNotEnd)
                 {
                     $exitCode = $proc.ExitCode
-                    return [ExecutionResult]::Timeout
+                    return $ExecutionResult_Timeout
                 }
             }
 
@@ -161,7 +160,7 @@ function Start-RunProcessWithTimeout {
             if (-not $didNotEnd2)
             {
                 $exitCode = $proc.ExitCode
-                return [ExecutionResult]::Timeout
+                return $ExecutionResult_Timeout
             }
 
             # terminate the process
@@ -169,16 +168,16 @@ function Start-RunProcessWithTimeout {
             $proc | Stop-Process -Force
 
             $exitCode = $proc.ExitCode
-            return [ExecutionResult]::Timeout
+            return $ExecutionResult_Timeout
         }
         elseif ($proc.ExitCode -ne 0)
         {
             $exitCode = $proc.ExitCode
-            return [ExecutionResult]::Failure
+            return $ExecutionResult_Failure
         }
 
         $exitCode = $proc.ExitCode
-        return [ExecutionResult]::Success
+        return $ExecutionResult_Success
     }
 }
 
@@ -281,26 +280,26 @@ function Start-RunShellCommandWithTimeout {
 
             if ($wroteToStdErr && $FailOnStdErr) {
                 return [PSCustomObject]@{
-                    outcome = [ExecutionResult]::Failure
+                    outcome = $ExecutionResult_Failure
                     failCase = "Command $Line standard error output was not empty"
                 }
             }
 
-            if ($result -eq [ExecutionResult]::Failure && $IgnoreExitCodes -contains $exitCode) {
+            if ($result -eq $ExecutionResult_Failure && $IgnoreExitCodes -contains $exitCode) {
                 return [PSCustomObject]@{
-                    outcome = [ExecutionResult]::Timeout
+                    outcome = $ExecutionResult_Timeout
                     failCase = "Return code was in ignore-return-codes list: $exitCode"
                 }
             }
 
             switch ($result) {
-                [ExecutionResult]::Timeout {
+                $ExecutionResult_Timeout {
                     return [PSCustomObject]@{
                         outcome = $result
                         failCase = "'exec' timed out"
                     }
                 }
-                [ExecutionResult]::Failure {
+                $ExecutionResult_Failure {
                     return [PSCustomObject]@{
                         outcome = $result
                         failCase = "Command $Line returned exit code: $exitCode"
@@ -329,26 +328,26 @@ function Start-RunShellCommandWithTimeout {
 
         if ($wroteToStdErr && $FailOnStdErr) {
             return [PSCustomObject]@{
-                outcome = [ExecutionResult]::Failure
+                outcome = $ExecutionResult_Failure
                 failCase = "Command $Line standard error output was not empty"
             }
         }
 
-        if ($result -eq [ExecutionResult]::Failure && $IgnoreExitCodes -contains $exitCode) {
+        if ($result -eq $ExecutionResult_Failure && $IgnoreExitCodes -contains $exitCode) {
             return [PSCustomObject]@{
-                outcome = [ExecutionResult]::Timeout
+                outcome = $ExecutionResult_Timeout
                 failCase = "Return code was in ignore-return-codes list: $exitCode"
             }
         }
 
         switch ($result) {
-            [ExecutionResult]::Timeout {
+            $ExecutionResult_Timeout {
                 return [PSCustomObject]@{
                     outcome = $result
                     failCase = "'exec' timed out"
                 }
             }
-            [ExecutionResult]::Failure {
+            $ExecutionResult_Failure {
                 return [PSCustomObject]@{
                     outcome = $result
                     failCase = "$Shell command '$Command' returned exit code: $exitCode"
@@ -450,9 +449,9 @@ if(($item = Get-Item "env:STAGE_END_$TimeoutKey" -ErrorAction SilentlyContinue))
 if ($Null -ne $BeforeRun) {
     if (Get-IsExecutionTimedOut) {
         Set-GitHubActionsOutput results-per-command '[]'
-        Set-GitHubActionsOutput before-run-outcome 'timeout'
-        Set-GitHubActionsOutput outcome 'timeout'
-        Set-GitHubActionsOutput after-run-outcome ($Null -ne $AfterRun ? 'timeout' : 'skipped')
+        Set-GitHubActionsOutput before-run-outcome $ExecutionResult_Timeout
+        Set-GitHubActionsOutput outcome $ExecutionResult_Timeout
+        Set-GitHubActionsOutput after-run-outcome ($Null -ne $AfterRun ? $ExecutionResult_Timeout : $ExecutionResult_Skipped)
         Write-GitHubActionsNotice Timed out before before-hook execution
         Return
     }
@@ -460,12 +459,12 @@ if ($Null -ne $BeforeRun) {
     $result = Start-RunShellCommandWithTimeout $BeforeRun -Cwd $Cwd -FailOnStdErr $FailOnStdErr -Shell $Shell -IgnoreExitCodes $IgnoreExitCodes
 
     Set-GitHubActionsOutput before-run-outcome $result.outcome
-    if ($result.outcome -eq [ExecutionResult]::Failure) {
-        Set-GitHubActionsOutput outcome [ExecutionResult]::Failure
+    if ($result.outcome -eq $ExecutionResult_Failure) {
+        Set-GitHubActionsOutput outcome $ExecutionResult_Failure
         Write-GitHubActionsFail Before-run hook failed: $failCase
     }
 } else {
-    Set-GitHubActionsOutput before-run-outcome 'skipped'
+    Set-GitHubActionsOutput before-run-outcome $ExecutionResult_Skipped
 }
 
 if ($Null -eq $EndTime) {
@@ -478,8 +477,8 @@ if (Get-IsExecutionTimedOut) {
     Save-BuildArtifacts
 
     Set-GitHubActionsOutput results-per-command '[]'
-    Set-GitHubActionsOutput outcome 'timeout'
-    Set-GitHubActionsOutput after-run-outcome ($Null -ne $AfterRun ? 'timeout' : 'skipped')
+    Set-GitHubActionsOutput outcome $ExecutionResult_Timeout
+    Set-GitHubActionsOutput after-run-outcome ($Null -ne $AfterRun ? $ExecutionResult_Timeout : $ExecutionResult_Skipped)
     Write-GitHubActionsNotice Timed out before main command execution
     Return
 }
@@ -488,33 +487,33 @@ if (Get-IsExecutionTimedOut) {
     $result = Start-RunShellCommandWithTimeout $Run -Cwd $Cwd -FailOnStdErr $FailOnStdErr -Shell $Shell -IgnoreExitCodes $IgnoreExitCodes
 
     switch ($result.outcome) {
-        [ExecutionResult]::Failure {
-            Set-GitHubActionsOutput outcome [ExecutionResult]::Failure
-            Set-GitHubActionsOutput after-run-outcome 'skipped'
+        $ExecutionResult_Failure {
+            Set-GitHubActionsOutput outcome $ExecutionResult_Failure
+            Set-GitHubActionsOutput after-run-outcome $ExecutionResult_Skipped
             Write-GitHubActionsFail $failCase
         }
-        [ExecutionResult]::Timeout {
-            Set-GitHubActionsOutput outcome [ExecutionResult]::Timeout
-            Set-GitHubActionsOutput after-run-outcome 'skipped'
+        $ExecutionResult_Timeout {
+            Set-GitHubActionsOutput outcome $ExecutionResult_Timeout
+            Set-GitHubActionsOutput after-run-outcome $ExecutionResult_Skipped
             Save-BuildArtifacts
             Write-GitHubActionsNotice Execution has timed out
         }
-        [ExecutionResult]::Success {
-            Set-GitHubActionsOutput outcome [ExecutionResult]::Success
+        $ExecutionResult_Success {
+            Set-GitHubActionsOutput outcome $ExecutionResult_Success
 
             if ($Null -ne $AfterRun) {
                 $result = Start-RunShellCommandWithTimeout $AfterRun -Cwd $Cwd -FailOnStdErr $FailOnStdErr -Shell $Shell -IgnoreExitCodes $IgnoreExitCodes
 
                 Set-GitHubActionsOutput after-run-outcome $result.outcome
-                if ($result.outcome -eq [ExecutionResult]::Failure) {
-                    Set-GitHubActionsOutput outcome [ExecutionResult]::Failure
+                if ($result.outcome -eq $ExecutionResult_Failure) {
+                    Set-GitHubActionsOutput outcome $ExecutionResult_Failure
                     Write-GitHubActionsFail After-run hook failed: $failCase
                 } else {
-                    Set-GitHubActionsOutput outcome [ExecutionResult]::Success
+                    Set-GitHubActionsOutput outcome $ExecutionResult_Success
                 }
             } else {
-                Set-GitHubActionsOutput after-run-outcome 'skipped'
-                Set-GitHubActionsOutput outcome [ExecutionResult]::Success
+                Set-GitHubActionsOutput after-run-outcome $ExecutionResult_Skipped
+                Set-GitHubActionsOutput outcome $ExecutionResult_Success
             }
         }
     }
