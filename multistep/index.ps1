@@ -559,13 +559,13 @@ Invoke-GitHubActionsLogGroup "Downloading and extracting artifact" {
         }
         Catch {
             $_ | Get-Error
-            if ($_.Message -notcontains "Unable to find any artifacts for the associated workflow" && $_.Reason -notcontains "Unable to find an artifact with the name: $TarballArtifactName") {
+            if ($_.Exception.Message -notcontains "Unable to find any artifacts for the associated workflow" && $_.Exception.Message -notcontains "Unable to find an artifact with the name: $TarballArtifactName") {
                 Throw
                 Write-Host $_
             }
         }
 
-        if ($Ok) {
+        if ($Ok && Test-Path $TarballRoot) {
             Push-Location $TarballRoot
             7z x -y (Resolve-RelativePath -ReferencePath $TarballRoot -Path $TarballFileName)
             Remove-Item -Force (Resolve-RelativePath -ReferencePath $TarballRoot -Path $TarballFileName)
