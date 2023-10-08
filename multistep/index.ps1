@@ -464,13 +464,9 @@ function Resolve-RelativePath {
 		[string[]]$Path,
 		[string]$ReferencePath = "."
 	)
-	begin{
-		$ReferencePath = (Get-Item $ReferencePath).FullName
-	}
 	process {
 		foreach ($pItem in $Path){
-			$pItem = (Get-Item $pItem).FullName
-			[System.IO.Path]::GetRelativePath($ReferencePath, $pItem)
+			[System.IO.Path]::GetFullPath($ReferencePath, $pItem)
 		}
 	}
 }
