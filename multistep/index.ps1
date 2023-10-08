@@ -468,8 +468,8 @@ function Resolve-RelativePath {
         $ReferencePath = [System.IO.Path]::GetFullPath($ReferencePath)
     }
     process {
-        foreach ($pItem in $Path){
-            [System.IO.Path]::GetFullPath([System.IO.Path]::GetFullPath($ReferencePath), $pItem)
+        foreach ($pItem in $Path) {
+            [System.IO.Path]::GetFullPath($pItem, $ReferencePath)
         }
     }
 }
