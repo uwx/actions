@@ -98,18 +98,20 @@ function Start-RunProcessWithTimeout {
         $command = (Get-Command $command).Path
     }
 
-    Using-Object ($proc = [Process]::Start([ProcessStartInfo]@{
-        FileName = $command
-        Arguments = $arguments
-        RedirectStandardError = $true
-        RedirectStandardOutput = $true
-        UseShellExecute = $false
-    })) {
+    $procJob = Start-ThreadJob -ScriptBlock {
+        $proc = [Process]::Start([ProcessStartInfo]@{
+            FileName = $command
+            Arguments = $arguments
+            RedirectStandardError = $true
+            RedirectStandardOutput = $true
+            UseShellExecute = $false
+        })
+
         $proc.add_OutputDataReceived({
             param($sendingProcess, $outLine)
 
             #$outputText::AppendLine($outLine.Data)
-            Write-Output $outLine.Data
+            Write-Host $outLine.Data
         })
 
         $proc.add_ErrorDataReceived({
@@ -124,6 +126,11 @@ function Start-RunProcessWithTimeout {
 
         $proc.BeginOutputReadLine()
         $proc.BeginErrorReadLine()
+
+        return $proc
+    }
+
+    Using-Object ($proc = Receive-Job $procJob) {
         #$proc.WaitForExit();
 
         if ($Timeout -eq 0) {
@@ -392,6 +399,21 @@ function Invoke-GitHubActionsLogGroup {
         Exit-GitHubActionsLogGroup
     }
 }
+
+function Wait-AndReceiveJobWithTimeout {
+    param (
+        [ThreadJob] $j,
+        [int] $timeout
+    )
+    $timedOut = $null
+    Wait-Job $j -Timeout $timeout -ErrorAction SilentlyContinue -ErrorVariable timedOut
+    if ($timedOut) {
+        return @($true)
+    } else {
+        return @($false, (Receive-Job $j))
+    }
+}
+
 function Save-BuildArtifacts {
     Start-Sleep -Seconds 5
 
