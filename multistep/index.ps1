@@ -518,8 +518,8 @@ Function Hell {
         [scriptblock] $code
     )
 
-    $oldDefaultErrorAction = $PSDefaultParameterValues["ErrorAction"]
-    $PSDefaultParameterValues["ErrorAction"] = "Stop"
+    $oldDefaultErrorAction = $PSDefaultParameterValues["*:ErrorAction"]
+    $PSDefaultParameterValues["*:ErrorAction"] = "Stop"
     $oldPreference = $ErrorActionPreference
     $ErrorActionPreference = 'Stop'
     Try {
@@ -534,7 +534,7 @@ Function Hell {
     }
     Finally {
         $ErrorActionPreference = $oldPreference
-        $PSDefaultParameterValues["ErrorAction"] = $oldDefaultErrorAction
+        $PSDefaultParameterValues["*:ErrorAction"] = $oldDefaultErrorAction
     }
 }
 
