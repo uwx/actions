@@ -458,17 +458,20 @@ function Save-BuildArtifacts {
 
 # see https://github.com/PowerShell/PowerShell/pull/19358 when PS 8 comes out
 function Resolve-RelativePath {
-	[CmdletBinding()]
-	param(
-		[Parameter(Mandatory, ValueFromPipeline)]
-		[string[]]$Path,
-		[string]$ReferencePath = "."
-	)
-	process {
-		foreach ($pItem in $Path){
-			[System.IO.Path]::GetFullPath($ReferencePath, $pItem)
-		}
-	}
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory, ValueFromPipeline)]
+        [string[]]$Path,
+        [string]$ReferencePath = "."
+    )
+    begin {
+        $ReferencePath = [System.IO.Path]::GetFullPath($ReferencePath)
+    }
+    process {
+        foreach ($pItem in $Path){
+            [System.IO.Path]::GetFullPath([System.IO.Path]::GetFullPath($ReferencePath), $pItem)
+        }
+    }
 }
 
 # commands
