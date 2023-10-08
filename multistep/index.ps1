@@ -577,7 +577,7 @@ if (Get-IsExecutionTimedOut) {
     Set-GitHubActionsOutput outcome $ExecutionResult_Timeout
     Set-GitHubActionsOutput after-run-outcome ($Null -ne $AfterRun ? $ExecutionResult_Timeout : $ExecutionResult_Skipped)
     Write-GitHubActionsNotice "Timed out before main command execution"
-    Return
+    Exit
 }
 
 {
@@ -615,3 +615,5 @@ if (Get-IsExecutionTimedOut) {
         }
     }
 }
+
+Exit

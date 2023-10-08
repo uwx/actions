@@ -1,6 +1,7 @@
 // @ts-check
 
+import { setFailed } from '@actions/core';
 import { exec } from '@actions/exec';
 import { resolve } from 'path';
 
-exec('pwsh', [resolve(__dirname, 'index.ps1')]);
+exec('pwsh', ['-command', `. '${resolve(__dirname, 'index.ps1')}'`]).catch(err => setFailed(err.message));
