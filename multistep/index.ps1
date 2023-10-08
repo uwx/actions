@@ -68,12 +68,29 @@ $ExecutionResult_Skipped = "skipped"
 # https://devblogs.microsoft.com/scripting/use-a-powershell-function-to-see-if-a-command-exists/
 Function Test-CommandExists {
     Param ($command)
-    $oldPreference = $ErrorActionPreference
-    $ErrorActionPreference = 'stop'
-    Try { if (Get-Command $command) { return $true } }
-    Catch { Write-Host "$command does not exist"; return $false }
-    Finally { $ErrorActionPreference = $oldPreference }
+    Invoke-WithErrorActionPreference 'stop' {
+        Try { if (Get-Command $command) { return $true } }
+        Catch { Write-Host "$command does not exist"; return $false }
+    }
 } #end function test-CommandExists
+
+Invoke-WithErrorActionPreference {
+    param (
+        [ActionPreference] $newPref,
+        [scriptblock] $action
+    )
+
+    $oldPreference = $ErrorActionPreference
+    $ErrorActionPreference = $newPref
+    Try
+    {
+        return . $action
+    }
+    Finally
+    {
+        $ErrorActionPreference = $oldPreference
+    }
+}
 
 function Start-RunProcessWithTimeout {
     Param(
@@ -510,7 +527,9 @@ Invoke-GitHubActionsLogGroup "Downloading and extracting artifact" {
     if ($LoadTarballArtifactIfExists) {
         $Ok = $False
         Try {
-            Import-GitHubActionsArtifact -Name $TarballArtifactName -Destination $TarballRoot -ErrorAction Stop
+            Invoke-WithErrorActionPreference Stop {
+                Import-GitHubActionsArtifact -Name $TarballArtifactName -Destination $TarballRoot -ErrorAction Stop
+            }
             $Ok = $True
         } Catch {
             if ($_.Reason -ne "Unable to find any artifacts for the associated workflow" && $_.Reason -ne "Unable to find an artifact with the name: $TarballArtifactName") {
