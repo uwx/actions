@@ -503,11 +503,11 @@ $Input = Get-GitHubActionsInput input -EmptyStringAsNull
 $InputEncoding = (Get-GitHubActionsInput input-encoding -EmptyStringAsNull) ?? 'utf-8'
 $FailOnStdErr = Get-GitHubActionsInputBoolean fail-on-stderr
 $IgnoreExitCodes = (Get-GitHubActionsInput "ignore-exit-codes") -Split ','
-    | ForEach-Object {
-        $ConvertedInt = 0
-        [int]::TryParse($_, [ref]$ConvertedInt) ? $ConvertedInt : $Null
-    }
-    | Where-Object { $_ -ne $Null }
+| ForEach-Object {
+    $ConvertedInt = 0
+    [int]::TryParse($_, [ref]$ConvertedInt) ? $ConvertedInt : $Null
+}
+| Where-Object { $_ -ne $Null }
 
 # timeout
 $TimeoutKey = Get-GitHubActionsInput key
@@ -517,21 +517,23 @@ Function Hell {
     param (
         [scriptblock] $code
     )
+
     $oldDefaultErrorAction = $PSDefaultParameterValues["ErrorAction"]
     $PSDefaultParameterValues["ErrorAction"] = "Stop"
+    $oldPreference = $ErrorActionPreference
+    $ErrorActionPreference = 'Stop'
     Try {
         $fuck = $null
-        Invoke-WithErrorActionPreference Stop {
-            $errOutput = $( $output = & $code -ErrorAction Stop -ErrorVariable $fuck ) 2>&1
-            if (-not [string]::IsNullOrWhiteSpace($errOutput)) {
-                throw $errOutput
-            }
+        $errOutput = $( $output = & $code -ErrorAction Stop -ErrorVariable $fuck ) 2>&1
+        if (-not [string]::IsNullOrWhiteSpace($errOutput)) {
+            throw $errOutput
         }
         if ($null -ne $fuck) {
             Throw $fuck
         }
     }
     Finally {
+        $ErrorActionPreference = $oldPreference
         $PSDefaultParameterValues["ErrorAction"] = $oldDefaultErrorAction
     }
 }
