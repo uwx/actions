@@ -1,3 +1,5 @@
+Set-StrictMode -Version 3.0
+
 #https://stackoverflow.com/a/69267542
 if (-not(Get-Module -ListAvailable -Name hugoalh.GitHubActionsToolkit)) {
     Install-Module hugoalh.GitHubActionsToolkit
@@ -527,8 +529,15 @@ Invoke-GitHubActionsLogGroup "Downloading and extracting artifact" {
     if ($LoadTarballArtifactIfExists) {
         $Ok = $False
         Try {
+            $fuck = $null
             Invoke-WithErrorActionPreference Stop {
-                Import-GitHubActionsArtifact -Name $TarballArtifactName -Destination $TarballRoot -ErrorAction Stop
+                $errOutput = $( $output = Import-GitHubActionsArtifact -Name $TarballArtifactName -Destination $TarballRoot -ErrorAction Stop -ErrorVariable $fuck ) 2>&1
+                if (-not [string]::IsNullOrWhiteSpace($errOutput)) {
+                    throw $errOutput
+                }
+            }
+            if ($fuck -ne $null) {
+                Throw $fuck
             }
             $Ok = $True
         } Catch {
