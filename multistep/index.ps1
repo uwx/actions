@@ -122,12 +122,12 @@ function Start-RunProcessWithTimeout {
             Write-Error $errorLine.Data
         })
 
-        $proc::BeginOutputReadLine()
-        $proc::BeginErrorReadLine()
-        #$proc::WaitForExit();
+        $proc.BeginOutputReadLine()
+        $proc.BeginErrorReadLine()
+        #$proc.WaitForExit();
 
         if ($Timeout -eq 0) {
-            $proc::WaitForExit()
+            $proc.WaitForExit()
             $exitCode = $proc.ExitCode
             return $ExecutionResult_Success
         }
@@ -367,8 +367,8 @@ function Get-DateTimeToUnixTimeMilliseconds {
         [DateTime] $DateTime
     )
 
-    $dto = [DateTimeOffset]::new($DateTime::ToUniversalTime())
-    return $dto::ToUnixTimeMilliseconds()::ToString();
+    $dto = [DateTimeOffset]::new($DateTime.ToUniversalTime())
+    return $dto.ToUnixTimeMilliseconds().ToString();
 }
 
 function Get-DateTimeFromUnixTimeMilliseconds {
@@ -390,6 +390,47 @@ function Invoke-GitHubActionsLogGroup {
     Finally
     {
         Exit-GitHubActionsLogGroup
+    }
+}
+function Save-BuildArtifacts {
+    Start-Sleep -Seconds 5
+
+    if ($SaveTarballArtifact) {
+        #console.time('glob');
+
+        $globbed = Find-GlobFile -Path . -Include (Join-Path $TarballGlob '**')
+
+        #console.timeEnd('glob');
+        Write-Output "Globbed $($globbed.Length) files"
+
+        Invoke-GitHubActionsLogGroup "Tarballing build files" {
+            # Write source directories to manifest.txt to avoid command length limits
+            $manifestFilename = "manifest.txt"
+            $globbed | Out-File -FilePath (Join-Path $tarballRoot $manifestFilename)
+
+            $tarFileName = Join-Path $tarballRoot $tarballFileName
+            Push-Location $tarballRoot
+            7z a $tarFileName -m0=zstd -mx2 "@$manifestFilename" "-x!$tarFileName" "-x!$manifestFilename"
+            Pop-Location
+
+            Remove-Item (Join-Path $tarballRoot $manifestFilename)
+        }
+
+        Invoke-GitHubActionsLogGroup "Upload artifact" {
+            $maxRetries = 5
+            for ($i = 0; $i -lt $maxRetries; $i++) {
+                try
+                {
+                    Export-GitHubActionsArtifact -Name $tarballArtifactName -Path (Join-Path $TarballRoot, $TarballFileName) -RootDirectory $TarballRoot -RetentionDays 3
+                    break
+                }
+                catch
+                {
+                    Start-Sleep -Seconds 3
+                    Write-Error "Exporting artifact failed: $_. Attempt $($i + 1) of $maxRetries"
+                }
+            }
+        }
     }
 }
 
@@ -415,7 +456,10 @@ $Input = Get-GitHubActionsInput input -EmptyStringAsNull
 $InputEncoding = (Get-GitHubActionsInput input-encoding -EmptyStringAsNull) ?? 'utf-8'
 $FailOnStdErr = Get-GitHubActionsInputBoolean fail-on-stderr
 $IgnoreExitCodes = (Get-GitHubActionsInput "ignore-exit-codes") -Split ','
-    | ForEach-Object { [int]::TryParse($_, [ref]$ConvertedInt) ? $ConvertedInt : $Null }
+    | ForEach-Object {
+        $ConvertedInt = 0
+        [int]::TryParse($_, [ref]$ConvertedInt) ? $ConvertedInt : $Null
+    }
     | Where-Object { $_ -ne $Null }
 
 # timeout
@@ -456,7 +500,7 @@ function Get-CalcTimeout {
 
 if(($item = Get-Item "env:STAGE_END_$TimeoutKey" -ErrorAction SilentlyContinue)) {
     $EndTime = Get-DateTimeFromUnixTimeMilliseconds $item
-    Write-GitHubActionsNote This build stage will time out at $EndTime
+    Write-GitHubActionsNote "This build stage will time out at $EndTime"
 }
 
 if ($Null -ne $BeforeRun) {
@@ -465,7 +509,7 @@ if ($Null -ne $BeforeRun) {
         Set-GitHubActionsOutput before-run-outcome $ExecutionResult_Timeout
         Set-GitHubActionsOutput outcome $ExecutionResult_Timeout
         Set-GitHubActionsOutput after-run-outcome ($Null -ne $AfterRun ? $ExecutionResult_Timeout : $ExecutionResult_Skipped)
-        Write-GitHubActionsNotice Timed out before before-hook execution
+        Write-GitHubActionsNotice "Timed out before before-hook execution"
         Return
     }
 
@@ -474,7 +518,7 @@ if ($Null -ne $BeforeRun) {
     Set-GitHubActionsOutput before-run-outcome $result.outcome
     if ($result.outcome -eq $ExecutionResult_Failure) {
         Set-GitHubActionsOutput outcome $ExecutionResult_Failure
-        Write-GitHubActionsFail Before-run hook failed: $failCase
+        Write-GitHubActionsFail "Before-run hook failed: $failCase"
     }
 } else {
     Set-GitHubActionsOutput before-run-outcome $ExecutionResult_Skipped
@@ -483,7 +527,7 @@ if ($Null -ne $BeforeRun) {
 if ($Null -eq $EndTime) {
     $EndTime = [DateTime]::Now.AddMilliseconds($Timeout)
     Set-GitHubActionsEnvironmentVariable "STAGE_END_$TimeoutKey" (Get-DateTimeToUnixTimeMilliseconds $EndTime)
-    Write-GitHubActionsNote This build stage will time out at $EndTime
+    Write-GitHubActionsNote "This build stage will time out at $EndTime"
 }
 
 if (Get-IsExecutionTimedOut) {
@@ -492,7 +536,7 @@ if (Get-IsExecutionTimedOut) {
     Set-GitHubActionsOutput results-per-command '[]'
     Set-GitHubActionsOutput outcome $ExecutionResult_Timeout
     Set-GitHubActionsOutput after-run-outcome ($Null -ne $AfterRun ? $ExecutionResult_Timeout : $ExecutionResult_Skipped)
-    Write-GitHubActionsNotice Timed out before main command execution
+    Write-GitHubActionsNotice "Timed out before main command execution"
     Return
 }
 
@@ -509,7 +553,7 @@ if (Get-IsExecutionTimedOut) {
             Set-GitHubActionsOutput outcome $ExecutionResult_Timeout
             Set-GitHubActionsOutput after-run-outcome $ExecutionResult_Skipped
             Save-BuildArtifacts
-            Write-GitHubActionsNotice Execution has timed out
+            Write-GitHubActionsNotice "Execution has timed out"
         }
         $ExecutionResult_Success {
             Set-GitHubActionsOutput outcome $ExecutionResult_Success
@@ -520,55 +564,13 @@ if (Get-IsExecutionTimedOut) {
                 Set-GitHubActionsOutput after-run-outcome $result.outcome
                 if ($result.outcome -eq $ExecutionResult_Failure) {
                     Set-GitHubActionsOutput outcome $ExecutionResult_Failure
-                    Write-GitHubActionsFail After-run hook failed: $failCase
+                    Write-GitHubActionsFail "After-run hook failed: $failCase"
                 } else {
                     Set-GitHubActionsOutput outcome $ExecutionResult_Success
                 }
             } else {
                 Set-GitHubActionsOutput after-run-outcome $ExecutionResult_Skipped
                 Set-GitHubActionsOutput outcome $ExecutionResult_Success
-            }
-        }
-    }
-}
-
-function Save-BuildArtifacts {
-    Start-Sleep -Seconds 5
-
-    if ($SaveTarballArtifact) {
-        #console.time('glob');
-
-        $globbed = Find-GlobFile -Path . -Include (Join-Path $TarballGlob '**')
-
-        #console.timeEnd('glob');
-        Write-Output Globbed $($globbed.Length) files
-
-        Invoke-GitHubActionsLogGroup "Tarballing build files" {
-            # Write source directories to manifest.txt to avoid command length limits
-            $manifestFilename = "manifest.txt"
-            $globbed | Out-File -FilePath (Join-Path $tarballRoot $manifestFilename)
-
-            $tarFileName = Join-Path $tarballRoot $tarballFileName
-            Push-Location $tarballRoot
-            7z a $tarFileName -m0=zstd -mx2 "@$manifestFilename" "-x!$tarFileName" "-x!$manifestFilename"
-            Pop-Location
-
-            Remove-Item (Join-Path $tarballRoot $manifestFilename)
-        }
-
-        Invoke-GitHubActionsLogGroup "Upload artifact" {
-            $maxRetries = 5
-            for ($i = 0; $i -lt $maxRetries; $i++) {
-                try
-                {
-                    Export-GitHubActionsArtifact -Name $tarballArtifactName -Path (Join-Path $TarballRoot, $TarballFileName) -RootDirectory $TarballRoot -RetentionDays 3
-                    break
-                }
-                catch
-                {
-                    Start-Sleep -Seconds 3
-                    Write-Error "Exporting artifact failed: $_. Attempt $($i + 1) of $maxRetries"
-                }
             }
         }
     }
