@@ -33,8 +33,7 @@ function Get-GitHubActionsInputBoolean {
 }
 
 # https://stackoverflow.com/a/42108420
-function Using-Object
-{
+function Using-Object {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -49,14 +48,11 @@ function Using-Object
         $ScriptBlock
     )
 
-    try
-    {
+    try {
         . $ScriptBlock
     }
-    finally
-    {
-        if ($null -ne $InputObject -and $InputObject -is [System.IDisposable])
-        {
+    finally {
+        if ($null -ne $InputObject -and $InputObject -is [System.IDisposable]) {
             $InputObject.Dispose()
         }
     }
@@ -84,12 +80,10 @@ Function Invoke-WithErrorActionPreference {
 
     $oldPreference = $ErrorActionPreference
     $ErrorActionPreference = $newPref
-    Try
-    {
+    Try {
         return . $action
     }
-    Finally
-    {
+    Finally {
         $ErrorActionPreference = $oldPreference
     }
 }
@@ -119,29 +113,29 @@ function Start-RunProcessWithTimeout {
 
     $procJob = Start-ThreadJob -ScriptBlock {
         $proc = [Process]::Start([ProcessStartInfo]@{
-            FileName = $command
-            Arguments = $arguments
-            RedirectStandardError = $true
-            RedirectStandardOutput = $true
-            UseShellExecute = $false
-        })
+                FileName               = $command
+                Arguments              = $arguments
+                RedirectStandardError  = $true
+                RedirectStandardOutput = $true
+                UseShellExecute        = $false
+            })
 
         $proc.add_OutputDataReceived({
-            param($sendingProcess, $outLine)
+                param($sendingProcess, $outLine)
 
-            #$outputText::AppendLine($outLine.Data)
-            Write-Host $outLine.Data
-        })
+                #$outputText::AppendLine($outLine.Data)
+                Write-Host $outLine.Data
+            })
 
         $proc.add_ErrorDataReceived({
-            param($sendingProcess, $errorLine)
+                param($sendingProcess, $errorLine)
 
-            if (-not $wroteToStdErr && -not [string]::IsNullOrWhiteSpace($errorLine)) {
-                $wroteToStdErr = $true
-            }
-            #$errorText::AppendLine($errorLine.Data)
-            Write-Error $errorLine.Data
-        })
+                if (-not $wroteToStdErr && -not [string]::IsNullOrWhiteSpace($errorLine)) {
+                    $wroteToStdErr = $true
+                }
+                #$errorText::AppendLine($errorLine.Data)
+                Write-Error $errorLine.Data
+            })
 
         $proc.BeginOutputReadLine()
         $proc.BeginErrorReadLine()
@@ -164,18 +158,15 @@ function Start-RunProcessWithTimeout {
         # wait up to x seconds for normal termination
         $proc | Wait-Process -Timeout ($Timeout / 1000) -ErrorAction SilentlyContinue -ErrorVariable timedOut
 
-        if ($timedOut)
-        {
+        if ($timedOut) {
             $maxRetries = 3
-            for ($i = 0; $i -lt $maxRetries; $i++)
-            {
+            for ($i = 0; $i -lt $maxRetries; $i++) {
                 Write-Output "Sending CTRL+BREAK to process $proc attempt $($i+1) of $maxRetries";
                 Send-InterruptProcess $proc.Id
 
                 $proc | Wait-Process -Timeout 3 -ErrorAction SilentlyContinue -ErrorVariable didNotEnd
 
-                if (-not $didNotEnd)
-                {
+                if (-not $didNotEnd) {
                     $exitCode = $proc.ExitCode
                     return $ExecutionResult_Timeout
                 }
@@ -183,8 +174,7 @@ function Start-RunProcessWithTimeout {
 
             $proc | Wait-Process -Timeout 10 -ErrorAction SilentlyContinue -ErrorVariable didNotEnd2
 
-            if (-not $didNotEnd2)
-            {
+            if (-not $didNotEnd2) {
                 $exitCode = $proc.ExitCode
                 return $ExecutionResult_Timeout
             }
@@ -196,8 +186,7 @@ function Start-RunProcessWithTimeout {
             $exitCode = $proc.ExitCode
             return $ExecutionResult_Timeout
         }
-        elseif ($proc.ExitCode -ne 0)
-        {
+        elseif ($proc.ExitCode -ne 0) {
             $exitCode = $proc.ExitCode
             return $ExecutionResult_Failure
         }
@@ -216,7 +205,7 @@ function Get-WrapInShell {
                 $pwshPath = (Get-Command pwsh).Path
                 Write-Output "Using pwsh at path: $pwshPath"
                 return [PSCustomObject]@{
-                    Command = $pwshPath
+                    Command   = $pwshPath
                     Arguments = @(
                         '-NoLogo',
                         '-NoProfile',
@@ -227,11 +216,12 @@ function Get-WrapInShell {
                         $command
                     )
                 }
-            } else {
+            }
+            else {
                 $powershellPath = (Get-Command powershell).Path
                 Write-Output "Using powershell at path: $powershellPath"
                 return [PSCustomObject]@{
-                    Command = $powershellPath
+                    Command   = $powershellPath
                     Arguments = @(
                         '-NoLogo',
                         '-Sta',
@@ -247,19 +237,19 @@ function Get-WrapInShell {
         }
         'python' {
             return [PSCustomObject]@{
-                Command = 'python'
+                Command   = 'python'
                 Arguments = @('-u', '-c', $command)
             }
         }
         'node' {
             return [PSCustomObject]@{
-                Command = 'node'
+                Command   = 'node'
                 Arguments = @('-e', $command) # aka --eval
             }
         }
         'cmd' {
             return [PSCustomObject]@{
-                Command = 'cmd.exe'
+                Command   = 'cmd.exe'
                 Arguments = @('/c', $command)
             }
         }
@@ -295,25 +285,25 @@ function Start-RunShellCommandWithTimeout {
             $lineCommand, $lineArguments = Invoke-Expression ("Write-Output -- $Command")
 
             $result = Start-RunProcessWithTimeout @{
-                Cwd = $Cwd
-                Shell = $Shell
-                Command = $lineCommand
-                Arguments = $lineArguments
-                Timeout = $Timeout
+                Cwd           = $Cwd
+                Shell         = $Shell
+                Command       = $lineCommand
+                Arguments     = $lineArguments
+                Timeout       = $Timeout
                 wroteToStdErr = [ref]$wroteToStdErr
-                exitCode = [ref]$exitCode
+                exitCode      = [ref]$exitCode
             }
 
             if ($wroteToStdErr && $FailOnStdErr) {
                 return [PSCustomObject]@{
-                    outcome = $ExecutionResult_Failure
+                    outcome  = $ExecutionResult_Failure
                     failCase = "Command $Line standard error output was not empty"
                 }
             }
 
             if ($result -eq $ExecutionResult_Failure && $IgnoreExitCodes -contains $exitCode) {
                 return [PSCustomObject]@{
-                    outcome = $ExecutionResult_Timeout
+                    outcome  = $ExecutionResult_Timeout
                     failCase = "Return code was in ignore-return-codes list: $exitCode"
                 }
             }
@@ -321,19 +311,20 @@ function Start-RunShellCommandWithTimeout {
             switch ($result) {
                 $ExecutionResult_Timeout {
                     return [PSCustomObject]@{
-                        outcome = $result
+                        outcome  = $result
                         failCase = "'exec' timed out"
                     }
                 }
                 $ExecutionResult_Failure {
                     return [PSCustomObject]@{
-                        outcome = $result
+                        outcome  = $result
                         failCase = "Command $Line returned exit code: $exitCode"
                     }
                 }
             }
         }
-    } else {
+    }
+    else {
         Write-GitHubActionsAnnotation "Executing command: $Line"
 
         $wroteToStdErr = $false
@@ -342,26 +333,26 @@ function Start-RunShellCommandWithTimeout {
         $wrapped = Get-WrapInShell $Command $Shell
 
         $result = Start-RunProcessWithTimeout @{
-            Cwd = $Cwd
+            Cwd              = $Cwd
             IgnoreReturnCode = $IgnoreReturnCode
-            Shell = $Shell
-            Command = $wrapped.Command
-            Arguments = $wrapped.Arguments
-            Timeout = $Timeout
-            wroteToStdErr = [ref]$wroteToStdErr
-            exitCode = [ref]$exitCode
+            Shell            = $Shell
+            Command          = $wrapped.Command
+            Arguments        = $wrapped.Arguments
+            Timeout          = $Timeout
+            wroteToStdErr    = [ref]$wroteToStdErr
+            exitCode         = [ref]$exitCode
         }
 
         if ($wroteToStdErr && $FailOnStdErr) {
             return [PSCustomObject]@{
-                outcome = $ExecutionResult_Failure
+                outcome  = $ExecutionResult_Failure
                 failCase = "Command $Line standard error output was not empty"
             }
         }
 
         if ($result -eq $ExecutionResult_Failure && $IgnoreExitCodes -contains $exitCode) {
             return [PSCustomObject]@{
-                outcome = $ExecutionResult_Timeout
+                outcome  = $ExecutionResult_Timeout
                 failCase = "Return code was in ignore-return-codes list: $exitCode"
             }
         }
@@ -369,13 +360,13 @@ function Start-RunShellCommandWithTimeout {
         switch ($result) {
             $ExecutionResult_Timeout {
                 return [PSCustomObject]@{
-                    outcome = $result
+                    outcome  = $result
                     failCase = "'exec' timed out"
                 }
             }
             $ExecutionResult_Failure {
                 return [PSCustomObject]@{
-                    outcome = $result
+                    outcome  = $result
                     failCase = "$Shell command '$Command' returned exit code: $exitCode"
                 }
             }
@@ -383,7 +374,7 @@ function Start-RunShellCommandWithTimeout {
     }
 
     return [PSCustomObject]@{
-        outcome = $success
+        outcome  = $success
         failCase = $Null
     }
 }
@@ -409,12 +400,10 @@ function Invoke-GitHubActionsLogGroup {
     )
 
     Enter-GitHubActionsLogGroup $Name
-    Try
-    {
+    Try {
         . $Action
     }
-    Finally
-    {
+    Finally {
         Exit-GitHubActionsLogGroup
     }
 }
@@ -428,7 +417,8 @@ function Wait-AndReceiveJobWithTimeout {
     Wait-Job $j -Timeout $timeout -ErrorAction SilentlyContinue -ErrorVariable timedOut
     if ($timedOut) {
         return @($true)
-    } else {
+    }
+    else {
         return @($false, (Receive-Job $j))
     }
 }
@@ -460,13 +450,11 @@ function Save-BuildArtifacts {
         Invoke-GitHubActionsLogGroup "Upload artifact" {
             $maxRetries = 5
             for ($i = 0; $i -lt $maxRetries; $i++) {
-                try
-                {
+                try {
                     Export-GitHubActionsArtifact -Name $tarballArtifactName -Path (Resolve-RelativePath -ReferencePath $TarballRoot -Path $TarballFileName) -RootDirectory $TarballRoot -RetentionDays 3
                     break
                 }
-                catch
-                {
+                catch {
                     Start-Sleep -Seconds 3
                     Write-Error "Exporting artifact failed: $_. Attempt $($i + 1) of $maxRetries"
                 }
@@ -525,22 +513,40 @@ $IgnoreExitCodes = (Get-GitHubActionsInput "ignore-exit-codes") -Split ','
 $TimeoutKey = Get-GitHubActionsInput key
 $Timeout = Get-GitHubActionsInput timeout
 
+Function Hell {
+    param (
+        [scriptblock] $code
+    )
+    $oldDefaultErrorAction = $PSDefaultParameterValues["ErrorAction"]
+    $PSDefaultParameterValues["ErrorAction"] = "Stop"
+    Try {
+        $fuck = $null
+        Invoke-WithErrorActionPreference Stop {
+            $errOutput = $( $output = & $code -ErrorAction Stop -ErrorVariable $fuck ) 2>&1
+            if (-not [string]::IsNullOrWhiteSpace($errOutput)) {
+                throw $errOutput
+            }
+        }
+        if ($null -ne $fuck) {
+            Throw $fuck
+        }
+    }
+    Finally {
+        $PSDefaultParameterValues["ErrorAction"] = $oldDefaultErrorAction
+    }
+}
+
 Invoke-GitHubActionsLogGroup "Downloading and extracting artifact" {
     if ($LoadTarballArtifactIfExists) {
         $Ok = $False
         Try {
-            $fuck = $null
-            Invoke-WithErrorActionPreference Stop {
-                $errOutput = $( $output = Import-GitHubActionsArtifact -Name $TarballArtifactName -Destination $TarballRoot -ErrorAction Stop -ErrorVariable $fuck ) 2>&1
-                if (-not [string]::IsNullOrWhiteSpace($errOutput)) {
-                    throw $errOutput
-                }
-            }
-            if ($fuck -ne $null) {
-                Throw $fuck
+            Hell {
+                Import-GitHubActionsArtifact -Name $TarballArtifactName -Destination $TarballRoot
             }
             $Ok = $True
-        } Catch {
+        }
+        Catch {
+            $_ | Get-Error
             if ($_.Reason -ne "Unable to find any artifacts for the associated workflow" && $_.Reason -ne "Unable to find an artifact with the name: $TarballArtifactName") {
                 Throw
                 Write-Host $_
@@ -566,7 +572,7 @@ function Get-CalcTimeout {
     return $Null -ne $EndTime ? [Math]::Max($EndTime - [DateTime]::Now, 1) : 1
 }
 
-if(($item = Get-Item "env:STAGE_END_$TimeoutKey" -ErrorAction SilentlyContinue)) {
+if (($item = Get-Item "env:STAGE_END_$TimeoutKey" -ErrorAction SilentlyContinue)) {
     $EndTime = Get-DateTimeFromUnixTimeMilliseconds $item
     Write-GitHubActionsNote "This build stage will time out at $EndTime"
 }
@@ -588,7 +594,8 @@ if ($Null -ne $BeforeRun) {
         Set-GitHubActionsOutput outcome $ExecutionResult_Failure
         Write-GitHubActionsFail "Before-run hook failed: $failCase"
     }
-} else {
+}
+else {
     Set-GitHubActionsOutput before-run-outcome $ExecutionResult_Skipped
 }
 
@@ -633,10 +640,12 @@ if (Get-IsExecutionTimedOut) {
                 if ($result.outcome -eq $ExecutionResult_Failure) {
                     Set-GitHubActionsOutput outcome $ExecutionResult_Failure
                     Write-GitHubActionsFail "After-run hook failed: $failCase"
-                } else {
+                }
+                else {
                     Set-GitHubActionsOutput outcome $ExecutionResult_Success
                 }
-            } else {
+            }
+            else {
                 Set-GitHubActionsOutput after-run-outcome $ExecutionResult_Skipped
                 Set-GitHubActionsOutput outcome $ExecutionResult_Success
             }
