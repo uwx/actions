@@ -406,14 +406,14 @@ function Save-BuildArtifacts {
         Invoke-GitHubActionsLogGroup "Tarballing build files" {
             # Write source directories to manifest.txt to avoid command length limits
             $manifestFilename = "manifest.txt"
-            $globbed | Out-File -FilePath (Join-Path $tarballRoot $manifestFilename)
+            $globbed | Out-File -FilePath (Resolve-RelativePath -ReferencePath $tarballRoot -Path $manifestFilename)
 
-            $tarFileName = Join-Path $tarballRoot $tarballFileName
+            $tarFileName = Resolve-RelativePath -ReferencePath $tarballRoot -Path $tarballFileName
             Push-Location $tarballRoot
             7z a $tarFileName -m0=zstd -mx2 "@$manifestFilename" "-x!$tarFileName" "-x!$manifestFilename"
             Pop-Location
 
-            Remove-Item (Join-Path $tarballRoot $manifestFilename)
+            Remove-Item (Resolve-RelativePath -ReferencePath $tarballRoot -Path $manifestFilename)
         }
 
         Invoke-GitHubActionsLogGroup "Upload artifact" {
@@ -421,7 +421,7 @@ function Save-BuildArtifacts {
             for ($i = 0; $i -lt $maxRetries; $i++) {
                 try
                 {
-                    Export-GitHubActionsArtifact -Name $tarballArtifactName -Path (Join-Path $TarballRoot, $TarballFileName) -RootDirectory $TarballRoot -RetentionDays 3
+                    Export-GitHubActionsArtifact -Name $tarballArtifactName -Path (Resolve-RelativePath -ReferencePath $TarballRoot -Path $TarballFileName) -RootDirectory $TarballRoot -RetentionDays 3
                     break
                 }
                 catch
@@ -434,6 +434,25 @@ function Save-BuildArtifacts {
     }
 }
 
+# see https://github.com/PowerShell/PowerShell/pull/19358 when PS 8 comes out
+function Resolve-RelativePath {
+	[CmdletBinding()]
+	param(
+		[Parameter(Mandatory, ValueFromPipeline)]
+		[string[]]$Path,
+		[string]$ReferencePath = "."
+	)
+	begin{
+		$ReferencePath = (Get-Item $ReferencePath).FullName
+	}
+	process {
+		foreach ($pItem in $Path){
+			$pItem = (Get-Item $pItem).FullName
+			[System.IO.Path]::GetRelativePath($ReferencePath, $pItem)
+		}
+	}
+}
+
 # commands
 $Run = Get-GitHubActionsInput run -Mandatory
 $BeforeRun = Get-GitHubActionsInput before-run -EmptyStringAsNull
@@ -441,8 +460,8 @@ $AfterRun = Get-GitHubActionsInput after-run -EmptyStringAsNull
 
 # paths
 $Cwd = (Get-GitHubActionsInput cwd -EmptyStringAsNull) ?? (Get-Item .).FullName
-$TarballRoot = Join-Path $Cwd (Get-GitHubActionsInput tarball-root -Mandatory)
-$TarballGlob = Join-Path $Cwd ((Get-GitHubActionsInput tarball-pattern -EmptyStringAsNull) ?? $TarballRoot)
+$TarballRoot = Resolve-RelativePath -ReferencePath $Cwd -Path (Get-GitHubActionsInput tarball-root -Mandatory)
+$TarballGlob = Resolve-RelativePath -ReferencePath $Cwd -Path ((Get-GitHubActionsInput tarball-pattern -EmptyStringAsNull) ?? $TarballRoot)
 
 # archiving
 $TarballArtifactName = Get-GitHubActionsInput tarball-artifact-name
@@ -481,8 +500,8 @@ Invoke-GitHubActionsLogGroup "Downloading and extracting artifact" {
 
         if ($Ok) {
             Push-Location $TarballRoot
-            7z x -y (Join-Path $TarballRoot $TarballFileName)
-            Remove-Item -Force (Join-Path $TarballRoot $TarballFileName)
+            7z x -y (Resolve-RelativePath -ReferencePath $TarballRoot -Path $TarballFileName)
+            Remove-Item -Force (Resolve-RelativePath -ReferencePath $TarballRoot -Path $TarballFileName)
             Pop-Location
         }
     }
