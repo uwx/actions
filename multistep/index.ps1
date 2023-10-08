@@ -518,7 +518,12 @@ Function Hell {
         [scriptblock] $code
     )
 
-    $oldDefaultErrorAction = $PSDefaultParameterValues["*:ErrorAction"]
+    $hasKey = $false
+    $oldDefaultErrorAction = $null
+    if ($PSDefaultParameterValues.ContainsKey("*:ErrorAction")) {
+        $hasKey = $true
+        $oldDefaultErrorAction = $PSDefaultParameterValues["*:ErrorAction"]
+    }
     $PSDefaultParameterValues["*:ErrorAction"] = "Stop"
     $oldPreference = $ErrorActionPreference
     $ErrorActionPreference = 'Stop'
@@ -534,7 +539,12 @@ Function Hell {
     }
     Finally {
         $ErrorActionPreference = $oldPreference
-        $PSDefaultParameterValues["*:ErrorAction"] = $oldDefaultErrorAction
+        if ($hasKey) {
+            $PSDefaultParameterValues["*:ErrorAction"] = $oldDefaultErrorAction
+        }
+        else {
+            $PSDefaultParameterValues.Remove("*:ErrorAction")
+        }
     }
 }
 
@@ -549,7 +559,7 @@ Invoke-GitHubActionsLogGroup "Downloading and extracting artifact" {
         }
         Catch {
             $_ | Get-Error
-            if ($_.Reason -ne "Unable to find any artifacts for the associated workflow" && $_.Reason -ne "Unable to find an artifact with the name: $TarballArtifactName") {
+            if ($_.Message -notcontains "Unable to find any artifacts for the associated workflow" && $_.Reason -notcontains "Unable to find an artifact with the name: $TarballArtifactName") {
                 Throw
                 Write-Host $_
             }
