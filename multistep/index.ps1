@@ -74,7 +74,7 @@ Function Test-CommandExists {
     }
 } #end function test-CommandExists
 
-Invoke-WithErrorActionPreference {
+Function Invoke-WithErrorActionPreference {
     param (
         [ActionPreference] $newPref,
         [scriptblock] $action
