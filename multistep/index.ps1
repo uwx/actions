@@ -510,7 +510,7 @@ Invoke-GitHubActionsLogGroup "Downloading and extracting artifact" {
     if ($LoadTarballArtifactIfExists) {
         $Ok = $False
         Try {
-            Import-GitHubActionsArtifact -Name $TarballArtifactName -Destination $TarballRoot
+            Import-GitHubActionsArtifact -Name $TarballArtifactName -Destination $TarballRoot -ErrorAction Stop
             $Ok = $True
         } Catch {
             if ($_.Reason -ne "Unable to find any artifacts for the associated workflow" && $_.Reason -ne "Unable to find an artifact with the name: $TarballArtifactName") {
