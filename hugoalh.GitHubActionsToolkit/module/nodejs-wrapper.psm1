@@ -42,36 +42,31 @@ Function Invoke-NodeJsWrapper {
 			Return
 		}
 		[Hashtable]$ExchangeInput = @{ 'wrapperName' = $Name } + $Argument
-		[String]$ExchangeInputRaw = $ExchangeInput |
-			ConvertTo-Json -Depth 100 -Compress
-		Set-Content -LiteralPath $ExchangeFilePath -Value $ExchangeInputRaw -Confirm:$False -Encoding 'UTF8NoBOM'
+		[String]$ExchangeInputRaw = $ExchangeInput | ConvertTo-Json -Depth 100 -Compress
 		Try {
-			[String[]]$StdOut = Invoke-Expression -Command "node --no-deprecation --no-warnings `"$WrapperScriptFilePath`" `"$ExchangeFilePath`"" |
-				Where-Object -FilterScript {
-					If ($_ -imatch '^::.+?::.*$') {
-						Write-Host -Object $_
-						Write-Output -InputObject $False
-					}
-					Else {
-						Write-Output -InputObject $True
-					}
-				}
+			# https://stackoverflow.com/a/60695780
+			$StdErr = $( $StdOut = . node --no-deprecation --no-warnings "$WrapperScriptFilePath" "$ExchangeInputRaw" "$ExchangeFilePath" ) 2>&1
+
+			Write-Host $StdOut
+
 			If ($LASTEXITCODE -ne 0) {
-				Throw "Unexpected exit code ``$LASTEXITCODE``! $(
-					$StdOut |
-						Join-String -Separator "`n"
-				)"
+				if (-not [string]::IsNullOrWhiteSpace($StdErr)) {
+					Throw $StdErr
+				}
+
+				Throw "Unexpected exit code ``$LASTEXITCODE``! $( $StdOut | Join-String -Separator "`n" )"
 			}
-			[PSCustomObject]$Result = Get-Content -LiteralPath $ExchangeFilePath -Raw -Encoding 'UTF8NoBOM' |
-				ConvertFrom-Json -Depth 100
+			ElseIf (-not [string]::IsNullOrWhiteSpace($StdErr)) {
+				Write-Error $StdErr
+			}
+			[PSCustomObject]$Result = Get-Content -LiteralPath $ExchangeFilePath -Raw -Encoding 'UTF8NoBOM' -ErrorAction 'Continue' | ConvertFrom-Json -Depth 100
 			If (!$Result.IsSuccess) {
 				Throw $Result.Reason
 			}
-			$Result.Result |
-				Write-Output
+			$Result.Result | Write-Output
 		}
 		Catch {
-			Write-Error -Message "Unable to successfully invoke the NodeJS wrapper (``$Name``): $_" -Category 'InvalidData'
+			Throw "Unable to successfully invoke the NodeJS wrapper (``$Name``): $_"
 		}
 	}
 	End {

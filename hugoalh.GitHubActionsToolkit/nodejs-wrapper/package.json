@@ -15,7 +15,7 @@
 	},
 	"license": "MIT",
 	"author": "hugoalh",
-	"type": "module",
+	"type": "commonjs",
 	"main": "./main.js",
 	"exports": {
 		"import": "./main.js"
