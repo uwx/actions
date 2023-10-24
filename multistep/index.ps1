@@ -1,14 +1,11 @@
 Set-StrictMode -Version 3.0
 
 #https://stackoverflow.com/a/69267542
-if (-not(Get-Module -ListAvailable -Name hugoalh.GitHubActionsToolkit)) {
-    Install-Module hugoalh.GitHubActionsToolkit
-}
 if (-not(Get-Module -ListAvailable -Name Glob)) {
     Install-Module Glob
 }
 
-Import-Module -Name hugoalh.GitHubActionsToolkit -Global
+Import-Module -Name './ghactions-toolkit-powershell/hugoalh.GitHubActionsToolkit/hugoalh.GitHubActionsToolkit.psm1' -Global
 Import-Module -Name Glob -Global
 
 $Kernel32 = Add-Type -MemberDefinition '[DllImport("kernel32.dll")] static extern bool GenerateConsoleCtrlEvent(uint dwCtrlEvent, uint dwProcessGroupId);' -Name "Win32ShowWindowAsync" -Namespace Win32Functions -PassThru
