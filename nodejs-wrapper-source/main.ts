@@ -1,3 +1,5 @@
+require('source-map-support').install();
+
 import { createWriteStream, constants as fsConstants } from "fs";
 import { writeFile } from "fs/promises";
 import { create as artifactClient } from "@actions/artifact";
