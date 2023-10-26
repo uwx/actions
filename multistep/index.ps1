@@ -2,7 +2,7 @@ Set-StrictMode -Version 3.0
 
 #https://stackoverflow.com/a/69267542
 if (-not(Get-Module -ListAvailable -Name Glob)) {
-    Install-Module Glob
+    Install-Module Glob -Force
 }
 
 Import-Module -Name "$PSScriptRoot/ghactions-toolkit-powershell/hugoalh.GitHubActionsToolkit/hugoalh.GitHubActionsToolkit.psm1" -Global
