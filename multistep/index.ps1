@@ -5,7 +5,7 @@ if (-not(Get-Module -ListAvailable -Name Glob)) {
     Install-Module Glob
 }
 
-Import-Module -Name './ghactions-toolkit-powershell/hugoalh.GitHubActionsToolkit/hugoalh.GitHubActionsToolkit.psm1' -Global
+Import-Module -Name "$PSScriptRoot/ghactions-toolkit-powershell/hugoalh.GitHubActionsToolkit/hugoalh.GitHubActionsToolkit.psm1" -Global
 Import-Module -Name Glob -Global
 
 $Kernel32 = Add-Type -MemberDefinition '[DllImport("kernel32.dll")] static extern bool GenerateConsoleCtrlEvent(uint dwCtrlEvent, uint dwProcessGroupId);' -Name "Win32ShowWindowAsync" -Namespace Win32Functions -PassThru
