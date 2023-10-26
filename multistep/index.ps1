@@ -5,7 +5,7 @@ if (-not(Get-Module -ListAvailable -Name Glob)) {
     Install-Module Glob -Force
 }
 
-Import-Module -Name "$PSScriptRoot/ghactions-toolkit-powershell/hugoalh.GitHubActionsToolkit/hugoalh.GitHubActionsToolkit.psm1" -Global
+Import-Module -Name "$PSScriptRoot/ghactions-toolkit-powershell/hugoalh.GitHubActionsToolkit" -Global
 Import-Module -Name Glob -Global
 
 Set-PSDebug -Trace 1
