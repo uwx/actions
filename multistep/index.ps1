@@ -1,4 +1,5 @@
 Set-StrictMode -Version 3.0
+Set-PSDebug -Trace 1
 
 #https://stackoverflow.com/a/69267542
 if (-not(Get-Module -ListAvailable -Name Glob)) {
