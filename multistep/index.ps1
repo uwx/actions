@@ -556,7 +556,7 @@ Invoke-GitHubActionsLogGroup "Downloading and extracting artifact" {
         }
         Catch {
             $_ | Get-Error
-            if ($_.Exception.Message -notcontains "Unable to find any artifacts for the associated workflow" && $_.Exception.Message -notcontains "Unable to find") {
+            if ($_.Exception.Message -notcontains "Unable to find" && $_.Message -notcontains "Unable to find") {
                 Throw
                 Write-Host $_
             }
