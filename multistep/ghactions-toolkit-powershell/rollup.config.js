@@ -18,6 +18,7 @@ export default {
         freeze: false,
         sourcemap: true,
         sanitizeFileName: false,
+        inlineDynamicImports: true
     },
     preserveEntrySignatures: false,
     plugins: [
@@ -26,32 +27,32 @@ export default {
         nodeResolve(),
         esbuild({
             target: 'es2019',
-            minify: true,
+            minify: false,// true,
             treeShaking: true,
             loaders: {
                 '.json': 'json',
             }
         }),
-        minify({
-            compress: {
-                defaults: true,
-                passes: 10,
-                unsafe: true,
-                toplevel: true,
-                module: true,
-                // unsafe_arrows: true,
-                unsafe_comps: true,
-                unsafe_math: true,
-                unsafe_symbols: true,
-                unsafe_methods: true,
-                unsafe_proto: true,
-                unsafe_regexp: true,
-                unsafe_undefined: true,
-            },
-            ecma: 2019,
-            mangle: true,
-            sourceMap: true,
-            toplevel: true,
-        })
+        //minify({
+        //    compress: {
+        //        defaults: true,
+        //        passes: 10,
+        //        unsafe: true,
+        //        toplevel: true,
+        //        module: true,
+        //        // unsafe_arrows: true,
+        //        unsafe_comps: true,
+        //        unsafe_math: true,
+        //        unsafe_symbols: true,
+        //        unsafe_methods: true,
+        //        unsafe_proto: true,
+        //        unsafe_regexp: true,
+        //        unsafe_undefined: true,
+        //    },
+        //    ecma: 2019,
+        //    mangle: true,
+        //    sourceMap: true,
+        //    toplevel: true,
+        //})
     ],
 }

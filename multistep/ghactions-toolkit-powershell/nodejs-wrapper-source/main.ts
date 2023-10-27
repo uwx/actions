@@ -1,4 +1,4 @@
-require('source-map-support').install();
+import('source-map-support').then(e => e.install()); // happens instantly in rollup
 
 import { createWriteStream, constants as fsConstants } from "fs";
 import { writeFile } from "fs/promises";
@@ -142,6 +142,4 @@ import { promisify } from "util";
     } catch (error) {
         await resolveError(error);
     }
-    await exchangeFileHandle.close();
-
 })();
