@@ -66,7 +66,14 @@ Function Invoke-NodeJsWrapper {
 			$Result.Result | Write-Output
 		}
 		Catch {
-			Throw "Unable to successfully invoke the NodeJS wrapper (``$Name``): $_"
+			# Define a more user-friendly error message.
+			# This sets ErrorRecord.ErrorDetails.Message
+			$_.ErrorDetails = "Unable to successfully invoke the NodeJS wrapper (``$Name``): $($_.ErrorDetails)"
+
+			# Rethrows (if $ErrorActionPreference is 'Stop') or reports the error normally,
+			# preserving $_.ScriptStackTrace.
+			$ErrorActionPreference = 'Stop'
+			$PSCmdlet.WriteError( $_ )
 		}
 	}
 	End {
