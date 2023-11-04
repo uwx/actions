@@ -81,7 +81,7 @@ RUN cd /usr/local/src/vips-${VIPS_VERSION} \
   && make install
 
 # nodejs
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
 RUN apt-get install -y nodejs
 
 RUN mkdir -p /usr/local/src/image-actions
