@@ -1,6 +1,6 @@
 import { promises as fsPromises } from 'fs'
 const { readFile } = fsPromises
-import yaml from 'js-yaml'
+import { load as yamlLoad } from 'js-yaml'
 import { OutputOptions, PngOptions, JpegOptions, WebpOptions } from 'sharp'
 
 const {
@@ -26,7 +26,7 @@ interface Config {
 const getYamlConfig = async () => {
   try {
     const buffer = await readFile(CONFIG_PATH)
-    return yaml.safeLoad(buffer.toString())
+    return yamlLoad(buffer.toString())
   } catch (err) {
     return undefined
   }

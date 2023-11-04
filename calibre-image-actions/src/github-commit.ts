@@ -1,5 +1,4 @@
 import Octokit from '@octokit/rest'
-import { GitCreateCommitResponseData } from '@octokit/types'
 import { promises as fsPromises } from 'fs'
 const { readFile } = fsPromises
 
@@ -13,7 +12,8 @@ interface ImageBlobsParams {
 }
 
 interface ImageBlobResponse
-  extends Omit<Octokit.GitCreateBlobResponse, 'url'> {}
+  extends Omit<Octokit.RestEndpointMethodTypes["git"]["createTree"]["parameters"], 'url'> {
+  }
 
 // GitCreateBlobResponse
 const convertToTreeBlobs = async ({
@@ -22,7 +22,7 @@ const convertToTreeBlobs = async ({
   images
 }: ImageBlobsParams): Promise<ImageBlobResponse[]> => {
   console.log('\t * ', 'Converting images to blobs…')
-  const imageBlobs = []
+  const imageBlobs: ImageBlobResponse[] = []
 
   for await (const image of images) {
     const encodedImage = await readFile(image.path, { encoding: 'base64' })
@@ -49,7 +49,7 @@ const convertToTreeBlobs = async ({
 
 const commitOptimisedImages = async (
   optimisedImages: ProcessedImage[]
-): Promise<GitCreateCommitResponseData> => {
+): Promise<Octokit.RestEndpointMethodTypes["git"]["createCommit"]["response"]['data']> => {
   const event = await githubEvent()
   const owner = event.repository.owner.login
   const repo = event.repository.name

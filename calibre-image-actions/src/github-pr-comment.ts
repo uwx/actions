@@ -4,13 +4,13 @@ import githubEvent from './github-event'
 
 const createComment = async (
   body: string
-): Promise<Octokit.Response<Octokit.IssuesCreateCommentResponse>> => {
+): Promise<Octokit.RestEndpointMethodTypes["issues"]["createComment"]["response"]> => {
   const event = await githubEvent()
-  const owner = event.repository.owner.login
-  const repo = event.repository.name
-  const number = event.number
+  const owner: string = event.repository.owner.login
+  const repo: string = event.repository.name
+  const issue_number: number = event.issue_number ?? event.number
 
-  return api.issues.createComment({ owner, repo, number, body })
+  return api.issues.createComment({ owner, repo, issue_number, body })
 }
 
 export default createComment

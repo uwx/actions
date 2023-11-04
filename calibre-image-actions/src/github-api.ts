@@ -1,4 +1,4 @@
-import Octokit from '@octokit/rest'
+import { Octokit } from '@octokit/rest'
 
 import { GITHUB_TOKEN, GITHUB_API_URL } from './constants'
 

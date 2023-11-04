@@ -4,7 +4,7 @@ const { readFile } = fsPromises
 import { GITHUB_EVENT_PATH } from './constants'
 
 const event = async () => {
-  const buffer = await readFile(GITHUB_EVENT_PATH)
+  const buffer = await readFile(GITHUB_EVENT_PATH!)
   return JSON.parse(buffer.toString())
 }
 

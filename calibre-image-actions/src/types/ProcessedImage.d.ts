@@ -11,7 +11,7 @@ interface ProcessedImageView extends ProcessedImage {
   formattedBeforeStats: string
   formattedAfterStats: string
   formattedPercentChange: string
-  diffUrl?: string
+  diffUrl?: string | null
 }
 
 interface ProcessedImageMetrics {
