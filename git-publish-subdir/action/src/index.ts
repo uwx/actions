@@ -425,7 +425,7 @@ export const main = async ({
   }
 
   // Clone the target repo
-  await exec(`git clone "${config.repo}" "${REPO_TEMP}"`, undefined, {
+  await exec(`git clone "${config.repo}" "${REPO_TEMP}" --depth 1 -b ${config.branch} --single-branch`, undefined, {
     env: childEnv,
   }).catch((err) => {
     const s = err.toString();
