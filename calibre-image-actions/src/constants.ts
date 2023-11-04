@@ -11,7 +11,7 @@ const GITHUB_REF = process.env['GITHUB_REF']
 const GITHUB_REPOSITORY = process.env['GITHUB_REPOSITORY']
 const GITHUB_API_URL = process.env['GITHUB_API_URL']
 
-const REPO_DIRECTORY = process.env['GITHUB_WORKSPACE']
+const REPO_DIRECTORY = process.env['INPUT_LOCATION'] || process.env['GITHUB_WORKSPACE']
 
 const JPEG_QUALITY = parseInt(process.env['INPUT_JPEGQUALITY']!) || 80
 const PNG_QUALITY = parseInt(process.env['INPUT_PNGQUALITY']!) || 80

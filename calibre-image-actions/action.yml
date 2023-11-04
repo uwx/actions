@@ -47,6 +47,11 @@ inputs:
     required: false
     default: ''
 
+  location:
+    description: 'Root path to optimize images in'
+    required: false
+    default: ''
+
 outputs:
   markdown:
     description: "Output param used to store the Markdown summary for subsequent actions to use"
