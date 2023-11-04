@@ -4,8 +4,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-ARG MOZJPEG_VERSION=3.3.1
-ARG VIPS_VERSION=8.10.1
+ARG MOZJPEG_VERSION=4.4.1
+ARG VIPS_VERSION=8.14.5
 
 ARG MOZJPEG_URL=https://github.com/mozilla/mozjpeg/archive
 ARG VIPS_URL=https://github.com/libvips/libvips/releases/download
@@ -87,7 +87,7 @@ RUN apt-get install -y nodejs
 RUN mkdir -p /usr/local/src/image-actions
 WORKDIR /usr/local/src/image-actions
 
-COPY package.json package-lock.json /usr/local/src/image-actions/
+COPY package.json package-lock.json pnpm-lock.yaml /usr/local/src/image-actions/
 RUN npm install
 
 # copy in src

@@ -13,9 +13,9 @@ const GITHUB_API_URL = process.env['GITHUB_API_URL']
 
 const REPO_DIRECTORY = process.env['GITHUB_WORKSPACE']
 
-const JPEG_QUALITY = parseInt(process.env['INPUT_JPEGQUALITY']) || 80
-const PNG_QUALITY = parseInt(process.env['INPUT_PNGQUALITY']) || 80
-const WEBP_QUALITY = parseInt(process.env['INPUT_WEBPQUALITY']) || 80
+const JPEG_QUALITY = parseInt(process.env['INPUT_JPEGQUALITY']!) || 80
+const PNG_QUALITY = parseInt(process.env['INPUT_PNGQUALITY']!) || 80
+const WEBP_QUALITY = parseInt(process.env['INPUT_WEBPQUALITY']!) || 80
 const IGNORE_PATHS = process.env['INPUT_IGNOREPATHS']
   ? process.env['INPUT_IGNOREPATHS'].split(',')
   : ['node_modules/**']
@@ -23,8 +23,8 @@ const COMPRESS_ONLY = process.env['INPUT_COMPRESSONLY'] === 'true'
 const JPEG_PROGRESSIVE = process.env['INPUT_JPEGPROGRESSIVE'] === 'true'
 
 const COMMITTER = {
-  name: 'Calibre',
-  email: 'hello@calibreapp.com'
+  name: process.env['INPUT_COMMITNAME'] || 'Calibre',
+  email: process.env['INPUT_COMMITEMAIL'] || 'hello@calibreapp.com'
 }
 
 if (!REPO_DIRECTORY) {

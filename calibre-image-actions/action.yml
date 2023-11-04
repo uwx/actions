@@ -37,13 +37,23 @@ inputs:
     required: false
     default: "false"
 
+  commitName:
+    description: ''
+    required: false
+    default: ''
+
+  commitEmail:
+    description: ''
+    required: false
+    default: ''
+
 outputs:
   markdown:
     description: "Output param used to store the Markdown summary for subsequent actions to use"
 
 runs:
   using: "docker"
-  image: "docker://ghcr.io/calibreapp/image-actions/image-actions:main" 
+  image: "Dockerfile"
 
 branding:
   icon: "image"

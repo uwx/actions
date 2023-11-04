@@ -3,8 +3,8 @@ import { promises as fsPromises } from 'fs'
 const { stat, writeFile } = fsPromises
 import path from 'path'
 import sharp from 'sharp'
-
-const glob = util.promisify(require('glob'))
+import { oxipng } from './oxipng'
+import { glob } from 'glob'
 
 import {
   REPO_DIRECTORY,
@@ -13,6 +13,7 @@ import {
 } from './constants'
 
 import getConfig from './config'
+import { ImageKind } from './enums'
 
 const processImages = async (): Promise<ProcessedImagesResult> => {
   console.log(
@@ -30,7 +31,7 @@ const processImages = async (): Promise<ProcessedImagesResult> => {
 
   const imagePaths = await glob(globPaths, {
     ignore: config.ignorePaths.map((p: string) =>
-      path.resolve(REPO_DIRECTORY, p)
+      path.resolve(REPO_DIRECTORY ?? '', p)
     ),
     nodir: true,
     follow: false,
@@ -46,6 +47,15 @@ const processImages = async (): Promise<ProcessedImagesResult> => {
     const options = config[sharpFormat]
     const beforeStats = (await stat(imgPath)).size
 
+    if (sharpFormat == ImageKind.Png) {
+      try {
+        oxipng(['-o', 'max', '--strip', 'safe', '--alpha', imgPath])
+        continue
+      } catch (e) {
+        console.error('::error:: While invoking oxipng', e, imgPath)
+      }
+    }
+
     try {
       const { data, info } = await sharp(imgPath)
         .toFormat(sharpFormat, options)
@@ -59,12 +69,12 @@ const processImages = async (): Promise<ProcessedImagesResult> => {
       )
 
       // Remove the /github/home/ path (including the slash)
-      const name = imgPath.replace(REPO_DIRECTORY, '').replace(/\//, '')
+      const name = (REPO_DIRECTORY ? imgPath.replace(REPO_DIRECTORY, '') : imgPath).replace(/\//, '')
       const afterStats = info.size
       const percentChange = (afterStats / beforeStats) * 100 - 100
 
       // Add a flag to tell if the optimisation was worthwhile
-      const compressionWasSignificant = percentChange < -1
+      const compressionWasSignificant = afterStats < beforeStats // percentChange < -1
 
       const processedImage: ProcessedImage = {
         name,
