@@ -1,9 +1,33 @@
 {
   "dependencies": {
-    "@actions/exec": "^1.1.1",
-    "@actions/core": "^1.10.1"
+    "@actions/exec": "^1.1.1"
   },
   "scripts": {
     "build": "rollup multistep\\index.js --file multistep\\bundle.js --format cjs -p commonjs -p node-resolve"
+  },
+  "devDependencies": {
+    "@actions/artifact": "^1.1.2",
+    "@actions/cache": "^3.2.2",
+    "@actions/core": "^1.10.1",
+    "@actions/io": "^1.1.3",
+    "@actions/tool-cache": "^2.0.1",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.0.1",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@swc/core": "^1.3.95",
+    "@types/node": "^20.8.10",
+    "@types/rollup": "^0.54.0",
+    "@types/source-map-support": "^0.5.9",
+    "@typescript-eslint/eslint-plugin": "^6.9.1",
+    "@typescript-eslint/parser": "^6.9.1",
+    "@vercel/ncc": "^0.38.1",
+    "esbuild": "^0.19.5",
+    "eslint": "^8.53.0",
+    "eslint-plugin-only-warn": "^1.1.0",
+    "rollup": "^4.3.0",
+    "rollup-plugin-esbuild": "^6.1.0",
+    "rollup-plugin-swc3": "^0.10.3",
+    "source-map-support": "^0.5.21",
+    "typescript": "^5.2.2"
   }
 }

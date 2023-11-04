@@ -2,17 +2,16 @@
 
 // import rollup from 'rollup';
 // @ts-ignore
-import { minify, defineRollupSwcOption } from 'rollup-plugin-swc3';
+import { swc } from 'rollup-plugin-swc3';
 import { default as json } from '@rollup/plugin-json';
 import { default as commonjs } from '@rollup/plugin-commonjs';
 import { default as nodeResolve } from '@rollup/plugin-node-resolve';
-import esbuild from 'rollup-plugin-esbuild'
 
 /** @type {import('rollup').RollupOptions} */
 export default {
-    input: 'nodejs-wrapper-source/main.ts',
+    input: 'src/run.ts',
     output: {
-        file: 'hugoalh.GitHubActionsToolkit/nodejs-wrapper/main.js',
+        file: 'dist/index.js',
         format: 'cjs',
         indent: false,
         freeze: false,
@@ -25,13 +24,18 @@ export default {
         json(),
         commonjs(),
         nodeResolve(),
-        esbuild({
-            target: 'es2019',
-            minify: false,// true,
-            treeShaking: true,
-            loaders: {
-                '.json': 'json',
-            }
+        swc({
+            jsc: {
+                target: 'es2020',
+                minify: {
+                    compress: true,
+                    ecma: 2020,
+                    mangle: true,
+                    sourceMap: true,
+                    toplevel: true,
+                }
+            },
+            sourceMaps: true
         }),
         //minify({
         //    compress: {

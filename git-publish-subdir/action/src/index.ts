@@ -5,66 +5,34 @@ import gitUrlParse from 'git-url-parse';
 import { homedir, tmpdir } from 'os';
 import * as path from 'path';
 import git from 'isomorphic-git';
+import { getInput, getBooleanInput, getMultilineInput } from '@actions/core';
 import { mkdirP, cp } from '@actions/io';
+import { exec } from '@actions/exec';
+import stream from 'stream';
 
-export type Console = {
-  readonly log: (...msg: unknown[]) => void;
-  readonly error: (...msg: unknown[]) => void;
-  readonly warn: (...msg: unknown[]) => void;
-};
+class WriteToStringStream extends stream.Writable {
+  private data: string = '';
 
-/**
- * Custom wrapper around the child_process module
- */
-export const exec = async (
-  cmd: string,
-  opts: {
-    env?: any;
-    cwd?: string;
-    log: Console;
-  }
-) => {
-  const { log } = opts;
-  const env = opts?.env || {};
-  const ps = child_process.spawn('bash', ['-c', cmd], {
-    env: {
-      HOME: process.env.HOME,
-      ...env,
-    },
-    cwd: opts.cwd,
-    stdio: ['pipe', 'pipe', 'pipe'],
-  });
-
-  const output = {
-    stderr: '',
-    stdout: '',
-  };
-
-  // We won't be providing any input to command
-  ps.stdin.end();
-  ps.stdout.on('data', (data) => {
-    output.stdout += data;
-    log.log(`data`, data.toString());
-  });
-  ps.stderr.on('data', (data) => {
-    output.stderr += data;
-    log.error(data.toString());
-  });
-
-  return new Promise<{
-    stderr: string;
-    stdout: string;
-  }>((resolve, reject) =>
-    ps.on('close', (code) => {
-      if (code !== 0) {
-        reject(
-          new Error('Process exited with code: ' + code + ':\n' + output.stderr)
-        );
-      } else {
-        resolve(output);
-      }
+  constructor() {
+    let self: this;
+    super({
+      decodeStrings: true,
+      write(chunk, encoding, callback) {
+        self.data += chunk;
+      },
     })
-  );
+    self = this;
+  }
+
+  get output() {
+    return this.data;
+  }
+}
+
+export interface Console {
+  log(...msg: unknown[]): void;
+  error(...msg: unknown[]): void;
+  warn(...msg: unknown[]): void;
 };
 
 export interface EnvironmentVariables {
@@ -147,6 +115,8 @@ export interface EnvironmentVariables {
    * An optional string to change the directory where the files are copied to
    */
   TARGET_DIR?: string;
+
+  TEMP_DIR?: string;
 }
 
 declare global {
@@ -331,7 +301,7 @@ export const main = async ({
   // Calculate paths that use temp diractory
 
   const TMP_PATH = await fs.mkdtemp(
-    path.join(tmpdir(), 'git-publish-subdir-action-')
+    path.join(env.TEMP_DIR ?? tmpdir(), 'git-publish-subdir-action-')
   );
   const REPO_TEMP = path.join(TMP_PATH, 'repo');
   const SSH_AUTH_SOCK = path.join(TMP_PATH, 'ssh_agent.sock');
@@ -356,8 +326,8 @@ export const main = async ({
   const tag = env.TAG;
 
   // Set Git Config
-  await exec(`git config --global user.name "${name}"`, { log });
-  await exec(`git config --global user.email "${email}"`, { log });
+  await exec(`git config --global user.name "${name}"`);
+  await exec(`git config --global user.email "${email}"`);
 
   interface GitInformation {
     commitMessage: string;
@@ -419,7 +389,7 @@ export const main = async ({
   // Environment to pass to children
   const childEnv = Object.assign({}, process.env, {
     SSH_AUTH_SOCK,
-  });
+  }) as { [key: string]: string; };
 
   if (config.mode === 'ssh') {
     // Copy over the known_hosts file if set
@@ -437,10 +407,11 @@ export const main = async ({
 
     // Setup ssh-agent with private key
     log.log(`Setting up ssh-agent on ${SSH_AUTH_SOCK}`);
-    const sshAgentMatch = SSH_AGENT_PID_EXTRACT.exec(
-      (await exec(`ssh-agent -a ${SSH_AUTH_SOCK}`, { log, env: childEnv }))
-        .stdout
-    );
+
+    const stdout = new WriteToStringStream();
+    await exec(`ssh-agent -a ${SSH_AUTH_SOCK}`, undefined, { outStream: stdout, env: childEnv });
+
+    const sshAgentMatch = SSH_AGENT_PID_EXTRACT.exec(stdout.output);
     /* istanbul ignore if */
     if (!sshAgentMatch) throw new Error('Unexpected output from ssh-agent');
     childEnv.SSH_AGENT_PID = sshAgentMatch[1];
@@ -454,8 +425,7 @@ export const main = async ({
   }
 
   // Clone the target repo
-  await exec(`git clone "${config.repo}" "${REPO_TEMP}"`, {
-    log,
+  await exec(`git clone "${config.repo}" "${REPO_TEMP}"`, undefined, {
     env: childEnv,
   }).catch((err) => {
     const s = err.toString();
@@ -473,8 +443,7 @@ export const main = async ({
 
   if (!config.squashHistory) {
     // Fetch branch if it exists
-    await exec(`git fetch -u origin ${config.branch}:${config.branch}`, {
-      log,
+    await exec(`git fetch -u origin ${config.branch}:${config.branch}`, undefined, {
       env: childEnv,
       cwd: REPO_TEMP,
     }).catch((err) => {
@@ -490,22 +459,21 @@ export const main = async ({
 
     // Check if branch already exists
     log.log(`##[info] Checking if branch ${config.branch} exists already`);
-    const branchCheck = await exec(`git branch --list "${config.branch}"`, {
-      log,
+    const stdout = new WriteToStringStream();
+    const branchCheck = await exec(`git branch --list "${config.branch}"`, undefined, {
+      outStream: stdout,
       env: childEnv,
       cwd: REPO_TEMP,
     });
-    if (branchCheck.stdout.trim() === '') {
+    if (stdout.output.trim() === '') {
       // Branch does not exist yet, let's check it out as an orphan
       log.log(`##[info] ${config.branch} does not exist, creating as orphan`);
-      await exec(`git checkout --orphan "${config.branch}"`, {
-        log,
+      await exec(`git checkout --orphan "${config.branch}"`, undefined, {
         env: childEnv,
         cwd: REPO_TEMP,
       });
     } else {
-      await exec(`git checkout "${config.branch}"`, {
-        log,
+      await exec(`git checkout "${config.branch}"`, undefined, {
         env: childEnv,
         cwd: REPO_TEMP,
       });
@@ -513,20 +481,17 @@ export const main = async ({
   } else {
     // Checkout a random branch so we can delete the target branch if it exists
     log.log('Checking out temp branch');
-    await exec(`git checkout -b "${Math.random().toString(36).substring(2)}"`, {
-      log,
+    await exec(`git checkout -b "${Math.random().toString(36).substring(2)}"`, undefined, {
       env: childEnv,
       cwd: REPO_TEMP,
     });
     // Delete the target branch if it exists
-    await exec(`git branch -D "${config.branch}"`, {
-      log,
+    await exec(`git branch -D "${config.branch}"`, undefined, {
       env: childEnv,
       cwd: REPO_TEMP,
     }).catch((err) => {});
     // Checkout target branch as an orphan
-    await exec(`git checkout --orphan "${config.branch}"`, {
-      log,
+    await exec(`git checkout --orphan "${config.branch}"`, undefined, {
       env: childEnv,
       cwd: REPO_TEMP,
     });
@@ -583,7 +548,7 @@ export const main = async ({
     recursive: true,
     copySourceDirectory: false,
   });
-  await exec(`git add -A .`, { log, env: childEnv, cwd: REPO_TEMP });
+  await exec(`git add -A .`, undefined, { env: childEnv, cwd: REPO_TEMP });
   const message = config.message
     .replace(/\{target\-branch\}/g, config.branch)
     .replace(/\{sha\}/g, gitInfo.sha.substr(0, 7))
@@ -633,15 +598,17 @@ export const main = async ({
   log.log(`##[info] Pushing`);
   const forceArg = config.squashHistory ? '-f' : '';
   const tagsArg = tag ? '--tags' : '';
+  const stdout = new WriteToStringStream();
   const push = await exec(
     `git push ${forceArg} origin "${config.branch}" ${tagsArg}`,
-    { log, env: childEnv, cwd: REPO_TEMP }
+    undefined,
+    { outStream: stdout, env: childEnv, cwd: REPO_TEMP }
   );
-  log.log(push.stdout);
+  log.log(stdout.output);
   log.log(`##[info] Deployment Successful`);
 
   if (config.mode === 'ssh') {
     log.log(`##[info] Killing ssh-agent`);
-    await exec(`ssh-agent -k`, { log, env: childEnv });
+    await exec(`ssh-agent -k`, undefined, { env: childEnv });
   }
 };

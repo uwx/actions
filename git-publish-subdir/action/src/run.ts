@@ -1,5 +1,7 @@
 /* istanbul ignore file - this file is used purely as an entry-point */
 
+import('source-map-support').then(e => e.install()); // happens instantly in rollup
+
 import { main } from './';
 
 main({
