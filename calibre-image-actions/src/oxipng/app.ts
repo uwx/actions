@@ -17,7 +17,7 @@ const binFile = {
 function getProcess(): string {
     assert(process.platform in binDir, `Missing binary for platform ${process.platform}`)
 
-    return resolve(join(__dirname, 'bin', binDir[process.platform as keyof typeof binDir], binFile[process.platform as keyof typeof binDir]))
+    return resolve(join(__dirname, '..', '..', 'src', 'oxipng', 'bin', binDir[process.platform as keyof typeof binDir], binFile[process.platform as keyof typeof binDir]))
 }
 
 export function oxipngSync(args: string[], options: Partial<ExecFileOptions>  = {}) {

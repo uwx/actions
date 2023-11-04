@@ -3,7 +3,7 @@ import { promises as fsPromises } from 'fs'
 const { stat, writeFile } = fsPromises
 import path from 'path'
 import sharp from 'sharp'
-import { oxipng } from './oxipng'
+import { oxipng } from './oxipng/app'
 import { glob } from 'glob'
 
 import {
