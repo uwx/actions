@@ -73,7 +73,7 @@ RUN apt-get install -y \
 
 RUN cd /usr/local/src \
   && wget ${VIPS_URL}/v${VIPS_VERSION}/vips-${VIPS_VERSION}.tar.xz \
-  && tar xzf vips-${VIPS_VERSION}.tar.xz
+  && tar xf vips-${VIPS_VERSION}.tar.xz
 
 RUN cd /usr/local/src/vips-${VIPS_VERSION} \
   && ./autogen.sh \
