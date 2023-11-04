@@ -1,11 +1,12 @@
 {
   "name": "git-publish-subdir-action",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "tsc && ncc build lib/src/run",
+    "build": "rollup -c --bundleConfigAsCjs",
     "lint-prettier": "prettier -c src/**/* test/**/*.ts",
     "lint": "npm run lint-prettier",
     "lint:fix": "prettier -w src/**/* test/**/*.ts",
-    "start": "node lib",
+    "start": "node dist",
     "test-init": "jest --projects test/jest.config.js --runInBand --verbose",
     "test-run": "nyc ts-node --transpile-only src",
     "test": "./test/bin/run-tests.sh --colors"
