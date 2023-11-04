@@ -72,8 +72,8 @@ RUN apt-get install -y \
   libimagequant-dev
 
 RUN cd /usr/local/src \
-  && wget ${VIPS_URL}/v${VIPS_VERSION}/vips-${VIPS_VERSION}.tar.gz \
-  && tar xzf vips-${VIPS_VERSION}.tar.gz
+  && wget ${VIPS_URL}/v${VIPS_VERSION}/vips-${VIPS_VERSION}.tar.xz \
+  && tar xzf vips-${VIPS_VERSION}.tar.xz
 
 RUN cd /usr/local/src/vips-${VIPS_VERSION} \
   && ./autogen.sh \
