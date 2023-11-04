@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-ARG MOZJPEG_VERSION=4.4.1
+ARG MOZJPEG_VERSION=4.1.1
 ARG VIPS_VERSION=8.14.5
 
 ARG MOZJPEG_URL=https://github.com/mozilla/mozjpeg/archive
