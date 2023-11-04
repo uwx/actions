@@ -49,7 +49,7 @@ const processImages = async (): Promise<ProcessedImagesResult> => {
 
     if (sharpFormat == ImageKind.Png) {
       try {
-        oxipng(['-o', 'max', '--strip', 'safe', '--alpha', imgPath])
+        await oxipng(['-o', 'max', '--strip', 'safe', '--alpha', imgPath])
         continue
       } catch (e) {
         console.error('::error:: While invoking oxipng', e, imgPath)
