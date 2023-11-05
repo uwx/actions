@@ -1,0 +1,53 @@
+name: git-publish-subdir CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+    paths:
+      - "git-publish-subdir/action/**"
+
+  pull_request:
+    branches: [ "main" ]
+
+    paths:
+      - "git-publish-subdir/action/**"
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js 20
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+        cache: 'pnpm'
+
+    - run: pnpm install
+
+    - run: pnpm install
+      working-directory: git-publish-subdir/action
+
+    - run: npm run build
+      working-directory: git-publish-subdir/action
+
+  push:
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.event_name == 'push'
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - run: |
+        git config --global user.name 'github-actions'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+        git add .
+        git commit -m"Automated compile multistep"
+        git push
+      working-directory: git-publish-subdir/action

@@ -1,4 +1,4 @@
-name: Docker
+name: calibre-image-actions Docker
 
 on:
   push:
