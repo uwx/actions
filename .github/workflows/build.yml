@@ -5,15 +5,21 @@ on:
     branches:
       - main
 
+    paths:
+      - "calibre-image-actions/**"
+
     # Publish `v1.2.3` tags as releases.
-    tags:
-      - v*
+    #tags:
+    #  - v*
 
   # Run tests for any PRs.
   pull_request:
 
+permissions:
+  packages: write
+
 env:
-  IMAGE_NAME: image-actions
+  IMAGE_NAME: calibre-image-actions
 
 jobs:
   # Run tests.
@@ -25,6 +31,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Run tests
+        working-directory: calibre-image-actions
         run: |
           if [ -f docker-compose.test.yml ]; then
             docker-compose --file docker-compose.test.yml build
@@ -42,9 +49,10 @@ jobs:
     if: github.event_name == 'push'
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Build image
+        working-directory: calibre-image-actions
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
 
       - name: Login to GitHub Container Registry
@@ -52,9 +60,10 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ github.token }}
 
       - name: Push image
+        working-directory: calibre-image-actions
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository }}/$IMAGE_NAME
           # Change all uppercase to lowercase
