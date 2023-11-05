@@ -1,1 +1,0 @@
-cmd_Release/sharp-win32-arm64v8.node := ln -f "Release/obj.target/sharp-win32-arm64v8.node" "Release/sharp-win32-arm64v8.node" 2>/dev/null || (rm -rf "Release/sharp-win32-arm64v8.node" && cp -af "Release/obj.target/sharp-win32-arm64v8.node" "Release/sharp-win32-arm64v8.node")
