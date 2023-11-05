@@ -6277,13 +6277,47 @@ var libvips = {
   mkdirSync
 };
 
-const __require$3 = require("./libs/sharp-win32-arm64v8.node");
+const __require$k = require("./libs/sharp-win32-arm64v8.node");
 
-const __require$2 = require("./libs/sharp-win32-ia32.node");
+const __require$j = require("./libs/sharp-win32-ia32.node");
 
-const __require$1 = require("./libs/sharp-win32-x64.node");
+const __require$i = require("./libs/sharp-win32-x64.node");
 
-const __require = require("./libs/sharp-win32-arm64v8.node");
+const __require$h = require("./libs/sharp-win32-arm64v8.node");
+
+const __require$g = require("./libs/sharp-win32-ia32.node");
+
+const __require$f = require("./libs/sharp-win32-x64.node");
+
+const __require$e = require("./libs/sharp-win32-arm64v8.node");
+
+const __require$d = require("./libs/sharp-linux-armv6.node");
+
+const __require$c = require("./libs/sharp-linux-armv7.node");
+
+const __require$b = require("./libs/sharp-win32-arm64v8.node");
+
+const __require$a = require("./libs/sharp-darwin-arm64v8.node");
+
+const __require$9 = require("./libs/sharp-darwin-x64.node");
+
+const __require$8 = require("./libs/sharp-linux-arm64v8.node");
+
+const __require$7 = require("./libs/sharp-linux-armv6.node");
+
+const __require$6 = require("./libs/sharp-linux-armv7.node");
+
+const __require$5 = require("./libs/sharp-linux-x64.node");
+
+const __require$4 = require("./libs/sharp-linuxmusl-arm64v8.node");
+
+const __require$3 = require("./libs/sharp-linuxmusl-x64.node");
+
+const __require$2 = require("./libs/sharp-win32-arm64v8.node");
+
+const __require$1 = require("./libs/sharp-win32-ia32.node");
+
+const __require = require("./libs/sharp-win32-x64.node");
 
 var aom$a = "3.7.0";
 var archive$a = "3.7.2";
@@ -6312,7 +6346,7 @@ var tiff$b = "4.6.0";
 var vips$a = "8.14.5";
 var webp$b = "1.3.2";
 var xml$a = "2.11.5";
-var json4 = {
+var json21 = {
 	aom: aom$a,
 	archive: archive$a,
 	cairo: cairo$a,
@@ -6371,7 +6405,7 @@ var tiff$a = "4.6.0";
 var vips$9 = "8.14.5";
 var webp$a = "1.3.2";
 var xml$9 = "2.11.5";
-var json5 = {
+var json22 = {
 	aom: aom$9,
 	archive: archive$9,
 	cairo: cairo$9,
@@ -6430,7 +6464,7 @@ var tiff$9 = "4.6.0";
 var vips$8 = "8.14.5";
 var webp$9 = "1.3.2";
 var xml$8 = "2.11.5";
-var json6 = {
+var json23 = {
 	aom: aom$8,
 	archive: archive$8,
 	cairo: cairo$8,
@@ -6489,7 +6523,7 @@ var tiff$8 = "4.6.0";
 var vips$7 = "8.14.5";
 var webp$8 = "1.3.2";
 var xml$7 = "2.11.5";
-var json7 = {
+var json24 = {
 	aom: aom$7,
 	archive: archive$7,
 	cairo: cairo$7,
@@ -6548,7 +6582,7 @@ var tiff$7 = "4.6.0";
 var vips$6 = "8.14.5";
 var webp$7 = "1.3.2";
 var xml$6 = "2.11.5";
-var json8 = {
+var json25 = {
 	aom: aom$6,
 	archive: archive$6,
 	cairo: cairo$6,
@@ -6607,7 +6641,7 @@ var tiff$6 = "4.6.0";
 var vips$5 = "8.14.5";
 var webp$6 = "1.3.2";
 var xml$5 = "2.11.5";
-var json9 = {
+var json26 = {
 	aom: aom$5,
 	archive: archive$5,
 	cairo: cairo$5,
@@ -6666,7 +6700,7 @@ var tiff$5 = "4.6.0";
 var vips$4 = "8.14.5";
 var webp$5 = "1.3.2";
 var xml$4 = "2.11.5";
-var json10 = {
+var json27 = {
 	aom: aom$4,
 	archive: archive$4,
 	cairo: cairo$4,
@@ -6725,7 +6759,7 @@ var tiff$4 = "4.6.0";
 var vips$3 = "8.14.5";
 var webp$4 = "1.3.2";
 var xml$3 = "2.11.5";
-var json11 = {
+var json28 = {
 	aom: aom$3,
 	archive: archive$3,
 	cairo: cairo$3,
@@ -6784,7 +6818,7 @@ var tiff$3 = "4.6.0";
 var vips$2 = "8.14.5";
 var webp$3 = "1.3.2";
 var xml$2 = "2.11.5";
-var json12 = {
+var json29 = {
 	aom: aom$2,
 	archive: archive$2,
 	cairo: cairo$2,
@@ -6843,7 +6877,7 @@ var tiff$2 = "4.6.0";
 var vips$1 = "8.14.5";
 var webp$2 = "1.3.2";
 var xml$1 = "2.11.5";
-var json13 = {
+var json30 = {
 	aom: aom$1,
 	archive: archive$1,
 	cairo: cairo$1,
@@ -6902,7 +6936,7 @@ var tiff$1 = "4.6.0";
 var vips = "8.14.5";
 var webp$1 = "1.3.2";
 var xml = "2.11.5";
-var json14 = {
+var json31 = {
 	aom: aom,
 	archive: archive,
 	cairo: cairo,
@@ -6938,21 +6972,38 @@ var dynamicModules;
 
 function getDynamicModules() {
 	return dynamicModules || (dynamicModules = {
-		"/node_modules/sharp/build/Release/sharp-win32-arm64v8.node": __require$3,
-		"/node_modules/sharp/build/Release/sharp-win32-ia32.node": __require$2,
-		"/node_modules/sharp/build/Release/sharp-win32-x64.node": __require$1,
-		"/node_modules/sharp/build/Release/obj.target/sharp-win32-arm64v8.node": __require,
-		"/node_modules/sharp/vendor/8.14.5/darwin-arm64v8/versions.json": function () { return json4; },
-		"/node_modules/sharp/vendor/8.14.5/darwin-x64/versions.json": function () { return json5; },
-		"/node_modules/sharp/vendor/8.14.5/linux-arm64v8/versions.json": function () { return json6; },
-		"/node_modules/sharp/vendor/8.14.5/linux-armv6/versions.json": function () { return json7; },
-		"/node_modules/sharp/vendor/8.14.5/linux-armv7/versions.json": function () { return json8; },
-		"/node_modules/sharp/vendor/8.14.5/linux-x64/versions.json": function () { return json9; },
-		"/node_modules/sharp/vendor/8.14.5/linuxmusl-arm64v8/versions.json": function () { return json10; },
-		"/node_modules/sharp/vendor/8.14.5/linuxmusl-x64/versions.json": function () { return json11; },
-		"/node_modules/sharp/vendor/8.14.5/win32-arm64v8/versions.json": function () { return json12; },
-		"/node_modules/sharp/vendor/8.14.5/win32-ia32/versions.json": function () { return json13; },
-		"/node_modules/sharp/vendor/8.14.5/win32-x64/versions.json": function () { return json14; }
+		"/node_modules/sharp/build/Release/sharp-win32-arm64v8.node": __require$k,
+		"/node_modules/sharp/build/Release/sharp-win32-ia32.node": __require$j,
+		"/node_modules/sharp/build/Release/sharp-win32-x64.node": __require$i,
+		"/node_modules/sharp/build/Release/libs/sharp-win32-arm64v8.node": __require$h,
+		"/node_modules/sharp/build/Release/libs/sharp-win32-ia32.node": __require$g,
+		"/node_modules/sharp/build/Release/libs/sharp-win32-x64.node": __require$f,
+		"/node_modules/sharp/build/Release/obj.target/sharp-win32-arm64v8.node": __require$e,
+		"/node_modules/sharp/build/Release/libs/Release/obj.target/sharp-linux-armv6.node": __require$d,
+		"/node_modules/sharp/build/Release/libs/Release/obj.target/sharp-linux-armv7.node": __require$c,
+		"/node_modules/sharp/build/Release/libs/Release/obj.target/sharp-win32-arm64v8.node": __require$b,
+		"/node_modules/sharp/build/Release/libs/Release/sharp-darwin-arm64v8.node": __require$a,
+		"/node_modules/sharp/build/Release/libs/Release/sharp-darwin-x64.node": __require$9,
+		"/node_modules/sharp/build/Release/libs/Release/sharp-linux-arm64v8.node": __require$8,
+		"/node_modules/sharp/build/Release/libs/Release/sharp-linux-armv6.node": __require$7,
+		"/node_modules/sharp/build/Release/libs/Release/sharp-linux-armv7.node": __require$6,
+		"/node_modules/sharp/build/Release/libs/Release/sharp-linux-x64.node": __require$5,
+		"/node_modules/sharp/build/Release/libs/Release/sharp-linuxmusl-arm64v8.node": __require$4,
+		"/node_modules/sharp/build/Release/libs/Release/sharp-linuxmusl-x64.node": __require$3,
+		"/node_modules/sharp/build/Release/libs/Release/sharp-win32-arm64v8.node": __require$2,
+		"/node_modules/sharp/build/Release/libs/Release/sharp-win32-ia32.node": __require$1,
+		"/node_modules/sharp/build/Release/libs/Release/sharp-win32-x64.node": __require,
+		"/node_modules/sharp/vendor/8.14.5/darwin-arm64v8/versions.json": function () { return json21; },
+		"/node_modules/sharp/vendor/8.14.5/darwin-x64/versions.json": function () { return json22; },
+		"/node_modules/sharp/vendor/8.14.5/linux-arm64v8/versions.json": function () { return json23; },
+		"/node_modules/sharp/vendor/8.14.5/linux-armv6/versions.json": function () { return json24; },
+		"/node_modules/sharp/vendor/8.14.5/linux-armv7/versions.json": function () { return json25; },
+		"/node_modules/sharp/vendor/8.14.5/linux-x64/versions.json": function () { return json26; },
+		"/node_modules/sharp/vendor/8.14.5/linuxmusl-arm64v8/versions.json": function () { return json27; },
+		"/node_modules/sharp/vendor/8.14.5/linuxmusl-x64/versions.json": function () { return json28; },
+		"/node_modules/sharp/vendor/8.14.5/win32-arm64v8/versions.json": function () { return json29; },
+		"/node_modules/sharp/vendor/8.14.5/win32-ia32/versions.json": function () { return json30; },
+		"/node_modules/sharp/vendor/8.14.5/win32-x64/versions.json": function () { return json31; }
 	});
 }
 
