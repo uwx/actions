@@ -39,14 +39,6 @@ jobs:
     - run: npm run build
       working-directory: git-publish-subdir/action
 
-  push:
-    runs-on: ubuntu-latest
-    needs: [build]
-    if: github.event_name == 'push'
-
-    steps:
-    - uses: actions/checkout@v4
-
     - run: |
         git config --global user.name 'github-actions'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
@@ -58,3 +50,4 @@ jobs:
 
         exit 0
       working-directory: git-publish-subdir/action
+      if: github.event_name == 'push'
