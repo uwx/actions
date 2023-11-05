@@ -54,4 +54,6 @@ jobs:
         git add .
         git commit -m"Automated compile multistep"
         git push
+
+        true
       working-directory: git-publish-subdir/action

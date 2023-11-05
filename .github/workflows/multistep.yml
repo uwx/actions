@@ -53,4 +53,6 @@ jobs:
         git add .
         git commit -m"Automated compile multistep"
         git push
+
+        true
       working-directory: multistep/ghactions-toolkit-powershell
