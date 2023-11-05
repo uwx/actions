@@ -62,6 +62,23 @@ export default {
                         await fs.copyFile(id, path.resolve('dist/libs', moduleName));
                     }
 
+
+                    if (!id.endsWith('.node')) // dlopen
+                        return `
+                        import { resolve } from 'path';
+                        function get() {
+                            let p = resolve(__dirname, ${JSON.stringify('./libs/' + moduleName)});
+                            if (!require.cache[p]) {
+                                let module = {exports:{}};
+                                process.dlopen(module, p);
+                                require.cache[p] = module;
+                            }
+                            // Fool other plugins, leave this one alone! (Resilient to uglifying too)
+                            let req = require || require;
+                            return req(p);
+                        };
+                        export const __require = get();`;
+
                     return `export const __require = require(${JSON.stringify('./libs/' + moduleName)})`;
                 }
             }
