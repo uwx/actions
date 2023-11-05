@@ -6277,7 +6277,601 @@ var libvips = {
   mkdirSync
 };
 
+const __require$2 = require("./libs/sharp-win32-arm64v8.node");
+
+const __require$1 = require("./libs/sharp-win32-ia32.node");
+
 const __require = require("./libs/sharp-win32-x64.node");
+
+var aom$a = "3.7.0";
+var archive$a = "3.7.2";
+var cairo$a = "1.17.8";
+var cgif$a = "0.3.2";
+var exif$a = "0.6.24";
+var expat$a = "2.5.0";
+var ffi$a = "3.4.4";
+var fontconfig$a = "2.14.2";
+var freetype$a = "2.13.2";
+var fribidi$a = "1.0.13";
+var gdkpixbuf$a = "2.42.10";
+var glib$a = "2.78.0";
+var harfbuzz$a = "8.2.0";
+var heif$b = "1.16.2";
+var imagequant$a = "2.4.1";
+var lcms$a = "2.15";
+var mozjpeg$a = "4.1.4";
+var orc$a = "0.4.34";
+var pango$a = "1.51.0";
+var pixman$a = "0.42.2";
+var png$b = "1.6.40";
+var rsvg$a = "2.57.0";
+var spng$a = "0.7.4";
+var tiff$b = "4.6.0";
+var vips$a = "8.14.5";
+var webp$b = "1.3.2";
+var xml$a = "2.11.5";
+var json3 = {
+	aom: aom$a,
+	archive: archive$a,
+	cairo: cairo$a,
+	cgif: cgif$a,
+	exif: exif$a,
+	expat: expat$a,
+	ffi: ffi$a,
+	fontconfig: fontconfig$a,
+	freetype: freetype$a,
+	fribidi: fribidi$a,
+	gdkpixbuf: gdkpixbuf$a,
+	glib: glib$a,
+	harfbuzz: harfbuzz$a,
+	heif: heif$b,
+	imagequant: imagequant$a,
+	lcms: lcms$a,
+	mozjpeg: mozjpeg$a,
+	orc: orc$a,
+	pango: pango$a,
+	pixman: pixman$a,
+	png: png$b,
+	"proxy-libintl": "0.4",
+	rsvg: rsvg$a,
+	spng: spng$a,
+	tiff: tiff$b,
+	vips: vips$a,
+	webp: webp$b,
+	xml: xml$a,
+	"zlib-ng": "2.1.3"
+};
+
+var aom$9 = "3.7.0";
+var archive$9 = "3.7.2";
+var cairo$9 = "1.17.8";
+var cgif$9 = "0.3.2";
+var exif$9 = "0.6.24";
+var expat$9 = "2.5.0";
+var ffi$9 = "3.4.4";
+var fontconfig$9 = "2.14.2";
+var freetype$9 = "2.13.2";
+var fribidi$9 = "1.0.13";
+var gdkpixbuf$9 = "2.42.10";
+var glib$9 = "2.78.0";
+var harfbuzz$9 = "8.2.0";
+var heif$a = "1.16.2";
+var imagequant$9 = "2.4.1";
+var lcms$9 = "2.15";
+var mozjpeg$9 = "4.1.4";
+var orc$9 = "0.4.34";
+var pango$9 = "1.51.0";
+var pixman$9 = "0.42.2";
+var png$a = "1.6.40";
+var rsvg$9 = "2.57.0";
+var spng$9 = "0.7.4";
+var tiff$a = "4.6.0";
+var vips$9 = "8.14.5";
+var webp$a = "1.3.2";
+var xml$9 = "2.11.5";
+var json4 = {
+	aom: aom$9,
+	archive: archive$9,
+	cairo: cairo$9,
+	cgif: cgif$9,
+	exif: exif$9,
+	expat: expat$9,
+	ffi: ffi$9,
+	fontconfig: fontconfig$9,
+	freetype: freetype$9,
+	fribidi: fribidi$9,
+	gdkpixbuf: gdkpixbuf$9,
+	glib: glib$9,
+	harfbuzz: harfbuzz$9,
+	heif: heif$a,
+	imagequant: imagequant$9,
+	lcms: lcms$9,
+	mozjpeg: mozjpeg$9,
+	orc: orc$9,
+	pango: pango$9,
+	pixman: pixman$9,
+	png: png$a,
+	"proxy-libintl": "0.4",
+	rsvg: rsvg$9,
+	spng: spng$9,
+	tiff: tiff$a,
+	vips: vips$9,
+	webp: webp$a,
+	xml: xml$9,
+	"zlib-ng": "2.1.3"
+};
+
+var aom$8 = "3.6.1";
+var archive$8 = "3.7.2";
+var cairo$8 = "1.17.8";
+var cgif$8 = "0.3.2";
+var exif$8 = "0.6.24";
+var expat$8 = "2.5.0";
+var ffi$8 = "3.4.4";
+var fontconfig$8 = "2.14.2";
+var freetype$8 = "2.13.2";
+var fribidi$8 = "1.0.13";
+var gdkpixbuf$8 = "2.42.10";
+var glib$8 = "2.78.0";
+var harfbuzz$8 = "8.2.0";
+var heif$9 = "1.16.2";
+var imagequant$8 = "2.4.1";
+var lcms$8 = "2.15";
+var mozjpeg$8 = "4.1.4";
+var orc$8 = "0.4.34";
+var pango$8 = "1.51.0";
+var pixman$8 = "0.42.2";
+var png$9 = "1.6.40";
+var rsvg$8 = "2.57.0";
+var spng$8 = "0.7.4";
+var tiff$9 = "4.6.0";
+var vips$8 = "8.14.5";
+var webp$9 = "1.3.2";
+var xml$8 = "2.11.5";
+var json5 = {
+	aom: aom$8,
+	archive: archive$8,
+	cairo: cairo$8,
+	cgif: cgif$8,
+	exif: exif$8,
+	expat: expat$8,
+	ffi: ffi$8,
+	fontconfig: fontconfig$8,
+	freetype: freetype$8,
+	fribidi: fribidi$8,
+	gdkpixbuf: gdkpixbuf$8,
+	glib: glib$8,
+	harfbuzz: harfbuzz$8,
+	heif: heif$9,
+	imagequant: imagequant$8,
+	lcms: lcms$8,
+	mozjpeg: mozjpeg$8,
+	orc: orc$8,
+	pango: pango$8,
+	pixman: pixman$8,
+	png: png$9,
+	"proxy-libintl": "0.4",
+	rsvg: rsvg$8,
+	spng: spng$8,
+	tiff: tiff$9,
+	vips: vips$8,
+	webp: webp$9,
+	xml: xml$8,
+	"zlib-ng": "2.1.3"
+};
+
+var aom$7 = "3.7.0";
+var archive$7 = "3.7.2";
+var cairo$7 = "1.17.8";
+var cgif$7 = "0.3.2";
+var exif$7 = "0.6.24";
+var expat$7 = "2.5.0";
+var ffi$7 = "3.4.4";
+var fontconfig$7 = "2.14.2";
+var freetype$7 = "2.13.2";
+var fribidi$7 = "1.0.13";
+var gdkpixbuf$7 = "2.42.10";
+var glib$7 = "2.78.0";
+var harfbuzz$7 = "8.2.0";
+var heif$8 = "1.16.2";
+var imagequant$7 = "2.4.1";
+var lcms$7 = "2.15";
+var mozjpeg$7 = "4.1.4";
+var orc$7 = "0.4.34";
+var pango$7 = "1.51.0";
+var pixman$7 = "0.42.2";
+var png$8 = "1.6.40";
+var rsvg$7 = "2.57.0";
+var spng$7 = "0.7.4";
+var tiff$8 = "4.6.0";
+var vips$7 = "8.14.5";
+var webp$8 = "1.3.2";
+var xml$7 = "2.11.5";
+var json6 = {
+	aom: aom$7,
+	archive: archive$7,
+	cairo: cairo$7,
+	cgif: cgif$7,
+	exif: exif$7,
+	expat: expat$7,
+	ffi: ffi$7,
+	fontconfig: fontconfig$7,
+	freetype: freetype$7,
+	fribidi: fribidi$7,
+	gdkpixbuf: gdkpixbuf$7,
+	glib: glib$7,
+	harfbuzz: harfbuzz$7,
+	heif: heif$8,
+	imagequant: imagequant$7,
+	lcms: lcms$7,
+	mozjpeg: mozjpeg$7,
+	orc: orc$7,
+	pango: pango$7,
+	pixman: pixman$7,
+	png: png$8,
+	"proxy-libintl": "0.4",
+	rsvg: rsvg$7,
+	spng: spng$7,
+	tiff: tiff$8,
+	vips: vips$7,
+	webp: webp$8,
+	xml: xml$7,
+	"zlib-ng": "2.1.3"
+};
+
+var aom$6 = "3.7.0";
+var archive$6 = "3.7.2";
+var cairo$6 = "1.17.8";
+var cgif$6 = "0.3.2";
+var exif$6 = "0.6.24";
+var expat$6 = "2.5.0";
+var ffi$6 = "3.4.4";
+var fontconfig$6 = "2.14.2";
+var freetype$6 = "2.13.2";
+var fribidi$6 = "1.0.13";
+var gdkpixbuf$6 = "2.42.10";
+var glib$6 = "2.78.0";
+var harfbuzz$6 = "8.2.0";
+var heif$7 = "1.16.2";
+var imagequant$6 = "2.4.1";
+var lcms$6 = "2.15";
+var mozjpeg$6 = "4.1.4";
+var orc$6 = "0.4.34";
+var pango$6 = "1.51.0";
+var pixman$6 = "0.42.2";
+var png$7 = "1.6.40";
+var rsvg$6 = "2.57.0";
+var spng$6 = "0.7.4";
+var tiff$7 = "4.6.0";
+var vips$6 = "8.14.5";
+var webp$7 = "1.3.2";
+var xml$6 = "2.11.5";
+var json7 = {
+	aom: aom$6,
+	archive: archive$6,
+	cairo: cairo$6,
+	cgif: cgif$6,
+	exif: exif$6,
+	expat: expat$6,
+	ffi: ffi$6,
+	fontconfig: fontconfig$6,
+	freetype: freetype$6,
+	fribidi: fribidi$6,
+	gdkpixbuf: gdkpixbuf$6,
+	glib: glib$6,
+	harfbuzz: harfbuzz$6,
+	heif: heif$7,
+	imagequant: imagequant$6,
+	lcms: lcms$6,
+	mozjpeg: mozjpeg$6,
+	orc: orc$6,
+	pango: pango$6,
+	pixman: pixman$6,
+	png: png$7,
+	"proxy-libintl": "0.4",
+	rsvg: rsvg$6,
+	spng: spng$6,
+	tiff: tiff$7,
+	vips: vips$6,
+	webp: webp$7,
+	xml: xml$6,
+	"zlib-ng": "2.1.3"
+};
+
+var aom$5 = "3.6.1";
+var archive$5 = "3.7.2";
+var cairo$5 = "1.17.8";
+var cgif$5 = "0.3.2";
+var exif$5 = "0.6.24";
+var expat$5 = "2.5.0";
+var ffi$5 = "3.4.4";
+var fontconfig$5 = "2.14.2";
+var freetype$5 = "2.13.2";
+var fribidi$5 = "1.0.13";
+var gdkpixbuf$5 = "2.42.10";
+var glib$5 = "2.78.0";
+var harfbuzz$5 = "8.2.0";
+var heif$6 = "1.16.2";
+var imagequant$5 = "2.4.1";
+var lcms$5 = "2.15";
+var mozjpeg$5 = "4.1.4";
+var orc$5 = "0.4.34";
+var pango$5 = "1.51.0";
+var pixman$5 = "0.42.2";
+var png$6 = "1.6.40";
+var rsvg$5 = "2.57.0";
+var spng$5 = "0.7.4";
+var tiff$6 = "4.6.0";
+var vips$5 = "8.14.5";
+var webp$6 = "1.3.2";
+var xml$5 = "2.11.5";
+var json8 = {
+	aom: aom$5,
+	archive: archive$5,
+	cairo: cairo$5,
+	cgif: cgif$5,
+	exif: exif$5,
+	expat: expat$5,
+	ffi: ffi$5,
+	fontconfig: fontconfig$5,
+	freetype: freetype$5,
+	fribidi: fribidi$5,
+	gdkpixbuf: gdkpixbuf$5,
+	glib: glib$5,
+	harfbuzz: harfbuzz$5,
+	heif: heif$6,
+	imagequant: imagequant$5,
+	lcms: lcms$5,
+	mozjpeg: mozjpeg$5,
+	orc: orc$5,
+	pango: pango$5,
+	pixman: pixman$5,
+	png: png$6,
+	"proxy-libintl": "0.4",
+	rsvg: rsvg$5,
+	spng: spng$5,
+	tiff: tiff$6,
+	vips: vips$5,
+	webp: webp$6,
+	xml: xml$5,
+	"zlib-ng": "2.1.3"
+};
+
+var aom$4 = "3.7.0";
+var archive$4 = "3.7.2";
+var cairo$4 = "1.17.8";
+var cgif$4 = "0.3.2";
+var exif$4 = "0.6.24";
+var expat$4 = "2.5.0";
+var ffi$4 = "3.4.4";
+var fontconfig$4 = "2.14.2";
+var freetype$4 = "2.13.2";
+var fribidi$4 = "1.0.13";
+var gdkpixbuf$4 = "2.42.10";
+var glib$4 = "2.78.0";
+var harfbuzz$4 = "8.2.0";
+var heif$5 = "1.16.2";
+var imagequant$4 = "2.4.1";
+var lcms$4 = "2.15";
+var mozjpeg$4 = "4.1.4";
+var orc$4 = "0.4.34";
+var pango$4 = "1.51.0";
+var pixman$4 = "0.42.2";
+var png$5 = "1.6.40";
+var rsvg$4 = "2.57.0";
+var spng$4 = "0.7.4";
+var tiff$5 = "4.6.0";
+var vips$4 = "8.14.5";
+var webp$5 = "1.3.2";
+var xml$4 = "2.11.5";
+var json9 = {
+	aom: aom$4,
+	archive: archive$4,
+	cairo: cairo$4,
+	cgif: cgif$4,
+	exif: exif$4,
+	expat: expat$4,
+	ffi: ffi$4,
+	fontconfig: fontconfig$4,
+	freetype: freetype$4,
+	fribidi: fribidi$4,
+	gdkpixbuf: gdkpixbuf$4,
+	glib: glib$4,
+	harfbuzz: harfbuzz$4,
+	heif: heif$5,
+	imagequant: imagequant$4,
+	lcms: lcms$4,
+	mozjpeg: mozjpeg$4,
+	orc: orc$4,
+	pango: pango$4,
+	pixman: pixman$4,
+	png: png$5,
+	"proxy-libintl": "0.4",
+	rsvg: rsvg$4,
+	spng: spng$4,
+	tiff: tiff$5,
+	vips: vips$4,
+	webp: webp$5,
+	xml: xml$4,
+	"zlib-ng": "2.1.3"
+};
+
+var aom$3 = "3.7.0";
+var archive$3 = "3.7.2";
+var cairo$3 = "1.17.8";
+var cgif$3 = "0.3.2";
+var exif$3 = "0.6.24";
+var expat$3 = "2.5.0";
+var ffi$3 = "3.4.4";
+var fontconfig$3 = "2.14.2";
+var freetype$3 = "2.13.2";
+var fribidi$3 = "1.0.13";
+var gdkpixbuf$3 = "2.42.10";
+var glib$3 = "2.78.0";
+var harfbuzz$3 = "8.2.0";
+var heif$4 = "1.16.2";
+var imagequant$3 = "2.4.1";
+var lcms$3 = "2.15";
+var mozjpeg$3 = "4.1.4";
+var orc$3 = "0.4.34";
+var pango$3 = "1.51.0";
+var pixman$3 = "0.42.2";
+var png$4 = "1.6.40";
+var rsvg$3 = "2.57.0";
+var spng$3 = "0.7.4";
+var tiff$4 = "4.6.0";
+var vips$3 = "8.14.5";
+var webp$4 = "1.3.2";
+var xml$3 = "2.11.5";
+var json10 = {
+	aom: aom$3,
+	archive: archive$3,
+	cairo: cairo$3,
+	cgif: cgif$3,
+	exif: exif$3,
+	expat: expat$3,
+	ffi: ffi$3,
+	fontconfig: fontconfig$3,
+	freetype: freetype$3,
+	fribidi: fribidi$3,
+	gdkpixbuf: gdkpixbuf$3,
+	glib: glib$3,
+	harfbuzz: harfbuzz$3,
+	heif: heif$4,
+	imagequant: imagequant$3,
+	lcms: lcms$3,
+	mozjpeg: mozjpeg$3,
+	orc: orc$3,
+	pango: pango$3,
+	pixman: pixman$3,
+	png: png$4,
+	"proxy-libintl": "0.4",
+	rsvg: rsvg$3,
+	spng: spng$3,
+	tiff: tiff$4,
+	vips: vips$3,
+	webp: webp$4,
+	xml: xml$3,
+	"zlib-ng": "2.1.3"
+};
+
+var aom$2 = "3.7.0";
+var archive$2 = "3.7.2";
+var cairo$2 = "1.17.8";
+var cgif$2 = "0.3.2";
+var exif$2 = "0.6.24";
+var expat$2 = "2.5.0";
+var ffi$2 = "3.4.4";
+var fontconfig$2 = "2.14.2";
+var freetype$2 = "2.13.2";
+var fribidi$2 = "1.0.13";
+var gdkpixbuf$2 = "2.42.10";
+var glib$2 = "2.78.0";
+var harfbuzz$2 = "8.2.0";
+var heif$3 = "1.16.2";
+var imagequant$2 = "2.4.1";
+var lcms$2 = "2.15";
+var mozjpeg$2 = "4.1.4";
+var orc$2 = "0.4.34";
+var pango$2 = "1.51.0";
+var pixman$2 = "0.42.2";
+var png$3 = "1.6.40";
+var rsvg$2 = "2.57.0";
+var spng$2 = "0.7.4";
+var tiff$3 = "4.6.0";
+var vips$2 = "8.14.5";
+var webp$3 = "1.3.2";
+var xml$2 = "2.11.5";
+var json11 = {
+	aom: aom$2,
+	archive: archive$2,
+	cairo: cairo$2,
+	cgif: cgif$2,
+	exif: exif$2,
+	expat: expat$2,
+	ffi: ffi$2,
+	fontconfig: fontconfig$2,
+	freetype: freetype$2,
+	fribidi: fribidi$2,
+	gdkpixbuf: gdkpixbuf$2,
+	glib: glib$2,
+	harfbuzz: harfbuzz$2,
+	heif: heif$3,
+	imagequant: imagequant$2,
+	lcms: lcms$2,
+	mozjpeg: mozjpeg$2,
+	orc: orc$2,
+	pango: pango$2,
+	pixman: pixman$2,
+	png: png$3,
+	"proxy-libintl": "0.4",
+	rsvg: rsvg$2,
+	spng: spng$2,
+	tiff: tiff$3,
+	vips: vips$2,
+	webp: webp$3,
+	xml: xml$2,
+	"zlib-ng": "2.1.3"
+};
+
+var aom$1 = "3.7.0";
+var archive$1 = "3.7.2";
+var cairo$1 = "1.17.8";
+var cgif$1 = "0.3.2";
+var exif$1 = "0.6.24";
+var expat$1 = "2.5.0";
+var ffi$1 = "3.4.4";
+var fontconfig$1 = "2.14.2";
+var freetype$1 = "2.13.2";
+var fribidi$1 = "1.0.13";
+var gdkpixbuf$1 = "2.42.10";
+var glib$1 = "2.78.0";
+var harfbuzz$1 = "8.2.0";
+var heif$2 = "1.16.2";
+var imagequant$1 = "2.4.1";
+var lcms$1 = "2.15";
+var mozjpeg$1 = "4.1.4";
+var orc$1 = "0.4.34";
+var pango$1 = "1.51.0";
+var pixman$1 = "0.42.2";
+var png$2 = "1.6.40";
+var rsvg$1 = "2.57.0";
+var spng$1 = "0.7.4";
+var tiff$2 = "4.6.0";
+var vips$1 = "8.14.5";
+var webp$2 = "1.3.2";
+var xml$1 = "2.11.5";
+var json12 = {
+	aom: aom$1,
+	archive: archive$1,
+	cairo: cairo$1,
+	cgif: cgif$1,
+	exif: exif$1,
+	expat: expat$1,
+	ffi: ffi$1,
+	fontconfig: fontconfig$1,
+	freetype: freetype$1,
+	fribidi: fribidi$1,
+	gdkpixbuf: gdkpixbuf$1,
+	glib: glib$1,
+	harfbuzz: harfbuzz$1,
+	heif: heif$2,
+	imagequant: imagequant$1,
+	lcms: lcms$1,
+	mozjpeg: mozjpeg$1,
+	orc: orc$1,
+	pango: pango$1,
+	pixman: pixman$1,
+	png: png$2,
+	"proxy-libintl": "0.4",
+	rsvg: rsvg$1,
+	spng: spng$1,
+	tiff: tiff$2,
+	vips: vips$1,
+	webp: webp$2,
+	xml: xml$1,
+	"zlib-ng": "2.1.3"
+};
 
 var aom = "3.7.0";
 var archive = "3.7.2";
@@ -6306,7 +6900,7 @@ var tiff$1 = "4.6.0";
 var vips = "8.14.5";
 var webp$1 = "1.3.2";
 var xml = "2.11.5";
-var json1 = {
+var json13 = {
 	aom: aom,
 	archive: archive,
 	cairo: cairo,
@@ -6342,8 +6936,20 @@ var dynamicModules;
 
 function getDynamicModules() {
 	return dynamicModules || (dynamicModules = {
+		"/node_modules/sharp/build/Release/sharp-win32-arm64v8.node": __require$2,
+		"/node_modules/sharp/build/Release/sharp-win32-ia32.node": __require$1,
 		"/node_modules/sharp/build/Release/sharp-win32-x64.node": __require,
-		"/node_modules/sharp/vendor/8.14.5/win32-x64/versions.json": function () { return json1; }
+		"/node_modules/sharp/vendor/8.14.5/darwin-arm64v8/versions.json": function () { return json3; },
+		"/node_modules/sharp/vendor/8.14.5/darwin-x64/versions.json": function () { return json4; },
+		"/node_modules/sharp/vendor/8.14.5/linux-arm64v8/versions.json": function () { return json5; },
+		"/node_modules/sharp/vendor/8.14.5/linux-armv6/versions.json": function () { return json6; },
+		"/node_modules/sharp/vendor/8.14.5/linux-armv7/versions.json": function () { return json7; },
+		"/node_modules/sharp/vendor/8.14.5/linux-x64/versions.json": function () { return json8; },
+		"/node_modules/sharp/vendor/8.14.5/linuxmusl-arm64v8/versions.json": function () { return json9; },
+		"/node_modules/sharp/vendor/8.14.5/linuxmusl-x64/versions.json": function () { return json10; },
+		"/node_modules/sharp/vendor/8.14.5/win32-arm64v8/versions.json": function () { return json11; },
+		"/node_modules/sharp/vendor/8.14.5/win32-ia32/versions.json": function () { return json12; },
+		"/node_modules/sharp/vendor/8.14.5/win32-x64/versions.json": function () { return json13; }
 	});
 }
 
