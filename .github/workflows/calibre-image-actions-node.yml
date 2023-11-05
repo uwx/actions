@@ -1,0 +1,71 @@
+name: calibre-image-actions Node.JS CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+    paths:
+      - ".github/workflows/calibre-image-actions-node.yml"
+      - "calibre-image-actions/**"
+
+  pull_request:
+    branches: [ "main" ]
+
+    paths:
+      - "calibre-image-actions/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js 20
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 8
+
+    - run: pnpm install
+
+    - run: |
+        pnpm install
+        pnpm rebuild --config.platform=darwin --config.arch=arm64 --config.arm-version=8
+        pnpm rebuild --config.platform=darwin --config.arch=x64
+        pnpm rebuild --config.platform=linux --config.arch=arm64 --config.arm-version=8
+        pnpm rebuild --config.platform=linux --config.arch=arm --config.arm-version=6
+        pnpm rebuild --config.platform=linux --config.arch=arm --config.arm-version=7
+        pnpm rebuild --config.platform=linux --config.arch=x64
+        pnpm rebuild --config.platform=linux --config.arch=arm64 --config.arm-version=8 --config.libc=musl
+        pnpm rebuild --config.platform=linux --config.arch=x64 --config.libc=musl
+        pnpm rebuild --config.platform=win32 --config.arch=arm64 --config.arm-version=8
+        pnpm rebuild --config.platform=win32 --config.arch=ia32
+        pnpm rebuild --config.platform=win32 --config.arch=x64
+      working-directory: calibre-image-actions
+
+    - run: npm run build
+      working-directory: calibre-image-actions
+
+  push:
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.event_name == 'push'
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - run: |
+        git config --global user.name 'github-actions'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+        git pull & \
+        git add . && \
+        git commit -m"Automated compile calibre-image-actions" && \
+        git push
+
+        exit 0
+      working-directory: calibre-image-actions

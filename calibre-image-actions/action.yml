@@ -57,8 +57,8 @@ outputs:
     description: "Output param used to store the Markdown summary for subsequent actions to use"
 
 runs:
-  using: "docker"
-  image: "docker://ghcr.io/uwx/actions/calibre-image-actions:main"
+  using: node20
+  main: 'dist/index.js'
 
 branding:
   icon: "image"

@@ -1,13 +1,9 @@
 #!/usr/bin/env node
 
-const {
-  GITHUB_TOKEN,
-  GITHUB_EVENT_NAME,
-  COMPRESS_ONLY
-} = require('./dist/constants')
+import { GITHUB_TOKEN, GITHUB_EVENT_NAME, COMPRESS_ONLY } from './src/constants'
 
-const githubEvent = require('./dist/github-event').default
-const run = require('./dist/index.js').default
+import githubEvent from './src/github-event'
+import run from './src/index'
 
 if (!GITHUB_TOKEN) {
   console.log('::error:: You must enable the GITHUB_TOKEN secret')
