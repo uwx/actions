@@ -2,4 +2,4 @@ version: "3"
 services:
   test:
     build: .
-    entrypoint: npm run test
+    entrypoint: npm --unsafe-perm=true --allow-root run test
