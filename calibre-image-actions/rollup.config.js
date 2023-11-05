@@ -66,20 +66,17 @@ export default {
                     if (!id.endsWith('.node')) // dlopen
                         return `
                         import { resolve } from 'path';
-                        function get() {
+                        export const __require = () => {
                             let p = resolve(__dirname, ${JSON.stringify('./libs/' + moduleName)});
                             if (!require.cache[p]) {
                                 let module = {exports:{}};
                                 process.dlopen(module, p);
                                 require.cache[p] = module;
                             }
-                            // Fool other plugins, leave this one alone! (Resilient to uglifying too)
-                            let req = require || require;
-                            return req(p);
-                        };
-                        export const __require = get();`;
+                            return require(p);
+                        }`;
 
-                    return `export const __require = require(${JSON.stringify('./libs/' + moduleName)})`;
+                    return `export const __require = () => require(${JSON.stringify('./libs/' + moduleName)})`;
                 }
             }
         }),
