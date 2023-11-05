@@ -71,6 +71,7 @@ export default {
             dynamicRequireTargets: [
                 'node_modules/sharp/build/Release/sharp-*.node',
                 'node_modules/sharp/build/Release/*/sharp-*.node',
+                'node_modules/sharp/build/**/*.node',
                 'node_modules/sharp/vendor/**/versions.json',
             ]
         }),
