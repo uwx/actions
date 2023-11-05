@@ -55,7 +55,7 @@ export default {
         /** @satisfies {import('rollup').Plugin} */ ({
             name: '.node loader',
             async load(id) {
-                if (id.endsWith('.node')) {
+                if (id.endsWith('.node') || id.endsWith('.dll') || id.endsWith('.dylib') || id.endsWith('.so')) {
                     const moduleName = path.basename(id);
                     if (!this.cache.get(moduleName)) {
                         this.cache.set(moduleName, true);
