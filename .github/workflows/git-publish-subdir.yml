@@ -43,9 +43,9 @@ jobs:
         git config --global user.name 'github-actions'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-        git pull & \
         git add . && \
         git commit -m"Automated compile git-publish-subdir" && \
+        git pull && \
         git push
 
         exit 0
