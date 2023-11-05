@@ -6,6 +6,7 @@ on:
       - main
 
     paths:
+      - ".github/workflows/calibre-image-actions.yml"
       - "calibre-image-actions/**"
 
     # Publish `v1.2.3` tags as releases.

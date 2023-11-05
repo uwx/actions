@@ -5,6 +5,7 @@ on:
     branches: [ "main" ]
 
     paths:
+      - ".github/workflows/multistep.yml"
       - "multistep/ghactions-toolkit-powershell/**"
 
   pull_request:

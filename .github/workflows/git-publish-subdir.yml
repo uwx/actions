@@ -5,6 +5,7 @@ on:
     branches: [ "main" ]
 
     paths:
+      - ".github/workflows/git-publish-subdir.yml"
       - "git-publish-subdir/action/**"
 
   pull_request:
