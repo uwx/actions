@@ -70,8 +70,10 @@ export default {
         commonjs({
             dynamicRequireTargets: [
                 'node_modules/sharp/build/Release/sharp-*.node',
+                'node_modules/sharp/build/Release/*.dll',
+                'node_modules/sharp/build/Release/*.dylib',
+                'node_modules/sharp/build/Release/*.so',
                 'node_modules/sharp/build/Release/*/sharp-*.node',
-                'node_modules/sharp/build/**/*.node',
                 'node_modules/sharp/vendor/**/versions.json',
             ]
         }),
