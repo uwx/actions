@@ -33,12 +33,12 @@ return n;
 
 var require$$0__namespace = /*#__PURE__*/_interopNamespaceDefault(require$$0);
 
-var ImageKind$1;
+var ImageKind;
 (function(ImageKind) {
     ImageKind["Jpeg"] = "jpeg";
     ImageKind["Png"] = "png";
     ImageKind["Webp"] = "webp";
-})(ImageKind$1 || (ImageKind$1 = {}));
+})(ImageKind || (ImageKind = {}));
 
 const GITHUB_TOKEN = process.env['INPUT_GITHUBTOKEN'] || process.env['GITHUB_TOKEN'];
 const GITHUB_EVENT_NAME = process.env['GITHUB_EVENT_NAME'];
@@ -48,14 +48,14 @@ process.env['GITHUB_REF'];
 const GITHUB_REPOSITORY = process.env['GITHUB_REPOSITORY'];
 const GITHUB_API_URL = process.env['GITHUB_API_URL'];
 const REPO_DIRECTORY = process.env['INPUT_LOCATION'] || process.env['GITHUB_WORKSPACE'];
-parseInt(process.env['INPUT_JPEGQUALITY']) || 80;
-parseInt(process.env['INPUT_PNGQUALITY']) || 80;
-parseInt(process.env['INPUT_WEBPQUALITY']) || 80;
-process.env['INPUT_IGNOREPATHS'] ? process.env['INPUT_IGNOREPATHS'].split(',') : [
+const JPEG_QUALITY = parseInt(process.env['INPUT_JPEGQUALITY']) || 80;
+const PNG_QUALITY = parseInt(process.env['INPUT_PNGQUALITY']) || 80;
+const WEBP_QUALITY = parseInt(process.env['INPUT_WEBPQUALITY']) || 80;
+const IGNORE_PATHS = process.env['INPUT_IGNOREPATHS'] ? process.env['INPUT_IGNOREPATHS'].split(',') : [
     'node_modules/**'
 ];
-const COMPRESS_ONLY$1 = process.env['INPUT_COMPRESSONLY'] === 'true';
-process.env['INPUT_JPEGPROGRESSIVE'] === 'true';
+const COMPRESS_ONLY = process.env['INPUT_COMPRESSONLY'] === 'true';
+const JPEG_PROGRESSIVE = process.env['INPUT_JPEGPROGRESSIVE'] === 'true';
 ({
     name: process.env['INPUT_COMMITNAME'] || 'Calibre',
     email: process.env['INPUT_COMMITEMAIL'] || 'hello@calibreapp.com'
@@ -64,7 +64,7 @@ if (!REPO_DIRECTORY) {
     console.log('::error:: There is no GITHUB_WORKSPACE environment variable');
     process.exit(1);
 }
-path$4.join(REPO_DIRECTORY, '.github/calibre/image-actions.yml');
+const CONFIG_PATH = path$4.join(REPO_DIRECTORY, '.github/calibre/image-actions.yml');
 const FILE_EXTENSIONS_TO_PROCESS = [
     'jpeg',
     'jpg',
@@ -72,10 +72,10 @@ const FILE_EXTENSIONS_TO_PROCESS = [
     'webp'
 ];
 const EXTENSION_TO_SHARP_FORMAT_MAPPING = {
-    '.png': ImageKind$1.Png,
-    '.jpeg': ImageKind$1.Jpeg,
-    '.jpg': ImageKind$1.Jpeg,
-    '.webp': ImageKind$1.Webp
+    '.png': ImageKind.Png,
+    '.jpeg': ImageKind.Jpeg,
+    '.jpg': ImageKind.Jpeg,
+    '.webp': ImageKind.Webp
 };
 
 const { readFile: readFile$4 } = require$$0.promises;
@@ -4649,7 +4649,6 @@ var loader = {
 var load                = loader.load;
 
 const { readFile: readFile$3 } = require$$0.promises;
-const { ImageKind, CONFIG_PATH, JPEG_QUALITY, JPEG_PROGRESSIVE, PNG_QUALITY, WEBP_QUALITY, IGNORE_PATHS, COMPRESS_ONLY } = require('./constants');
 // Deprecated configuration method
 const getYamlConfig = async ()=>{
     try {
@@ -21677,7 +21676,7 @@ const processImages = async ()=>{
         const sharpFormat = EXTENSION_TO_SHARP_FORMAT_MAPPING[extension];
         const options = config[sharpFormat];
         const beforeStats = (await stat(imgPath)).size;
-        if (sharpFormat == ImageKind$1.Png) {
+        if (sharpFormat == ImageKind.Png) {
             try {
                 await oxipng([
                     '-o',
@@ -25217,7 +25216,7 @@ if (!GITHUB_TOKEN) {
     process.exit(1);
 }
 const main = async ()=>{
-    if (!COMPRESS_ONLY$1) {
+    if (!COMPRESS_ONLY) {
         // Bail out if the event that executed the action wasn’t a pull_request
         if (GITHUB_EVENT_NAME !== 'pull_request') {
             console.log('::error:: This action only runs for pushes to PRs');
