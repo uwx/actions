@@ -49,51 +49,75 @@ jobs:
       working-directory: calibre-image-actions
 
     - name: Install prebuilt darwin@arm64v8
-      run: pnpm rebuild --config.platform=darwin --config.arch=arm64 --config.arm-version=8
+      run: |
+        pnpm rebuild --config.platform=darwin --config.arch=arm64 --config.arm-version=8
+        cp -r -f node_modules/sharp/build/Release dist/libs
       working-directory: calibre-image-actions
 
     - name: Install prebuilt darwin@x64
-      run: pnpm rebuild --config.platform=darwin --config.arch=x64
+      run: |
+        pnpm rebuild --config.platform=darwin --config.arch=x64
+        cp -r -f node_modules/sharp/build/Release dist/libs
       working-directory: calibre-image-actions
 
     - name: Install prebuilt linux@arm64v8
-      run: pnpm rebuild --config.platform=linux --config.arch=arm64 --config.arm-version=8
+      run: |
+        pnpm rebuild --config.platform=linux --config.arch=arm64 --config.arm-version=8
+        cp -r -f node_modules/sharp/build/Release dist/libs
       working-directory: calibre-image-actions
 
     - name: Install prebuilt linux@armv6
-      run: pnpm rebuild --config.platform=linux --config.arch=arm --config.arm-version=6
+      run: |
+        pnpm rebuild --config.platform=linux --config.arch=arm --config.arm-version=6
+        cp -r -f node_modules/sharp/build/Release dist/libs
       working-directory: calibre-image-actions
 
     - name: Install prebuilt linux@armv7
-      run: pnpm rebuild --config.platform=linux --config.arch=arm --config.arm-version=7
+      run: |
+        pnpm rebuild --config.platform=linux --config.arch=arm --config.arm-version=7
+        cp -r -f node_modules/sharp/build/Release dist/libs
       working-directory: calibre-image-actions
 
     - name: Install prebuilt linux@x64
-      run: pnpm rebuild --config.platform=linux --config.arch=x64
+      run: |
+        pnpm rebuild --config.platform=linux --config.arch=x64
+        cp -r -f node_modules/sharp/build/Release dist/libs
       working-directory: calibre-image-actions
 
     - name: Install prebuilt linux@arm64v8musl
-      run: pnpm rebuild --config.platform=linux --config.arch=arm64 --config.arm-version=8 --config.libc=musl
+      run: |
+        pnpm rebuild --config.platform=linux --config.arch=arm64 --config.arm-version=8 --config.libc=musl
+        cp -r -f node_modules/sharp/build/Release dist/libs
       working-directory: calibre-image-actions
 
     - name: Install prebuilt linux@x64musl
-      run: pnpm rebuild --config.platform=linux --config.arch=x64 --config.libc=musl
+      run: |
+        pnpm rebuild --config.platform=linux --config.arch=x64 --config.libc=musl
+        cp -r -f node_modules/sharp/build/Release dist/libs
       working-directory: calibre-image-actions
 
     - name: Install prebuilt win32@arm64v8
-      run: pnpm rebuild --config.platform=win32 --config.arch=arm64 --config.arm-version=8
+      run: |
+        pnpm rebuild --config.platform=win32 --config.arch=arm64 --config.arm-version=8
+        cp -r -f node_modules/sharp/build/Release dist/libs
       working-directory: calibre-image-actions
 
     - name: Install prebuilt win32@ia32
-      run: pnpm rebuild --config.platform=win32 --config.arch=ia32
+      run: |
+        pnpm rebuild --config.platform=win32 --config.arch=ia32
+        cp -r -f node_modules/sharp/build/Release dist/libs
       working-directory: calibre-image-actions
 
     - name: Install prebuilt win32@x64
-      run: pnpm rebuild --config.platform=win32 --config.arch=x64
+      run: |
+        pnpm rebuild --config.platform=win32 --config.arch=x64
+        cp -r -f node_modules/sharp/build/Release dist/libs
       working-directory: calibre-image-actions
 
     - name: Build calibre-image-actions
-      run: npm run build
+      run: |
+        cp -r -f dist/libs node_modules/sharp/build/Release
+        npm run build
       working-directory: calibre-image-actions
 
     - name: Push changes to GitHub
