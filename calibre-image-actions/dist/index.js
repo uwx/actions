@@ -13949,7 +13949,7 @@ const binFile = {
 };
 function getProcess() {
     assert.strict(process.platform in binDir, `Missing binary for platform ${process.platform}`);
-    return path$4.resolve(path$4.join(__dirname, '..', '..', 'src', 'oxipng', 'bin', binDir[process.platform], binFile[process.platform]));
+    return path$4.resolve(path$4.join(__dirname, '..', 'src', 'oxipng', 'bin', binDir[process.platform], binFile[process.platform]));
 }
 let chmodded = false;
 async function oxipng(args, options = {}) {
