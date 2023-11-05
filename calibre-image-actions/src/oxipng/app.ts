@@ -1,6 +1,8 @@
 import { strict as assert } from 'assert';
 import { ExecFileOptions, execFile, execFileSync } from 'child_process'
 import { join, resolve } from 'path'
+import { chmodSync } from 'fs'
+import { chmod } from 'fs/promises'
 
 const binDir = {
     darwin: 'oxipng-9.0.0-x86_64-apple-darwin',
@@ -20,8 +22,15 @@ function getProcess(): string {
     return resolve(join(__dirname, '..', '..', 'src', 'oxipng', 'bin', binDir[process.platform as keyof typeof binDir], binFile[process.platform as keyof typeof binDir]))
 }
 
+let chmodded = false;
 export function oxipngSync(args: string[], options: Partial<ExecFileOptions>  = {}) {
     const file = getProcess();
+
+    if (!chmodded) {
+        chmodded = true;
+        chmodSync(file, 0o777)
+    }
+
     options = Object.assign({ stdio: 'inherit', windowsHide: true }, options)
 
     return execFileSync(file, args, options)
@@ -29,6 +38,12 @@ export function oxipngSync(args: string[], options: Partial<ExecFileOptions>  = 
 
 export async function oxipng(args: string[], options: Partial<ExecFileOptions> = {}) {
     const file = getProcess();
+
+    if (!chmodded) {
+        chmodded = true;
+        await chmod(file, 0o777)
+    }
+
     options = Object.assign({ stdio: 'inherit', windowsHide: true }, options)
 
     return new Promise<{ code: number | null, signal: NodeJS.Signals | null }>((resolve, reject) => {
