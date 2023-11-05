@@ -54,6 +54,74 @@ export default {
         })),
         /** @satisfies {import('rollup').Plugin} */ ({
             name: '.node loader',
+            renderChunk(code, chunk, options, meta) {
+                return code + `
+                commonjsResolve = function(path, originalModuleDir) {
+                    function isPossibleNodeModulesPath (modulePath) {
+                        var c0 = modulePath[0];
+                        if (c0 === '/' || c0 === '\\\\') return false;
+                        var c1 = modulePath[1], c2 = modulePath[2];
+                        if ((c0 === '.' && (!c1 || c1 === '/' || c1 === '\\\\')) ||
+                            (c0 === '.' && c1 === '.' && (!c2 || c2 === '/' || c2 === '\\\\'))) return false;
+                        if (c1 === ':' && (c2 === '/' || c2 === '\\\\')) return false;
+                        return true;
+                    }
+
+                    function normalize (path) {
+                        path = path.replace(/\\\\/g, '/');
+                        var parts = path.split('/');
+                        var slashed = parts[0] === '';
+                        for (var i = 1; i < parts.length; i++) {
+                            if (parts[i] === '.' || parts[i] === '') {
+                                parts.splice(i--, 1);
+                            }
+                        }
+                        for (var i = 1; i < parts.length; i++) {
+                            if (parts[i] !== '..') continue;
+                            if (i > 0 && parts[i - 1] !== '..' && parts[i - 1] !== '.') {
+                                parts.splice(--i, 2);
+                                i--;
+                            }
+                        }
+                        path = parts.join('/');
+                        if (slashed && path[0] !== '/') path = '/' + path;
+                        else if (path.length === 0) path = '.';
+                        return path;
+                    }
+
+                    var shouldTryNodeModules = isPossibleNodeModulesPath(path);
+                    path = normalize(path);
+                    var relPath;
+                    if (path[0] === '/') {
+                        originalModuleDir = '';
+                    }
+                    var modules = getDynamicModules();
+                    var checkedExtensions = ['', '.js', '.json', '.node', '.dll', '.dylib'];
+                    while (true) {
+                        if (!shouldTryNodeModules) {
+                            relPath = normalize(originalModuleDir + '/' + path);
+                        } else {
+                            relPath = normalize(originalModuleDir + '/node_modules/' + path);
+                        }
+
+                        if (relPath.endsWith('/..')) {
+                            break; // Travelled too far up, avoid infinite loop
+                        }
+
+                        for (var extensionIndex = 0; extensionIndex < checkedExtensions.length; extensionIndex++) {
+                            var resolvedPath = relPath + checkedExtensions[extensionIndex];
+                            if (modules[resolvedPath]) {
+                                return resolvedPath;
+                            }
+                        }
+                        if (!shouldTryNodeModules) break;
+                        var nextDir = normalize(originalModuleDir + '/..');
+                        if (nextDir === originalModuleDir) break;
+                        originalModuleDir = nextDir;
+                    }
+                    return null;
+                }`;
+            },
             async load(id) {
                 if (id.endsWith('.node') || id.endsWith('.dll') || id.endsWith('.dylib') || id.endsWith('.so')) {
                     const moduleName = path.basename(id);
