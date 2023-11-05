@@ -6283,13 +6283,53 @@ const __require$h = require("./libs/sharp-win32-ia32.node");
 
 const __require$g = require("./libs/sharp-win32-x64.node");
 
-const __require$f = require("./libs/libglib-2.0-0.dll");
+function get$3() {
+                            let p = path$4.resolve(__dirname, "./libs/libglib-2.0-0.dll");
+                            if (!require.cache[p]) {
+                                let module = {exports:{}};
+                                process.dlopen(module, p);
+                                require.cache[p] = module;
+                            }
+                            // Fool other plugins, leave this one alone! (Resilient to uglifying too)
+                            let req = require || require;
+                            return req(p);
+                        }                        const __require$f = get$3();
 
-const __require$e = require("./libs/libgobject-2.0-0.dll");
+function get$2() {
+                            let p = path$4.resolve(__dirname, "./libs/libgobject-2.0-0.dll");
+                            if (!require.cache[p]) {
+                                let module = {exports:{}};
+                                process.dlopen(module, p);
+                                require.cache[p] = module;
+                            }
+                            // Fool other plugins, leave this one alone! (Resilient to uglifying too)
+                            let req = require || require;
+                            return req(p);
+                        }                        const __require$e = get$2();
 
-const __require$d = require("./libs/libvips-42.dll");
+function get$1() {
+                            let p = path$4.resolve(__dirname, "./libs/libvips-42.dll");
+                            if (!require.cache[p]) {
+                                let module = {exports:{}};
+                                process.dlopen(module, p);
+                                require.cache[p] = module;
+                            }
+                            // Fool other plugins, leave this one alone! (Resilient to uglifying too)
+                            let req = require || require;
+                            return req(p);
+                        }                        const __require$d = get$1();
 
-const __require$c = require("./libs/libvips-cpp.dll");
+function get() {
+                            let p = path$4.resolve(__dirname, "./libs/libvips-cpp.dll");
+                            if (!require.cache[p]) {
+                                let module = {exports:{}};
+                                process.dlopen(module, p);
+                                require.cache[p] = module;
+                            }
+                            // Fool other plugins, leave this one alone! (Resilient to uglifying too)
+                            let req = require || require;
+                            return req(p);
+                        }                        const __require$c = get();
 
 const __require$b = require("./libs/sharp-darwin-arm64v8.node");
 
