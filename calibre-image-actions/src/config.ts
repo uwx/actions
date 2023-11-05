@@ -3,7 +3,7 @@ const { readFile } = fsPromises
 import { load as yamlLoad } from 'js-yaml'
 import { OutputOptions, PngOptions, JpegOptions, WebpOptions } from 'sharp'
 
-const {
+import {
   ImageKind,
   CONFIG_PATH,
   JPEG_QUALITY,
@@ -12,7 +12,7 @@ const {
   WEBP_QUALITY,
   IGNORE_PATHS,
   COMPRESS_ONLY
-} = require('./constants')
+} from './constants'
 
 interface Config {
   compressOnly: boolean

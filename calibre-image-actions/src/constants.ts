@@ -68,5 +68,6 @@ export {
   PNG_QUALITY,
   WEBP_QUALITY,
   IGNORE_PATHS,
-  COMPRESS_ONLY
+  COMPRESS_ONLY,
+  ImageKind
 }
