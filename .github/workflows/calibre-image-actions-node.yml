@@ -33,8 +33,8 @@ jobs:
     - run: pnpm install
 
     - run: |
-        apt-get update
-        apt-get install libvips
+        sudo apt-get update -y
+        sudo apt-get install libvips -y
         pnpm install
         pnpm rebuild --config.platform=darwin --config.arch=arm64 --config.arm-version=8
         pnpm rebuild --config.platform=darwin --config.arch=x64
