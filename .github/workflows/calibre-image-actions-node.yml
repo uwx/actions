@@ -117,6 +117,10 @@ jobs:
     - name: Build calibre-image-actions
       run: |
         cp -r -f dist/libs node_modules/sharp/build/Release
+
+        # stuff not meant to be pushed to github
+        rm -rf dist/libs/Release
+
         npm run build
       working-directory: calibre-image-actions
 
