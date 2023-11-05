@@ -14,6 +14,9 @@ on:
     paths:
       - "git-publish-subdir/action/**"
 
+permissions:
+  contents: write
+
 jobs:
   build:
 
