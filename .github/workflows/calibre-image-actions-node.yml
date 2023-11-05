@@ -22,40 +22,82 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
     - name: Use Node.js 20
       uses: actions/setup-node@v3
       with:
         node-version: '20'
 
-    - uses: pnpm/action-setup@v2
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
       with:
         version: 8
 
-    - run: pnpm install
+    - name: Install repo-wide dependencies
+      run: pnpm install
 
-    - run: |
+    - name: Install libvips
+      run: |
         sudo apt-get update -y
         sudo apt-get install libvips -y
+
+    - name: Install image-actions dependencies
+      run: |
         pnpm install
-        pnpm rebuild --config.platform=darwin --config.arch=arm64 --config.arm-version=8
-        pnpm rebuild --config.platform=darwin --config.arch=x64
-        pnpm rebuild --config.platform=linux --config.arch=arm64 --config.arm-version=8
-        pnpm rebuild --config.platform=linux --config.arch=arm --config.arm-version=6
-        pnpm rebuild --config.platform=linux --config.arch=arm --config.arm-version=7
-        pnpm rebuild --config.platform=linux --config.arch=x64
-        pnpm rebuild --config.platform=linux --config.arch=arm64 --config.arm-version=8 --config.libc=musl
-        pnpm rebuild --config.platform=linux --config.arch=x64 --config.libc=musl
-        pnpm rebuild --config.platform=win32 --config.arch=arm64 --config.arm-version=8
-        pnpm rebuild --config.platform=win32 --config.arch=ia32
-        pnpm rebuild --config.platform=win32 --config.arch=x64
       working-directory: calibre-image-actions
 
-    - run: npm run build
+    - name: Install prebuilt darwin@arm64v8
+      run: pnpm rebuild --config.platform=darwin --config.arch=arm64 --config.arm-version=8
       working-directory: calibre-image-actions
 
-    - run: |
+    - name: Install prebuilt darwin@x64
+      run: pnpm rebuild --config.platform=darwin --config.arch=x64
+      working-directory: calibre-image-actions
+
+    - name: Install prebuilt linux@arm64v8
+      run: pnpm rebuild --config.platform=linux --config.arch=arm64 --config.arm-version=8
+      working-directory: calibre-image-actions
+
+    - name: Install prebuilt linux@armv6
+      run: pnpm rebuild --config.platform=linux --config.arch=arm --config.arm-version=6
+      working-directory: calibre-image-actions
+
+    - name: Install prebuilt linux@armv7
+      run: pnpm rebuild --config.platform=linux --config.arch=arm --config.arm-version=7
+      working-directory: calibre-image-actions
+
+    - name: Install prebuilt linux@x64
+      run: pnpm rebuild --config.platform=linux --config.arch=x64
+      working-directory: calibre-image-actions
+
+    - name: Install prebuilt linux@arm64v8musl
+      run: pnpm rebuild --config.platform=linux --config.arch=arm64 --config.arm-version=8 --config.libc=musl
+      working-directory: calibre-image-actions
+
+    - name: Install prebuilt linux@x64musl
+      run: pnpm rebuild --config.platform=linux --config.arch=x64 --config.libc=musl
+      working-directory: calibre-image-actions
+
+    - name: Install prebuilt win32@arm64v8
+      run: pnpm rebuild --config.platform=win32 --config.arch=arm64 --config.arm-version=8
+      working-directory: calibre-image-actions
+
+    - name: Install prebuilt win32@ia32
+      run: pnpm rebuild --config.platform=win32 --config.arch=ia32
+      working-directory: calibre-image-actions
+
+    - name: Install prebuilt win32@x64
+      run: pnpm rebuild --config.platform=win32 --config.arch=x64
+      working-directory: calibre-image-actions
+
+    - name: Build calibre-image-actions
+      run: npm run build
+      working-directory: calibre-image-actions
+
+    - name: Push changes to GitHub
+      run: |
         git config --global user.name 'github-actions'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         git config pull.rebase true
