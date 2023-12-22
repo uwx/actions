@@ -39666,11 +39666,11 @@ let O = coreExports.getInput('run', {
     required: !1
 }), D = coreExports.getInput('tarball-file-name', {
     required: !1
-}), A = coreExports.getBooleanInput('load-tarball-artifact-if-exists', {
+}), j = coreExports.getBooleanInput('load-tarball-artifact-if-exists', {
     required: !1
-}), j = coreExports.getBooleanInput('save-tarball-artifact', {
+}), A = coreExports.getBooleanInput('save-tarball-artifact', {
     required: !1
-}), J = coreExports.getInput('shell', {
+}), U = coreExports.getInput('shell', {
     required: !1
 });
 coreExports.getInput('input', {
@@ -39678,11 +39678,11 @@ coreExports.getInput('input', {
 }), coreExports.getInput('input-encoding', {
     required: !1
 });
-let I = coreExports.getBooleanInput('fail-on-stderr', {
+let J = coreExports.getBooleanInput('fail-on-stderr', {
     required: !1
-}), R = coreExports.getInput("ignore-exit-codes", {
+}), I = coreExports.getInput("ignore-exit-codes", {
     required: !1
-}).split(',').map(parseInt), U = coreExports.getInput('key', {
+}).split(',').map(parseInt), R = coreExports.getInput('key', {
     required: !1
 }), G = Number(coreExports.getInput('timeout', {
     required: !1
@@ -39698,17 +39698,14 @@ try {
     var z = [];
     r(z, _("Downloading and extracting artifact"));
     var B = !0;
-    if (A) {
+    if (j) {
         B = !1;
         try {
             L.downloadArtifact(P, k), B = !0;
         } catch (e) {
-        /*if (!err.message.in)
-            $_ | Get-Error
-            if ($_.Exception.Message -notcontains "Unable to find") {
-                Throw
-                Write-Host $_
-            }*/ }
+            if (e && 'object' == typeof e && 'message' in e && ('Unable to find any artifacts for the associated workflow' == e.message || e.message == `Unable to find an artifact with the name: ${P}`)) B = !1;
+            else throw e;
+        }
         B && existsSync(k) && (await exec_2('7z', [
             'x',
             '-y',
@@ -39726,23 +39723,23 @@ let F = null;
 function H() {
     return null != F && F < Date.now();
 }
-if ((e = process.env[`STAGE_END_${U}`]) && (F = Number(e), coreExports.notice(`This build stage will time out at ${F}`)), v) {
+if ((e = process.env[`STAGE_END_${R}`]) && (F = Number(e), coreExports.notice(`This build stage will time out at ${F}`)), v) {
     H() && (coreExports.setOutput('results-per-command', '[]'), coreExports.setOutput('before-run-outcome', "timeout"), coreExports.setOutput('outcome', "timeout"), coreExports.setOutput('after-run-outcome', q ? "timeout" : "skipped"), coreExports.notice("Timed out before before-hook execution"), process.exit(0));
     let e = await ee(v, {
         cwd: N,
-        failOnStdErr: I,
-        shell: J,
-        ignoreExitCodes: R
+        failOnStdErr: J,
+        shell: U,
+        ignoreExitCodes: I
     });
     coreExports.setOutput('before-run-outcome', e.outcome), "failure" == e.outcome && (coreExports.setOutput('outcome', "failure"), coreExports.error("Before-run hook failed: $failCase"), process.exit(1));
 } else coreExports.setOutput('before-run-outcome', "skipped");
-null == F && (coreExports.exportVariable(`STAGE_END_${U}`, F = Date.now() + G), coreExports.info(`This build stage will time out at ${F}`)), H() && (await Y(), coreExports.setOutput('results-per-command', '[]'), coreExports.setOutput('outcome', "timeout"), coreExports.setOutput('after-run-outcome', null != q ? "timeout" : "skipped"), coreExports.notice("Timed out before main command execution"), process.exit(0));
+null == F && (coreExports.exportVariable(`STAGE_END_${R}`, F = Date.now() + G), coreExports.info(`This build stage will time out at ${F}`)), H() && (await Y(), coreExports.setOutput('results-per-command', '[]'), coreExports.setOutput('outcome', "timeout"), coreExports.setOutput('after-run-outcome', null != q ? "timeout" : "skipped"), coreExports.notice("Timed out before main command execution"), process.exit(0));
 {
     let e = await ee(O, {
         cwd: N,
-        failOnStdErr: I,
-        shell: J,
-        ignoreExitCodes: R,
+        failOnStdErr: J,
+        shell: U,
+        ignoreExitCodes: I,
         timeout: null != F ? Math.max(F - Date.now(), 1) : 1
     });
     switch(e.outcome){
@@ -39753,9 +39750,9 @@ null == F && (coreExports.exportVariable(`STAGE_END_${U}`, F = Date.now() + G), 
         case "success":
             coreExports.setOutput('outcome', "success"), null != q ? (coreExports.setOutput('after-run-outcome', (e = await ee(q, {
                 cwd: N,
-                failOnStdErr: I,
-                shell: J,
-                ignoreExitCodes: R
+                failOnStdErr: J,
+                shell: U,
+                ignoreExitCodes: I
             })).outcome), "failure" == e.outcome ? (coreExports.setOutput('outcome', "failure"), coreExports.error(`After-run hook failed: ${e.failCase}`)) : coreExports.setOutput('outcome', "success")) : (coreExports.setOutput('after-run-outcome', "skipped"), coreExports.setOutput('outcome', "success"));
     }
 }async function Q(e, t, o = 5) {
@@ -39792,7 +39789,7 @@ async function X(e, t) {
     };
 }
 async function Y() {
-    if (await W(5000), j) {
+    if (await W(5000), A) {
         console.time('glob');
         let l = await (await create_1(T, JSON.parse('{"implicitDescendants":true}'))).glob();
         console.timeEnd('glob'), console.log(`Globbed ${l.length} files`);
