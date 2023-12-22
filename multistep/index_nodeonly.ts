@@ -60,23 +60,22 @@ function withLogGroup(message: string): Disposable {
 {
     using _ = withLogGroup("Downloading and extracting artifact");
 
-    let Ok = true;
+    let ok = true;
 
     if (loadTarballArtifactIfExists) {
-        Ok = false;
+        ok = false;
         try {
             artifactClient.downloadArtifact(tarballArtifactName, tarballRoot);
-            Ok = true;
+            ok = true;
         } catch (err) {
-            /*if (!err.message.in)
-            $_ | Get-Error
-            if ($_.Exception.Message -notcontains "Unable to find") {
-                Throw
-                Write-Host $_
-            }*/
+            if (err && typeof err === 'object' && 'message' in err && (err.message == 'Unable to find any artifacts for the associated workflow' || err.message == `Unable to find an artifact with the name: ${tarballArtifactName}`)) {
+                ok = false;
+            } else {
+                throw err;
+            }
         }
 
-        if (Ok && existsSync(tarballRoot)) {
+        if (ok && existsSync(tarballRoot)) {
             await exec('7z', ['x', '-y', resolve(tarballRoot, tarballFileName)], { cwd: tarballRoot });
             await unlink(resolve(tarballRoot, tarballFileName));
         }
