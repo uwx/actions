@@ -6,13 +6,13 @@ on:
 
     paths:
       - ".github/workflows/multistep.yml"
-      - "multistep/ghactions-toolkit-powershell/**"
+      - "multistep/**"
 
   pull_request:
     branches: [ "main" ]
 
     paths:
-      - "multistep/ghactions-toolkit-powershell/**"
+      - "multistep/**"
 
 permissions:
   contents: write
@@ -36,10 +36,9 @@ jobs:
     - run: pnpm install
 
     - run: pnpm install
-      working-directory: multistep/ghactions-toolkit-powershell
+      working-directory: multistep
 
     - run: npm run build
-      working-directory: multistep/ghactions-toolkit-powershell
 
     - run: |
         git config --global user.name 'github-actions'
@@ -52,5 +51,4 @@ jobs:
         git push
 
         exit 0
-      working-directory: multistep/ghactions-toolkit-powershell
       if: github.event_name == 'push'
