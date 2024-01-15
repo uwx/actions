@@ -44322,6 +44322,7 @@ async function runWithTimeout(command, options) {
     const commandLines = command.split('\n');
     if (!options.shell || options.shell == 'none') {
         for (const line of commandLines){
+            if (line.trim() == '') continue;
             coreExports.info(`Executing command: ${line}`);
             const result = await runCommandWithTimeout(line, {
                 cwd: options.cwd,
