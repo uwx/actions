@@ -38,7 +38,7 @@ jobs:
     - run: pnpm install
       working-directory: multistep
 
-    - run: rollup -c --bundleConfigAsCjs
+    - run: pnpx rollup -c --bundleConfigAsCjs
       working-directory: multistep
 
     - run: |
