@@ -14,6 +14,8 @@ import { ExecPublicState, ToolRunner, argStringToArray } from './execx.ts';
 import { generateCtrlBreakAsync } from 'generate-ctrl-c-event';
 import { inspect } from 'util';
 
+const delayedSymbol = Symbol('delayed');
+
 process.on('SIGINT', function () {
 });
 
@@ -200,8 +202,6 @@ async function repeatOnFail(label: string, action: () => unknown, maxRetries = 5
 }
 
 type Shell = 'none' | 'pwsh' | 'cmd' | 'python' | 'node';
-
-const delayedSymbol = Symbol('delayed');
 
 function delay(ms: number): Promise<typeof delayedSymbol> {
     return new Promise(r => setTimeout(() => r(delayedSymbol), ms));
