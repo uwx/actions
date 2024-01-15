@@ -43958,6 +43958,7 @@ function _using(stack, value, isAwait) {
 }
 const delayedSymbol = Symbol('delayed');
 process.on('SIGINT', function() {});
+process.on('SIGBREAK', function() {});
 //
 const run = coreExports.getInput('run', {
     required: true
