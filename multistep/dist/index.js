@@ -43942,6 +43942,7 @@ function _using(stack, value, isAwait) {
     });
     return value;
 }
+const delayedSymbol = Symbol('delayed');
 process.on('SIGINT', function() {});
 //
 const run = coreExports.getInput('run', {
@@ -44149,7 +44150,6 @@ if (isExecutionTimedOut()) {
         }
     }
 }
-const delayedSymbol = Symbol('delayed');
 function delay(ms) {
     return new Promise((r)=>setTimeout(()=>r(delayedSymbol), ms));
 }
