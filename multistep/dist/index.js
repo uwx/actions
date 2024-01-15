@@ -1,39 +1,59 @@
-import * as require$$1 from 'path';
-import require$$1__default from 'path';
-import * as require$$0 from 'os';
-import require$$0__default from 'os';
-import require$$0$1, { existsSync } from 'fs';
-import require$$2$2 from 'http';
-import require$$3 from 'https';
-import require$$0$5 from 'net';
-import require$$1$1 from 'tls';
-import * as require$$4 from 'events';
-import require$$4__default from 'events';
-import require$$0$3 from 'assert';
-import require$$0$2, { inspect } from 'util';
-import require$$0$4 from 'stream';
-import require$$7 from 'buffer';
-import require$$8 from 'querystring';
-import require$$13 from 'stream/web';
-import require$$0$7 from 'node:stream';
-import require$$1$2 from 'node:util';
-import require$$0$6 from 'node:events';
-import require$$0$8 from 'worker_threads';
-import require$$2$3 from 'perf_hooks';
-import require$$5 from 'util/types';
-import require$$4$1 from 'async_hooks';
-import require$$1$3 from 'console';
-import require$$1$4 from 'url';
-import require$$3$1 from 'zlib';
-import require$$6 from 'string_decoder';
-import require$$0$9 from 'diagnostics_channel';
-import * as require$$2$1 from 'child_process';
-import require$$2__default from 'child_process';
-import require$$6$1, { setTimeout as setTimeout$1 } from 'timers';
-import require$$0$a from 'crypto';
-import { resolve } from 'path/win32';
-import { unlink, writeFile } from 'fs/promises';
-import require$$0$b from 'tty';
+'use strict';
+
+var require$$1 = require('path');
+var require$$0 = require('os');
+var require$$0$1 = require('fs');
+var require$$2$1 = require('http');
+var require$$3 = require('https');
+var require$$0$5 = require('net');
+var require$$1$1 = require('tls');
+var require$$4 = require('events');
+var require$$0$3 = require('assert');
+var require$$0$2 = require('util');
+var require$$0$4 = require('stream');
+var require$$7 = require('buffer');
+var require$$8 = require('querystring');
+var require$$13 = require('stream/web');
+var require$$0$7 = require('node:stream');
+var require$$1$2 = require('node:util');
+var require$$0$6 = require('node:events');
+var require$$0$8 = require('worker_threads');
+var require$$2$2 = require('perf_hooks');
+var require$$5 = require('util/types');
+var require$$4$1 = require('async_hooks');
+var require$$1$3 = require('console');
+var require$$1$4 = require('url');
+var require$$3$1 = require('zlib');
+var require$$6 = require('string_decoder');
+var require$$0$9 = require('diagnostics_channel');
+var require$$2$3 = require('child_process');
+var require$$6$1 = require('timers');
+var require$$0$a = require('crypto');
+var win32 = require('path/win32');
+var promises = require('fs/promises');
+var require$$0$b = require('tty');
+
+function _interopNamespaceDefault(e) {
+var n = Object.create(null);
+if (e) {
+Object.keys(e).forEach(function (k) {
+if (k !== 'default') {
+var d = Object.getOwnPropertyDescriptor(e, k);
+Object.defineProperty(n, k, d.get ? d : {
+enumerable: true,
+get: function () { return e[k]; }
+});
+}
+});
+}
+n.default = e;
+return n;
+}
+
+var require$$1__namespace = /*#__PURE__*/_interopNamespaceDefault(require$$1);
+var require$$0__namespace = /*#__PURE__*/_interopNamespaceDefault(require$$0);
+var require$$4__namespace = /*#__PURE__*/_interopNamespaceDefault(require$$4);
+var require$$2__namespace = /*#__PURE__*/_interopNamespaceDefault(require$$2$3);
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -3300,7 +3320,7 @@ sourceMapSupport.exports;
 
 (function (module, exports) {
 	var SourceMapConsumer = sourceMap.SourceMapConsumer;
-	var path = require$$1__default;
+	var path = require$$1;
 
 	var fs;
 	try {
@@ -3995,7 +4015,7 @@ var __importStar$j = (commonjsGlobal && commonjsGlobal.__importStar) || function
 };
 Object.defineProperty(command, "__esModule", { value: true });
 command.issue = command.issueCommand = void 0;
-const os$3 = __importStar$j(require$$0__default);
+const os$3 = __importStar$j(require$$0);
 const utils_1$6 = utils$2;
 /**
  * Commands
@@ -4692,7 +4712,7 @@ fileCommand.prepareKeyValueMessage = fileCommand.issueFileCommand = void 0;
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const fs$7 = __importStar$i(require$$0$1);
-const os$2 = __importStar$i(require$$0__default);
+const os$2 = __importStar$i(require$$0);
 const uuid_1 = require$$2;
 const utils_1$5 = utils$2;
 function issueFileCommand(command, message) {
@@ -4814,9 +4834,9 @@ function isLoopbackAddress(host) {
 var tunnel$2 = {};
 
 var tls$1 = require$$1$1;
-var http$1 = require$$2$2;
+var http$1 = require$$2$1;
 var https$1 = require$$3;
-var events$3 = require$$4__default;
+var events$3 = require$$4;
 var util$l = require$$0$2;
 
 
@@ -5357,7 +5377,7 @@ var errors$1 = {
 
 const assert$9 = require$$0$3;
 const { kDestroyed: kDestroyed$1, kBodyUsed: kBodyUsed$1 } = symbols$4;
-const { IncomingMessage } = require$$2$2;
+const { IncomingMessage } = require$$2$1;
 const stream$3 = require$$0$4;
 const net$2 = require$$0$5;
 const { InvalidArgumentError: InvalidArgumentError$l } = errors$1;
@@ -5790,7 +5810,7 @@ let events$2;
 function addAbortListener$1 (signal, listener) {
   if (typeof Symbol.dispose === 'symbol') {
     if (!events$2) {
-      events$2 = require$$4__default;
+      events$2 = require$$4;
     }
     if (typeof events$2.addAbortListener === 'function' && 'aborted' in signal) {
       return events$2.addAbortListener(signal, listener)
@@ -7577,7 +7597,7 @@ function requireUtil$4 () {
 
 	const { redirectStatus, badPorts, referrerPolicy: referrerPolicyTokens } = requireConstants$3();
 	const { getGlobalOrigin } = requireGlobal();
-	const { performance } = require$$2$3;
+	const { performance } = require$$2$2;
 	const { isBlobLike, toUSVString, ReadableStreamFrom } = util$k;
 	const assert = require$$0$3;
 	const { isUint8Array } = require$$5;
@@ -11601,7 +11621,7 @@ function processHeader (request, key, val, skipAppend = false) {
 
 var request$2 = Request$1;
 
-const EventEmitter = require$$4__default;
+const EventEmitter = require$$4;
 
 let Dispatcher$3 = class Dispatcher extends EventEmitter {
   dispatch () {
@@ -12309,7 +12329,7 @@ const util$g = util$k;
 const { kBodyUsed } = symbols$4;
 const assert$6 = require$$0$3;
 const { InvalidArgumentError: InvalidArgumentError$h } = errors$1;
-const EE = require$$4__default;
+const EE = require$$4;
 
 const redirectableStatusCodes = [300, 301, 302, 303, 307, 308];
 
@@ -16939,7 +16959,7 @@ const {
   kGetNetConnect: kGetNetConnect$1
 } = mockSymbols;
 const { buildURL: buildURL$1, nop } = util$k;
-const { STATUS_CODES } = require$$2$2;
+const { STATUS_CODES } = require$$2$1;
 const {
   types: {
     isPromise
@@ -19260,7 +19280,7 @@ function requireRequest () {
 	const { URLSerializer } = requireDataURL();
 	const { kHeadersList } = symbols$4;
 	const assert = require$$0$3;
-	const { getMaxListeners, setMaxListeners, getEventListeners, defaultMaxListeners } = require$$4__default;
+	const { getMaxListeners, setMaxListeners, getEventListeners, defaultMaxListeners } = require$$4;
 
 	let TransformStream = globalThis.TransformStream;
 
@@ -20235,14 +20255,14 @@ function requireFetch () {
 	  DOMException
 	} = requireConstants$3();
 	const { kHeadersList } = symbols$4;
-	const EE = require$$4__default;
+	const EE = require$$4;
 	const { Readable, pipeline } = require$$0$4;
 	const { addAbortListener, isErrored, isReadable, nodeMajor, nodeMinor } = util$k;
 	const { dataURLProcessor, serializeAMimeType } = requireDataURL();
 	const { TransformStream } = require$$13;
 	const { getGlobalDispatcher } = global$1;
 	const { webidl } = requireWebidl();
-	const { STATUS_CODES } = require$$2$2;
+	const { STATUS_CODES } = require$$2$1;
 
 	/** @type {import('buffer').resolveObjectURL} */
 	let resolveObjectURL;
@@ -27478,7 +27498,7 @@ var __awaiter$d = (commonjsGlobal && commonjsGlobal.__awaiter) || function (this
 };
 Object.defineProperty(lib$1, "__esModule", { value: true });
 lib$1.HttpClient = lib$1.isHttps = lib$1.HttpClientResponse = lib$1.HttpClientError = lib$1.getProxyUrl = lib$1.MediaTypes = lib$1.Headers = lib$1.HttpCodes = void 0;
-const http = __importStar$h(require$$2$2);
+const http = __importStar$h(require$$2$1);
 const https = __importStar$h(require$$3);
 const pm = __importStar$h(proxy);
 const tunnel = __importStar$h(tunnel$1);
@@ -28283,7 +28303,7 @@ function requireSummary () {
 		};
 		Object.defineProperty(exports, "__esModule", { value: true });
 		exports.summary = exports.markdownSummary = exports.SUMMARY_DOCS_URL = exports.SUMMARY_ENV_VAR = void 0;
-		const os_1 = require$$0__default;
+		const os_1 = require$$0;
 		const fs_1 = require$$0$1;
 		const { access, appendFile, writeFile } = fs_1.promises;
 		exports.SUMMARY_ENV_VAR = 'GITHUB_STEP_SUMMARY';
@@ -28586,7 +28606,7 @@ function requirePathUtils () {
 	};
 	Object.defineProperty(pathUtils, "__esModule", { value: true });
 	pathUtils.toPlatformPath = pathUtils.toWin32Path = pathUtils.toPosixPath = void 0;
-	const path = __importStar(require$$1__default);
+	const path = __importStar(require$$1);
 	/**
 	 * toPosixPath converts the given path to the posix form. On Windows, \\ will be
 	 * replaced with /.
@@ -28664,8 +28684,8 @@ function requireCore () {
 		const command_1 = command;
 		const file_command_1 = fileCommand;
 		const utils_1 = utils$2;
-		const os = __importStar(require$$0__default);
-		const path = __importStar(require$$1__default);
+		const os = __importStar(require$$0);
+		const path = __importStar(require$$1);
 		const oidc_utils_1 = requireOidcUtils();
 		/**
 		 * The code to exit an action
@@ -28972,12 +28992,6 @@ function requireCore () {
 
 var coreExports = requireCore();
 
-try {
-    await Promise.resolve().then(function () { return index_nodeonly; });
-} catch (err) {
-    coreExports.setFailed(err.message);
-}
-
 var io$1 = {};
 
 var ioUtil$2 = {};
@@ -29015,7 +29029,7 @@ var ioUtil$2 = {};
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.getCmdPath = exports.tryGetExecutablePath = exports.isRooted = exports.isDirectory = exports.exists = exports.READONLY = exports.UV_FS_O_EXLOCK = exports.IS_WINDOWS = exports.unlink = exports.symlink = exports.stat = exports.rmdir = exports.rm = exports.rename = exports.readlink = exports.readdir = exports.open = exports.mkdir = exports.lstat = exports.copyFile = exports.chmod = void 0;
 	const fs = __importStar(require$$0$1);
-	const path = __importStar(require$$1__default);
+	const path = __importStar(require$$1);
 	_a = fs.promises
 	// export const {open} = 'fs'
 	, exports.chmod = _a.chmod, exports.copyFile = _a.copyFile, exports.lstat = _a.lstat, exports.mkdir = _a.mkdir, exports.open = _a.open, exports.readdir = _a.readdir, exports.readlink = _a.readlink, exports.rename = _a.rename, exports.rm = _a.rm, exports.rmdir = _a.rmdir, exports.stat = _a.stat, exports.symlink = _a.symlink, exports.unlink = _a.unlink;
@@ -29198,7 +29212,7 @@ var __awaiter$b = (commonjsGlobal && commonjsGlobal.__awaiter) || function (this
 Object.defineProperty(io$1, "__esModule", { value: true });
 io$1.findInPath = which_1 = io$1.which = io$1.mkdirP = io$1.rmRF = io$1.mv = io$1.cp = void 0;
 const assert_1$3 = require$$0$3;
-const path$a = __importStar$g(require$$1__default);
+const path$a = __importStar$g(require$$1);
 const ioUtil$1 = __importStar$g(ioUtil$2);
 /**
  * Copies a file or folder.
@@ -29499,10 +29513,10 @@ var __awaiter$a = (commonjsGlobal && commonjsGlobal.__awaiter) || function (this
 };
 Object.defineProperty(toolrunner, "__esModule", { value: true });
 toolrunner.argStringToArray = toolrunner.ToolRunner = void 0;
-const os$1 = __importStar$f(require$$0__default);
-const events = __importStar$f(require$$4__default);
-const child = __importStar$f(require$$2__default);
-const path$9 = __importStar$f(require$$1__default);
+const os$1 = __importStar$f(require$$0);
+const events = __importStar$f(require$$4);
+const child = __importStar$f(require$$2$3);
+const path$9 = __importStar$f(require$$1);
 const io = __importStar$f(io$1);
 const ioUtil = __importStar$f(ioUtil$2);
 const timers_1 = require$$6$1;
@@ -30289,7 +30303,7 @@ Object.defineProperty(uploadSpecification, "__esModule", { value: true });
 uploadSpecification.getUploadSpecification = void 0;
 const fs$6 = __importStar$d(require$$0$1);
 const core_1$2 = requireCore();
-const path_1$1 = require$$1__default;
+const path_1$1 = require$$1;
 const path_and_artifact_name_validation_1$1 = pathAndArtifactNameValidation;
 /**
  * Creates a specification that describes how each file that is part of the artifact will be uploaded
@@ -30400,7 +30414,7 @@ function requireOld () {
 	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 	// USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-	var pathModule = require$$1__default;
+	var pathModule = require$$1;
 	var isWindows = process.platform === 'win32';
 	var fs = require$$0$1;
 
@@ -32086,7 +32100,7 @@ function requireCommon$2 () {
 	}
 
 	var fs = require$$0$1;
-	var path = require$$1__default;
+	var path = require$$1;
 	var minimatch = minimatch_1$1;
 	var isAbsolute = requirePathIsAbsolute();
 	var Minimatch = minimatch.Minimatch;
@@ -32327,7 +32341,7 @@ function requireSync () {
 	var minimatch = minimatch_1$1;
 	minimatch.Minimatch;
 	requireGlob().Glob;
-	var path = require$$1__default;
+	var path = require$$1;
 	var assert = require$$0$3;
 	var isAbsolute = requirePathIsAbsolute();
 	var common = requireCommon$2();
@@ -33013,8 +33027,8 @@ function requireGlob () {
 	var minimatch = minimatch_1$1;
 	minimatch.Minimatch;
 	var inherits = requireInherits();
-	var EE = require$$4__default.EventEmitter;
-	var path = require$$1__default;
+	var EE = require$$4.EventEmitter;
+	var path = require$$1;
 	var assert = require$$0$3;
 	var isAbsolute = requirePathIsAbsolute();
 	var globSync = requireSync();
@@ -33757,7 +33771,7 @@ function requireGlob () {
 }
 
 const assert = require$$0$3;
-const path$7 = require$$1__default;
+const path$7 = require$$1;
 const fs$5 = require$$0$1;
 let glob$1 = undefined;
 try {
@@ -34130,8 +34144,8 @@ rimraf.sync = rimrafSync;
 	 * Module dependencies.
 	 */
 	const fs = require$$0$1;
-	const os = require$$0__default;
-	const path = require$$1__default;
+	const os = require$$0;
+	const path = require$$1;
 	const crypto = require$$0$a;
 	const _c = { fs: fs.constants, os: os.constants };
 	const rimraf = rimraf_1;
@@ -36000,7 +36014,7 @@ const utils_1$2 = utils;
 const config_variables_1$2 = configVariables;
 const util_1 = require$$0$2;
 const url_1$1 = require$$1$4;
-const perf_hooks_1$1 = require$$2$3;
+const perf_hooks_1$1 = require$$2$2;
 const status_reporter_1$1 = statusReporter;
 const http_client_1 = lib$1;
 const http_manager_1$1 = httpManager;
@@ -36414,7 +36428,7 @@ const zlib = __importStar$9(require$$3$1);
 const utils_1$1 = utils;
 const url_1 = require$$1$4;
 const status_reporter_1 = statusReporter;
-const perf_hooks_1 = require$$2$3;
+const perf_hooks_1 = require$$2$2;
 const http_manager_1 = httpManager;
 const config_variables_1$1 = configVariables;
 const requestUtils_1 = requestUtils;
@@ -36696,7 +36710,7 @@ var __importStar$8 = (commonjsGlobal && commonjsGlobal.__importStar) || function
 };
 Object.defineProperty(downloadSpecification, "__esModule", { value: true });
 downloadSpecification.getDownloadSpecification = void 0;
-const path$6 = __importStar$8(require$$1__default);
+const path$6 = __importStar$8(require$$1);
 /**
  * Creates a specification for a set of files that will be downloaded
  * @param artifactName the name of the artifact
@@ -36790,7 +36804,7 @@ const path_and_artifact_name_validation_1 = pathAndArtifactNameValidation;
 const download_http_client_1 = downloadHttpClient;
 const download_specification_1 = downloadSpecification;
 const config_variables_1 = configVariables;
-const path_1 = require$$1__default;
+const path_1 = require$$1;
 class DefaultArtifactClient {
     /**
      * Constructs a DefaultArtifactClient
@@ -37028,7 +37042,7 @@ var __importDefault$2 = (commonjsGlobal && commonjsGlobal.__importDefault) || fu
 };
 Object.defineProperty(internalPathHelper, "__esModule", { value: true });
 internalPathHelper.safeTrimTrailingSeparator = internalPathHelper.normalizeSeparators = internalPathHelper.hasRoot = internalPathHelper.hasAbsoluteRoot = internalPathHelper.ensureAbsoluteRoot = internalPathHelper.dirname = void 0;
-const path$5 = __importStar$5(require$$1__default);
+const path$5 = __importStar$5(require$$1);
 const assert_1$2 = __importDefault$2(require$$0$3);
 const IS_WINDOWS$5 = process.platform === 'win32';
 /**
@@ -37338,7 +37352,7 @@ var __importDefault$1 = (commonjsGlobal && commonjsGlobal.__importDefault) || fu
 };
 Object.defineProperty(internalPath, "__esModule", { value: true });
 internalPath.Path = void 0;
-const path$4 = __importStar$3(require$$1__default);
+const path$4 = __importStar$3(require$$1);
 const pathHelper$1 = __importStar$3(internalPathHelper);
 const assert_1$1 = __importDefault$1(require$$0$3);
 const IS_WINDOWS$3 = process.platform === 'win32';
@@ -37450,8 +37464,8 @@ var __importDefault = (commonjsGlobal && commonjsGlobal.__importDefault) || func
 };
 Object.defineProperty(internalPattern, "__esModule", { value: true });
 internalPattern.Pattern = void 0;
-const os = __importStar$2(require$$0__default);
-const path$3 = __importStar$2(require$$1__default);
+const os = __importStar$2(require$$0);
+const path$3 = __importStar$2(require$$1);
 const pathHelper = __importStar$2(internalPathHelper);
 const assert_1 = __importDefault(require$$0$3);
 const minimatch_1 = minimatch_1$1;
@@ -37744,7 +37758,7 @@ internalGlobber.DefaultGlobber = void 0;
 const core$1 = __importStar$1(requireCore());
 const fs$1 = __importStar$1(require$$0$1);
 const globOptionsHelper = __importStar$1(internalGlobOptionsHelper);
-const path$2 = __importStar$1(require$$1__default);
+const path$2 = __importStar$1(require$$1);
 const patternHelper = __importStar$1(internalPatternHelper);
 const internal_match_kind_1 = internalMatchKind;
 const internal_pattern_1 = internalPattern;
@@ -37970,7 +37984,7 @@ const core = __importStar(requireCore());
 const fs = __importStar(require$$0$1);
 const stream = __importStar(require$$0$4);
 const util = __importStar(require$$0$2);
-const path$1 = __importStar(require$$1__default);
+const path$1 = __importStar(require$$1);
 function hashFiles$1(globber, currentWorkspace, verbose = false) {
     var e_1, _a;
     var _b;
@@ -38123,7 +38137,7 @@ class ExecPublicState {
 }
 /*
  * Class for running command line tools. Handles quoting and arg parsing in a platform agnostic way.
- */ class ToolRunner extends require$$4.EventEmitter {
+ */ class ToolRunner extends require$$4__namespace.EventEmitter {
     _debug(message) {
         if (this.options.listeners && this.options.listeners.debug) {
             this.options.listeners.debug(message);
@@ -38166,13 +38180,13 @@ class ExecPublicState {
     _processLineBuffer(data, strBuffer, onLine) {
         try {
             let s = strBuffer + data.toString();
-            let n = s.indexOf(require$$0.EOL);
+            let n = s.indexOf(require$$0__namespace.EOL);
             while(n > -1){
                 const line = s.substring(0, n);
                 onLine(line);
                 // the rest of the string ...
-                s = s.substring(n + require$$0.EOL.length);
-                n = s.indexOf(require$$0.EOL);
+                s = s.substring(n + require$$0__namespace.EOL.length);
+                n = s.indexOf(require$$0__namespace.EOL);
             }
             return s;
         } catch (err) {
@@ -38441,7 +38455,7 @@ class ExecPublicState {
         // root the tool path if it is unrooted and contains relative pathing
         if (!ioUtil$2.isRooted(this.toolPath) && (this.toolPath.includes('/') || IS_WINDOWS && this.toolPath.includes('\\'))) {
             // prefer options.cwd if it is specified, however options.cwd may also need to be rooted
-            this.toolPath = require$$1.resolve(process.cwd(), this.options.cwd || process.cwd(), this.toolPath);
+            this.toolPath = require$$1__namespace.resolve(process.cwd(), this.options.cwd || process.cwd(), this.toolPath);
         }
         // if the tool is only a file name, then resolve it from the PATH
         // otherwise verify it exists (add extension on Windows if necessary)
@@ -38453,7 +38467,7 @@ class ExecPublicState {
         }
         const optionsNonNull = this._cloneExecOptions(this.options);
         if (!optionsNonNull.silent && optionsNonNull.outStream) {
-            optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + require$$0.EOL);
+            optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + require$$0__namespace.EOL);
         }
         const state = new ExecState(optionsNonNull, this.toolPath);
         state.on('debug', (message)=>{
@@ -38463,7 +38477,7 @@ class ExecPublicState {
             throw new Error(`The cwd: ${this.options.cwd} does not exist!`);
         }
         const fileName = this._getSpawnFileName();
-        const cp = require$$2$1.spawn(fileName, this._getSpawnArgs(optionsNonNull), this._getSpawnOptions(this.options, fileName));
+        const cp = require$$2__namespace.spawn(fileName, this._getSpawnArgs(optionsNonNull), this._getSpawnOptions(this.options, fileName));
         let stdbuffer = '';
         if (cp.stdout) {
             cp.stdout.on('data', (data)=>{
@@ -38608,7 +38622,7 @@ class ExecPublicState {
     }
     return args;
 }
-class ExecState extends require$$4.EventEmitter {
+class ExecState extends require$$4__namespace.EventEmitter {
     CheckComplete() {
         if (this.done) {
             return;
@@ -38616,7 +38630,7 @@ class ExecState extends require$$4.EventEmitter {
         if (this.processClosed) {
             this._setResult();
         } else if (this.processExited) {
-            this.timeout = setTimeout$1(ExecState.HandleTimeout, this.delay, this);
+            this.timeout = require$$6$1.setTimeout(ExecState.HandleTimeout, this.delay, this);
         }
     }
     _debug(message) {
@@ -38686,165 +38700,6 @@ var ref = {exports: {}};
 var src$1 = {exports: {}};
 
 var node$1 = {exports: {}};
-
-var hasFlag;
-var hasRequiredHasFlag;
-
-function requireHasFlag () {
-	if (hasRequiredHasFlag) return hasFlag;
-	hasRequiredHasFlag = 1;
-
-	hasFlag = (flag, argv = process.argv) => {
-		const prefix = flag.startsWith('-') ? '' : (flag.length === 1 ? '-' : '--');
-		const position = argv.indexOf(prefix + flag);
-		const terminatorPosition = argv.indexOf('--');
-		return position !== -1 && (terminatorPosition === -1 || position < terminatorPosition);
-	};
-	return hasFlag;
-}
-
-var supportsColor_1;
-var hasRequiredSupportsColor;
-
-function requireSupportsColor () {
-	if (hasRequiredSupportsColor) return supportsColor_1;
-	hasRequiredSupportsColor = 1;
-	const os = require$$0__default;
-	const tty = require$$0$b;
-	const hasFlag = requireHasFlag();
-
-	const {env} = process;
-
-	let forceColor;
-	if (hasFlag('no-color') ||
-		hasFlag('no-colors') ||
-		hasFlag('color=false') ||
-		hasFlag('color=never')) {
-		forceColor = 0;
-	} else if (hasFlag('color') ||
-		hasFlag('colors') ||
-		hasFlag('color=true') ||
-		hasFlag('color=always')) {
-		forceColor = 1;
-	}
-
-	if ('FORCE_COLOR' in env) {
-		if (env.FORCE_COLOR === 'true') {
-			forceColor = 1;
-		} else if (env.FORCE_COLOR === 'false') {
-			forceColor = 0;
-		} else {
-			forceColor = env.FORCE_COLOR.length === 0 ? 1 : Math.min(parseInt(env.FORCE_COLOR, 10), 3);
-		}
-	}
-
-	function translateLevel(level) {
-		if (level === 0) {
-			return false;
-		}
-
-		return {
-			level,
-			hasBasic: true,
-			has256: level >= 2,
-			has16m: level >= 3
-		};
-	}
-
-	function supportsColor(haveStream, streamIsTTY) {
-		if (forceColor === 0) {
-			return 0;
-		}
-
-		if (hasFlag('color=16m') ||
-			hasFlag('color=full') ||
-			hasFlag('color=truecolor')) {
-			return 3;
-		}
-
-		if (hasFlag('color=256')) {
-			return 2;
-		}
-
-		if (haveStream && !streamIsTTY && forceColor === undefined) {
-			return 0;
-		}
-
-		const min = forceColor || 0;
-
-		if (env.TERM === 'dumb') {
-			return min;
-		}
-
-		if (process.platform === 'win32') {
-			// Windows 10 build 10586 is the first Windows release that supports 256 colors.
-			// Windows 10 build 14931 is the first release that supports 16m/TrueColor.
-			const osRelease = os.release().split('.');
-			if (
-				Number(osRelease[0]) >= 10 &&
-				Number(osRelease[2]) >= 10586
-			) {
-				return Number(osRelease[2]) >= 14931 ? 3 : 2;
-			}
-
-			return 1;
-		}
-
-		if ('CI' in env) {
-			if (['TRAVIS', 'CIRCLECI', 'APPVEYOR', 'GITLAB_CI', 'GITHUB_ACTIONS', 'BUILDKITE'].some(sign => sign in env) || env.CI_NAME === 'codeship') {
-				return 1;
-			}
-
-			return min;
-		}
-
-		if ('TEAMCITY_VERSION' in env) {
-			return /^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env.TEAMCITY_VERSION) ? 1 : 0;
-		}
-
-		if (env.COLORTERM === 'truecolor') {
-			return 3;
-		}
-
-		if ('TERM_PROGRAM' in env) {
-			const version = parseInt((env.TERM_PROGRAM_VERSION || '').split('.')[0], 10);
-
-			switch (env.TERM_PROGRAM) {
-				case 'iTerm.app':
-					return version >= 3 ? 3 : 2;
-				case 'Apple_Terminal':
-					return 2;
-				// No default
-			}
-		}
-
-		if (/-256(color)?$/i.test(env.TERM)) {
-			return 2;
-		}
-
-		if (/^screen|^xterm|^vt100|^vt220|^rxvt|color|ansi|cygwin|linux/i.test(env.TERM)) {
-			return 1;
-		}
-
-		if ('COLORTERM' in env) {
-			return 1;
-		}
-
-		return min;
-	}
-
-	function getSupportLevel(stream) {
-		const level = supportsColor(stream, stream && stream.isTTY);
-		return translateLevel(level);
-	}
-
-	supportsColor_1 = {
-		supportsColor: getSupportLevel,
-		stdout: translateLevel(supportsColor(true, tty.isatty(1))),
-		stderr: translateLevel(supportsColor(true, tty.isatty(2)))
-	};
-	return supportsColor_1;
-}
 
 /**
  * Helpers.
@@ -39336,7 +39191,7 @@ function requireNode$1 () {
 		try {
 			// Optional dependency (as in, doesn't need to be installed, NOT like optionalDependencies in package.json)
 			// eslint-disable-next-line import/no-extraneous-dependencies
-			const supportsColor = requireSupportsColor();
+			const supportsColor = require('supports-color');
 
 			if (supportsColor && (supportsColor.stderr || supportsColor).level >= 2) {
 				exports.colors = [
@@ -39884,8 +39739,8 @@ function requireNodeGypBuild$1 () {
 	if (hasRequiredNodeGypBuild$1) return nodeGypBuild;
 	hasRequiredNodeGypBuild$1 = 1;
 	var fs = require$$0$1;
-	var path = require$$1__default;
-	var os = require$$0__default;
+	var path = require$$1;
+	var os = require$$0;
 
 	// Workaround to fix webpack's build warnings: 'the request of a dependency is an expression'
 	var runtimeRequire = typeof __webpack_require__ === 'function' ? __non_webpack_require__ : commonjsRequire; // eslint-disable-line
@@ -40116,8 +39971,8 @@ function requireRef () {
 		const assert = require$$0$3;
 		const inspect = require$$0$2.inspect;
 		const debug = requireSrc$1()('ref');
-		const os = require$$0__default;
-		const path = require$$1__default;
+		const os = require$$0;
+		const path = require$$1;
 
 		exports = module.exports = requireNodeGypBuild()(path.join(__dirname, '..'));
 
@@ -41885,7 +41740,7 @@ function requireNode () {
 		try {
 		  // Optional dependency (as in, doesn't need to be installed, NOT like optionalDependencies in package.json)
 		  // eslint-disable-next-line import/no-extraneous-dependencies
-		  var supportsColor = requireSupportsColor();
+		  var supportsColor = require('supports-color');
 
 		  if (supportsColor && (supportsColor.stderr || supportsColor).level >= 2) {
 		    exports.colors = [20, 21, 26, 27, 32, 33, 38, 39, 40, 41, 42, 43, 44, 45, 56, 57, 62, 63, 68, 69, 74, 75, 76, 77, 78, 79, 80, 81, 92, 93, 98, 99, 112, 113, 128, 129, 134, 135, 148, 149, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 178, 179, 184, 185, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 214, 215, 220, 221];
@@ -42622,7 +42477,7 @@ var hasRequiredBindings;
 function requireBindings () {
 	if (hasRequiredBindings) return bindings_1;
 	hasRequiredBindings = 1;
-	const path = require$$1__default;
+	const path = require$$1;
 	const ref = requireRef();
 	const assert = require$$0$3;
 
@@ -43803,8 +43658,8 @@ function requireFfi () {
 	return ffi;
 }
 
-const cp = require$$2__default;
-const path = require$$1__default;
+const cp = require$$2$3;
+const path = require$$1;
 const { promisify } = require$$0$2;
 
 let kernel32;
@@ -43957,11 +43812,11 @@ const afterRun = coreExports.getInput('after', {
 // paths
 const cwd = coreExports.getInput('cwd', {
     required: false
-}) || resolve('.');
-const tarballRoot = resolve(cwd, coreExports.getInput('tarball-root', {
+}) || win32.resolve('.');
+const tarballRoot = win32.resolve(cwd, coreExports.getInput('tarball-root', {
     required: true
 }));
-const tarballGlob = resolve(cwd, coreExports.getInput('tarball-pattern', {
+const tarballGlob = win32.resolve(cwd, coreExports.getInput('tarball-pattern', {
     required: false
 }) || tarballRoot);
 // archiving
@@ -44010,328 +43865,365 @@ function withLogGroup(message) {
         }
     };
 }
-{
-    try {
-        var _stack = [];
-        var _ = _using(_stack, withLogGroup("Downloading and extracting artifact"));
-        var ok = true;
-        if (loadTarballArtifactIfExists) {
-            ok = false;
-            try {
-                await artifactClient.downloadArtifact(tarballArtifactName, tarballRoot);
-                ok = true;
-            } catch (err) {
-                if (err && typeof err === 'object' && 'message' in err && (err.message == 'Unable to find any artifacts for the associated workflow' || err.message == `Unable to find an artifact with the name: ${tarballArtifactName}`)) {
-                    ok = false;
-                } else {
-                    throw err;
+async function runScript() {
+    {
+        try {
+            var _stack = [];
+            var _ = _using(_stack, withLogGroup("Downloading and extracting artifact"));
+            var ok = true;
+            if (loadTarballArtifactIfExists) {
+                ok = false;
+                try {
+                    await artifactClient.downloadArtifact(tarballArtifactName, tarballRoot);
+                    ok = true;
+                } catch (err) {
+                    if (err && typeof err === 'object' && 'message' in err && (err.message == 'Unable to find any artifacts for the associated workflow' || err.message == `Unable to find an artifact with the name: ${tarballArtifactName}`)) {
+                        ok = false;
+                    } else {
+                        throw err;
+                    }
+                }
+                if (ok && require$$0$1.existsSync(tarballRoot)) {
+                    await exec_2('7z', [
+                        'x',
+                        '-y',
+                        win32.resolve(tarballRoot, tarballFileName)
+                    ], {
+                        cwd: tarballRoot
+                    });
+                    await promises.unlink(win32.resolve(tarballRoot, tarballFileName));
                 }
             }
-            if (ok && existsSync(tarballRoot)) {
-                await exec_2('7z', [
-                    'x',
-                    '-y',
-                    resolve(tarballRoot, tarballFileName)
-                ], {
-                    cwd: tarballRoot
-                });
-                await unlink(resolve(tarballRoot, tarballFileName));
-            }
+        } catch (_) {
+            var _error = _;
+            var _hasError = true;
+        } finally{
+            _dispose(_stack, _error, _hasError);
         }
-    } catch (_) {
-        var _error = _;
-        var _hasError = true;
-    } finally{
-        _dispose(_stack, _error, _hasError);
     }
-}let endTime = null;
-function isExecutionTimedOut() {
-    return endTime != null && endTime < Date.now();
-}
-function calcTimeout() {
-    return endTime != null ? Math.max(endTime - Date.now(), 1) : 1;
-}
-let item;
-if (item = process.env[`STAGE_END_${timeoutKey}`]) {
-    endTime = Number(item);
-    coreExports.notice(`This build stage will time out at ${endTime}`);
-}
-if (beforeRun) {
+    let endTime = null;
+    function isExecutionTimedOut() {
+        return endTime != null && endTime < Date.now();
+    }
+    function calcTimeout() {
+        return endTime != null ? Math.max(endTime - Date.now(), 1) : 1;
+    }
+    let item;
+    if (item = process.env[`STAGE_END_${timeoutKey}`]) {
+        endTime = Number(item);
+        coreExports.notice(`This build stage will time out at ${endTime}`);
+    }
+    if (beforeRun) {
+        if (isExecutionTimedOut()) {
+            coreExports.setOutput('results-per-command', '[]');
+            coreExports.setOutput('before-run-outcome', "timeout");
+            coreExports.setOutput('outcome', "timeout");
+            coreExports.setOutput('after-run-outcome', afterRun ? "timeout" : "skipped");
+            coreExports.notice("Timed out before before-hook execution");
+            process.exit(0);
+        }
+        const result = await runWithTimeout(beforeRun, {
+            cwd: cwd,
+            failOnStdErr: failOnStdErr,
+            shell,
+            ignoreExitCodes: ignoreExitCodes
+        });
+        coreExports.setOutput('before-run-outcome', result.outcome);
+        if (result.outcome == "failure") {
+            coreExports.setOutput('outcome', "failure");
+            coreExports.error("Before-run hook failed: $failCase");
+            process.exit(1);
+        }
+    } else {
+        coreExports.setOutput('before-run-outcome', "skipped");
+    }
+    if (endTime == null) {
+        endTime = Date.now() + timeout;
+        coreExports.exportVariable(`STAGE_END_${timeoutKey}`, endTime);
+        coreExports.info(`This build stage will time out at ${endTime}`);
+    }
     if (isExecutionTimedOut()) {
+        await saveBuildArtifacts();
         coreExports.setOutput('results-per-command', '[]');
-        coreExports.setOutput('before-run-outcome', "timeout");
         coreExports.setOutput('outcome', "timeout");
-        coreExports.setOutput('after-run-outcome', afterRun ? "timeout" : "skipped");
-        coreExports.notice("Timed out before before-hook execution");
+        coreExports.setOutput('after-run-outcome', afterRun != null ? "timeout" : "skipped");
+        coreExports.notice("Timed out before main command execution");
         process.exit(0);
     }
-    const result = await runWithTimeout(beforeRun, {
-        cwd: cwd,
-        failOnStdErr: failOnStdErr,
-        shell,
-        ignoreExitCodes: ignoreExitCodes
-    });
-    coreExports.setOutput('before-run-outcome', result.outcome);
-    if (result.outcome == "failure") {
-        coreExports.setOutput('outcome', "failure");
-        coreExports.error("Before-run hook failed: $failCase");
-        process.exit(1);
-    }
-} else {
-    coreExports.setOutput('before-run-outcome', "skipped");
-}
-if (endTime == null) {
-    endTime = Date.now() + timeout;
-    coreExports.exportVariable(`STAGE_END_${timeoutKey}`, endTime);
-    coreExports.info(`This build stage will time out at ${endTime}`);
-}
-if (isExecutionTimedOut()) {
-    await saveBuildArtifacts();
-    coreExports.setOutput('results-per-command', '[]');
-    coreExports.setOutput('outcome', "timeout");
-    coreExports.setOutput('after-run-outcome', afterRun != null ? "timeout" : "skipped");
-    coreExports.notice("Timed out before main command execution");
-    process.exit(0);
-}
-{
-    let result = await runWithTimeout(run, {
-        cwd: cwd,
-        failOnStdErr: failOnStdErr,
-        shell: shell,
-        ignoreExitCodes: ignoreExitCodes,
-        timeout: calcTimeout()
-    });
-    switch(result.outcome){
-        case "failure":
-            {
-                coreExports.setOutput('outcome', "failure");
-                coreExports.setOutput('after-run-outcome', "skipped");
-                coreExports.error(result.failCase ?? '');
-            }
-        case "timeout":
-            {
-                coreExports.setOutput('outcome', "timeout");
-                coreExports.setOutput('after-run-outcome', "skipped");
-                await saveBuildArtifacts();
-                coreExports.notice("Execution has timed out");
-            }
-        case "success":
-            {
-                coreExports.setOutput('outcome', "success");
-                if (afterRun != null) {
-                    result = await runWithTimeout(afterRun, {
-                        cwd: cwd,
-                        failOnStdErr: failOnStdErr,
-                        shell: shell,
-                        ignoreExitCodes: ignoreExitCodes
-                    });
-                    coreExports.setOutput('after-run-outcome', result.outcome);
-                    if (result.outcome == "failure") {
-                        coreExports.setOutput('outcome', "failure");
-                        coreExports.error(`After-run hook failed: ${result.failCase}`);
+    {
+        let result = await runWithTimeout(run, {
+            cwd: cwd,
+            failOnStdErr: failOnStdErr,
+            shell: shell,
+            ignoreExitCodes: ignoreExitCodes,
+            timeout: calcTimeout()
+        });
+        switch(result.outcome){
+            case "failure":
+                {
+                    coreExports.setOutput('outcome', "failure");
+                    coreExports.setOutput('after-run-outcome', "skipped");
+                    coreExports.error(result.failCase ?? '');
+                }
+            case "timeout":
+                {
+                    coreExports.setOutput('outcome', "timeout");
+                    coreExports.setOutput('after-run-outcome', "skipped");
+                    await saveBuildArtifacts();
+                    coreExports.notice("Execution has timed out");
+                }
+            case "success":
+                {
+                    coreExports.setOutput('outcome', "success");
+                    if (afterRun != null) {
+                        result = await runWithTimeout(afterRun, {
+                            cwd: cwd,
+                            failOnStdErr: failOnStdErr,
+                            shell: shell,
+                            ignoreExitCodes: ignoreExitCodes
+                        });
+                        coreExports.setOutput('after-run-outcome', result.outcome);
+                        if (result.outcome == "failure") {
+                            coreExports.setOutput('outcome', "failure");
+                            coreExports.error(`After-run hook failed: ${result.failCase}`);
+                        } else {
+                            coreExports.setOutput('outcome', "success");
+                        }
                     } else {
+                        coreExports.setOutput('after-run-outcome', "skipped");
                         coreExports.setOutput('outcome', "success");
                     }
-                } else {
-                    coreExports.setOutput('after-run-outcome', "skipped");
-                    coreExports.setOutput('outcome', "success");
                 }
-            }
-    }
-}async function repeatOnFail(label, action, maxRetries = 5) {
-    for(let i = 0; i < maxRetries; ++i){
-        try {
-            await action();
-            break;
-        } catch (e) {
-            console.error(`${label} failed: ${e}. Attempt ${i + 1} of ${maxRetries}`);
-            // Wait 10 seconds between the attempts
-            await delay(10000);
         }
     }
-}
-function delay(ms) {
-    return new Promise((r)=>setTimeout(()=>r(delayedSymbol), ms));
-}
-function delayCancelable(ms) {
-    /** @type {(result: typeof delayedSymbol) => void} */ let r;
-    const promise = new Promise((r1)=>r = r1);
-    const timeout = setTimeout(()=>r(delayedSymbol), ms);
-    return {
-        promise,
-        cancel: ()=>clearTimeout(timeout)
-    };
-}
-async function awaitWithTimeout(promise, ms) {
-    const { promise: delayPromise, cancel: cancelDelay } = delayCancelable(ms);
-    const result = await Promise.race([
-        promise,
-        delayPromise
-    ]);
-    if (result !== delayedSymbol) {
-        cancelDelay();
+    async function repeatOnFail(label, action, maxRetries = 5) {
+        for(let i = 0; i < maxRetries; ++i){
+            try {
+                await action();
+                break;
+            } catch (e) {
+                console.error(`${label} failed: ${e}. Attempt ${i + 1} of ${maxRetries}`);
+                // Wait 10 seconds between the attempts
+                await delay(10000);
+            }
+        }
+    }
+    function delay(ms) {
+        return new Promise((r)=>setTimeout(()=>r(delayedSymbol), ms));
+    }
+    function delayCancelable(ms) {
+        /** @type {(result: typeof delayedSymbol) => void} */ let r;
+        const promise = new Promise((r1)=>r = r1);
+        const timeout = setTimeout(()=>r(delayedSymbol), ms);
         return {
-            timedOut: false,
-            result
-        };
-    } else {
-        return {
-            timedOut: true,
-            result: promise
+            promise,
+            cancel: ()=>clearTimeout(timeout)
         };
     }
-}
-async function saveBuildArtifacts() {
-    await delay(5000);
-    if (saveTarballArtifact) {
-        console.time('glob');
-        const globbed = await (await create_1(tarballGlob, {
-            implicitDescendants: true
-        })).glob();
-        console.timeEnd('glob');
-        console.log(`Globbed ${globbed.length} files`);
-        {
-            try {
-                var _stack = [];
-                var _ = _using(_stack, withLogGroup("Tarballing build files"));
-                // Write source directories to manifest.txt to avoid command length limits
-                var manifestFilename = "manifest.txt";
-                await writeFile(resolve(tarballRoot, manifestFilename), globbed.join('\n'));
-                var tarFileName = resolve(tarballRoot, tarballFileName);
-                await exec_2('7z', [
-                    'a',
-                    tarFileName,
-                    '-m0=zstd',
-                    '-mx2',
-                    `@${manifestFilename}`,
-                    `-x!${tarFileName}`,
-                    `-x!${manifestFilename}`
-                ], {
-                    cwd: tarballRoot
-                });
-                await unlink(resolve(tarballRoot, manifestFilename));
-            } catch (_) {
-                var _error = _;
-                var _hasError = true;
-            } finally{
-                _dispose(_stack, _error, _hasError);
-            }
-        }
-        {
-            try {
-                var _stack1 = [];
-                var _ = _using(_stack1, withLogGroup("Upload artifact"));
-                repeatOnFail('Upload artifact', async ()=>{
-                    await artifactClient.uploadArtifact(tarballArtifactName, [
-                        resolve(tarballRoot, tarballFileName)
-                    ], tarballRoot, {
-                        retentionDays: 3
-                    });
-                }, 5);
-            } catch (_) {
-                var _error1 = _;
-                var _hasError1 = true;
-            } finally{
-                _dispose(_stack1, _error1, _hasError1);
-            }
+    async function awaitWithTimeout(promise, ms) {
+        const { promise: delayPromise, cancel: cancelDelay } = delayCancelable(ms);
+        const result = await Promise.race([
+            promise,
+            delayPromise
+        ]);
+        if (result !== delayedSymbol) {
+            cancelDelay();
+            return {
+                timedOut: false,
+                result
+            };
+        } else {
+            return {
+                timedOut: true,
+                result: promise
+            };
         }
     }
-}
-async function wrapInShell(command, shell) {
-    switch(shell){
-        case 'pwsh':
+    async function saveBuildArtifacts() {
+        await delay(5000);
+        if (saveTarballArtifact) {
+            console.time('glob');
+            const globbed = await (await create_1(tarballGlob, {
+                implicitDescendants: true
+            })).glob();
+            console.timeEnd('glob');
+            console.log(`Globbed ${globbed.length} files`);
             {
                 try {
-                    const pwshPath = await which_1('pwsh');
-                    console.log(`Using pwsh at path: ${pwshPath}`);
+                    var _stack = [];
+                    var _ = _using(_stack, withLogGroup("Tarballing build files"));
+                    // Write source directories to manifest.txt to avoid command length limits
+                    var manifestFilename = "manifest.txt";
+                    await promises.writeFile(win32.resolve(tarballRoot, manifestFilename), globbed.join('\n'));
+                    var tarFileName = win32.resolve(tarballRoot, tarballFileName);
+                    await exec_2('7z', [
+                        'a',
+                        tarFileName,
+                        '-m0=zstd',
+                        '-mx2',
+                        `@${manifestFilename}`,
+                        `-x!${tarFileName}`,
+                        `-x!${manifestFilename}`
+                    ], {
+                        cwd: tarballRoot
+                    });
+                    await promises.unlink(win32.resolve(tarballRoot, manifestFilename));
+                } catch (_) {
+                    var _error = _;
+                    var _hasError = true;
+                } finally{
+                    _dispose(_stack, _error, _hasError);
+                }
+            }
+            {
+                try {
+                    var _stack1 = [];
+                    var _ = _using(_stack1, withLogGroup("Upload artifact"));
+                    repeatOnFail('Upload artifact', async ()=>{
+                        await artifactClient.uploadArtifact(tarballArtifactName, [
+                            win32.resolve(tarballRoot, tarballFileName)
+                        ], tarballRoot, {
+                            retentionDays: 3
+                        });
+                    }, 5);
+                } catch (_) {
+                    var _error1 = _;
+                    var _hasError1 = true;
+                } finally{
+                    _dispose(_stack1, _error1, _hasError1);
+                }
+            }
+        }
+    }
+    async function wrapInShell(command, shell) {
+        switch(shell){
+            case 'pwsh':
+                {
+                    try {
+                        const pwshPath = await which_1('pwsh');
+                        console.log(`Using pwsh at path: ${pwshPath}`);
+                        return {
+                            command: pwshPath,
+                            arguments: [
+                                '-NoLogo',
+                                '-NoProfile',
+                                '-NonInteractive',
+                                '-ExecutionPolicy',
+                                'Unrestricted',
+                                '-Command',
+                                command
+                            ]
+                        };
+                    } catch (err) {
+                        const powershellPath = await which_1('powershell');
+                        console.log(`powershell pwsh at path: ${powershellPath}`);
+                        return {
+                            command: powershellPath,
+                            arguments: [
+                                '-NoLogo',
+                                '-Sta',
+                                '-NoProfile',
+                                '-NonInteractive',
+                                '-ExecutionPolicy',
+                                'Unrestricted',
+                                '-Command',
+                                command
+                            ]
+                        };
+                    }
+                }
+            case 'python':
+                {
                     return {
-                        command: pwshPath,
+                        command: 'python',
                         arguments: [
-                            '-NoLogo',
-                            '-NoProfile',
-                            '-NonInteractive',
-                            '-ExecutionPolicy',
-                            'Unrestricted',
-                            '-Command',
-                            command
-                        ]
-                    };
-                } catch (err) {
-                    const powershellPath = await which_1('powershell');
-                    console.log(`powershell pwsh at path: ${powershellPath}`);
-                    return {
-                        command: powershellPath,
-                        arguments: [
-                            '-NoLogo',
-                            '-Sta',
-                            '-NoProfile',
-                            '-NonInteractive',
-                            '-ExecutionPolicy',
-                            'Unrestricted',
-                            '-Command',
+                            '-u',
+                            '-c',
                             command
                         ]
                     };
                 }
-            }
-        case 'python':
-            {
-                return {
-                    command: 'python',
-                    arguments: [
-                        '-u',
-                        '-c',
-                        command
-                    ]
-                };
-            }
-        case 'node':
-            {
-                return {
-                    command: 'node',
-                    arguments: [
-                        '-e',
-                        command
-                    ] // aka --eval
-                };
-            }
-        case 'cmd':
-            {
-                return {
-                    command: 'cmd.exe',
-                    arguments: [
-                        '/c',
-                        command
-                    ]
-                };
-            }
-        default:
-        case 'none':
-            {
-                return null;
-            }
+            case 'node':
+                {
+                    return {
+                        command: 'node',
+                        arguments: [
+                            '-e',
+                            command
+                        ] // aka --eval
+                    };
+                }
+            case 'cmd':
+                {
+                    return {
+                        command: 'cmd.exe',
+                        arguments: [
+                            '/c',
+                            command
+                        ]
+                    };
+                }
+            default:
+            case 'none':
+                {
+                    return null;
+                }
+        }
     }
-}
-async function runWithTimeout(command, options) {
-    options = Object.assign({
-        cwd: process.cwd,
-        failOnStdErr: false,
-        shell: 'none',
-        ignoreExitCodes: []
-    }, options ?? {});
-    const commandLines = command.split('\n');
-    if (!options.shell || options.shell == 'none') {
-        for (const line of commandLines){
-            if (line.trim() == '') continue;
-            coreExports.info(`Executing command: ${line}`);
-            const result = await runCommandWithTimeout(line, {
+    async function runWithTimeout(command, options) {
+        options = Object.assign({
+            cwd: process.cwd,
+            failOnStdErr: false,
+            shell: 'none',
+            ignoreExitCodes: []
+        }, options ?? {});
+        const commandLines = command.split('\n');
+        if (!options.shell || options.shell == 'none') {
+            for (const line of commandLines){
+                if (line.trim() == '') continue;
+                coreExports.info(`Executing command: ${line}`);
+                const result = await runCommandWithTimeout(line, {
+                    cwd: options.cwd,
+                    timeout: options.timeout
+                });
+                if (options.failOnStdErr && result.stderr) {
+                    return {
+                        outcome: "failure",
+                        failCase: `Command ${line} standard error output was not empty`
+                    };
+                }
+                if (!result.timedOut && result.exitCode != 0 && options.ignoreExitCodes?.includes(result.exitCode)) {
+                    return {
+                        outcome: "timeout",
+                        failCase: "Return code was in ignore-return-codes list: $exitCode"
+                    };
+                }
+                if (result.timedOut) {
+                    return {
+                        outcome: "timeout",
+                        failCase: "'exec' timed out"
+                    };
+                } else {
+                    if (result.timedOut) {
+                        return {
+                            outcome: "timeout",
+                            failCase: `Command ${line} returned exit code: ${result.exitCode}`
+                        };
+                    }
+                }
+            }
+        } else {
+            coreExports.info(`Executing command: ${command}`);
+            const wrapped = await wrapInShell(command, options.shell);
+            if (wrapped === null) throw new Error('huh');
+            const result = await runCommandWithTimeout(wrapped, {
                 cwd: options.cwd,
                 timeout: options.timeout
             });
             if (options.failOnStdErr && result.stderr) {
                 return {
                     outcome: "failure",
-                    failCase: `Command ${line} standard error output was not empty`
+                    failCase: `${options.shell} command ${command} standard error output was not empty`
                 };
             }
             if (!result.timedOut && result.exitCode != 0 && options.ignoreExitCodes?.includes(result.exitCode)) {
@@ -44349,119 +44241,89 @@ async function runWithTimeout(command, options) {
                 if (result.timedOut) {
                     return {
                         outcome: "timeout",
-                        failCase: `Command ${line} returned exit code: ${result.exitCode}`
+                        failCase: `${options.shell} command ${command} returned exit code: ${result.exitCode}`
                     };
                 }
             }
         }
-    } else {
-        coreExports.info(`Executing command: ${command}`);
-        const wrapped = await wrapInShell(command, options.shell);
-        if (wrapped === null) throw new Error('huh');
-        const result = await runCommandWithTimeout(wrapped, {
-            cwd: options.cwd,
-            timeout: options.timeout
-        });
-        if (options.failOnStdErr && result.stderr) {
-            return {
-                outcome: "failure",
-                failCase: `${options.shell} command ${command} standard error output was not empty`
-            };
-        }
-        if (!result.timedOut && result.exitCode != 0 && options.ignoreExitCodes?.includes(result.exitCode)) {
-            return {
-                outcome: "timeout",
-                failCase: "Return code was in ignore-return-codes list: $exitCode"
-            };
-        }
-        if (result.timedOut) {
-            return {
-                outcome: "timeout",
-                failCase: "'exec' timed out"
-            };
-        } else {
-            if (result.timedOut) {
-                return {
-                    outcome: "timeout",
-                    failCase: `${options.shell} command ${command} returned exit code: ${result.exitCode}`
-                };
-            }
-        }
-    }
-    return {
-        outcome: "success",
-        failCase: undefined
-    };
-}
-async function runCommandWithTimeout(command, options) {
-    options = Object.assign({
-        cwd: process.cwd,
-        failOnStdErr: false
-    }, options ?? {});
-    const commandArgs = typeof command === 'string' ? argStringToArray(command) : [
-        command.command,
-        ...command.arguments
-    ];
-    if (commandArgs.length === 0) {
-        throw new Error(`Parameter 'commandLine' cannot be null or empty.`);
-    }
-    // Path to tool to execute should be first arg
-    const runner = new ToolRunner(commandArgs[0], [
-        ...commandArgs.slice(1)
-    ], {
-        ...options,
-        ignoreReturnCode: true
-    });
-    const proc = await runner.exec();
-    const timeout = options?.timeout;
-    if (timeout == null) {
         return {
-            timedOut: false,
-            exitCode: await proc.processClosedPromise,
-            stderr: proc.processStderr
+            outcome: "success",
+            failCase: undefined
         };
     }
-    const { timedOut } = await awaitWithTimeout(proc.processClosedPromise, timeout);
-    if (!timedOut) {
+    async function runCommandWithTimeout(command, options) {
+        options = Object.assign({
+            cwd: process.cwd,
+            failOnStdErr: false
+        }, options ?? {});
+        const commandArgs = typeof command === 'string' ? argStringToArray(command) : [
+            command.command,
+            ...command.arguments
+        ];
+        if (commandArgs.length === 0) {
+            throw new Error(`Parameter 'commandLine' cannot be null or empty.`);
+        }
+        // Path to tool to execute should be first arg
+        const runner = new ToolRunner(commandArgs[0], [
+            ...commandArgs.slice(1)
+        ], {
+            ...options,
+            ignoreReturnCode: true
+        });
+        const proc = await runner.exec();
+        const timeout = options?.timeout;
+        if (timeout == null) {
+            return {
+                timedOut: false,
+                exitCode: await proc.processClosedPromise,
+                stderr: proc.processStderr
+            };
+        }
+        const { timedOut } = await awaitWithTimeout(proc.processClosedPromise, timeout);
+        if (!timedOut) {
+            return {
+                timedOut: false,
+                exitCode: proc.processExitCode,
+                stderr: proc.processStderr
+            };
+        }
+        proc.unref();
+        await killCleanly(proc);
         return {
-            timedOut: false,
+            timedOut: true,
             exitCode: proc.processExitCode,
             stderr: proc.processStderr
         };
     }
-    proc.unref();
-    await killCleanly(proc);
-    return {
-        timedOut: true,
-        exitCode: proc.processExitCode,
-        stderr: proc.processStderr
-    };
-}
-async function killCleanly(proc) {
-    // Wait to see if the process closes itself
-    await delay(1000);
-    if (proc.processExited) {
-        return;
-    }
-    // if process is still running
-    const maxRetries = 3;
-    for(let i = 0; i < maxRetries; i++){
-        console.log(`Sending CTRL+BREAK to process ${inspect(proc)} attempt ${i + 1} of ${maxRetries}`);
-        await lib.generateCtrlBreakAsync(proc.pid);
-        await delay(3000);
+    async function killCleanly(proc) {
+        // Wait to see if the process closes itself
+        await delay(1000);
         if (proc.processExited) {
             return;
         }
+        // if process is still running
+        const maxRetries = 3;
+        for(let i = 0; i < maxRetries; i++){
+            console.log(`Sending CTRL+BREAK to process ${require$$0$2.inspect(proc)} attempt ${i + 1} of ${maxRetries}`);
+            await lib.generateCtrlBreakAsync(proc.pid);
+            await delay(3000);
+            if (proc.processExited) {
+                return;
+            }
+        }
+        await awaitWithTimeout(proc.processClosedPromise, 10000);
+        if (proc.processExited) {
+            return;
+        }
+        console.warn(`Killing process ${require$$0$2.inspect(proc)}`);
+        proc.kill(); // kill it with fire
     }
-    await awaitWithTimeout(proc.processClosedPromise, 10000);
-    if (proc.processExited) {
-        return;
-    }
-    console.warn(`Killing process ${inspect(proc)}`);
-    proc.kill(); // kill it with fire
 }
-
-var index_nodeonly = {
-__proto__: null
-};
+(async ()=>{
+    try {
+        await runScript();
+    } catch (err) {
+        coreExports.setFailed(err.message);
+    }
+})();
 //# sourceMappingURL=index.js.map

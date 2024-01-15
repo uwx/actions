@@ -3,3 +3,34 @@ lockfileVersion: '6.0'
 settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
+
+dependencies:
+  rollup-plugin-tla:
+    specifier: ^0.0.2
+    version: 0.0.2
+
+packages:
+
+  /@jridgewell/sourcemap-codec@1.4.15:
+    resolution: {integrity: sha512-eF2rxCRulEKXHTRiDrDy6erMYWqNw4LPdQ8UQA4huuxaQsVeRPFl2oM8oDGxMFhJUWZf9McpLtJasDDZb/Bpeg==}
+    dev: false
+
+  /acorn-walk@8.3.2:
+    resolution: {integrity: sha512-cjkyv4OtNCIeqhHrfS81QWXoCBPExR/J62oyEqepVw8WaQeSqpW2uhuLPh1m9eWhDuOo/jUXVTlifvesOWp/4A==}
+    engines: {node: '>=0.4.0'}
+    dev: false
+
+  /magic-string@0.30.5:
+    resolution: {integrity: sha512-7xlpfBaQaP/T6Vh8MO/EqXSW5En6INHEvEXQiuff7Gku0PWjU3uf6w/j9o7O+SpB5fOAkrI5HeoNgwjEO0pFsA==}
+    engines: {node: '>=12'}
+    dependencies:
+      '@jridgewell/sourcemap-codec': 1.4.15
+    dev: false
+
+  /rollup-plugin-tla@0.0.2:
+    resolution: {integrity: sha512-Z0P100crQTAjmQIXEC5J6ECupL4G8M3CTwTRK0D4J+5rMakimVa58n06kE3vnLSy/xZHnuerEpXdUW6s5G4HYg==}
+    engines: {node: ^14.18 || >= 16, pnpm: '>=6'}
+    dependencies:
+      acorn-walk: 8.3.2
+      magic-string: 0.30.5
+    dev: false

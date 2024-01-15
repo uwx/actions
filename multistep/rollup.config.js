@@ -11,10 +11,10 @@ const swc1 = /** @type {typeof swc} */ (swc.default);
 
 /** @type {import('rollup').RollupOptions} */
 export default {
-    input: './run.ts',
+    input: './index.ts',
     output: {
         file: 'dist/index.js',
-        format: 'es',
+        format: 'commonjs',
         indent: false,
         freeze: false,
         sourcemap: true,
