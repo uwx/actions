@@ -336,6 +336,8 @@ async function runWithTimeout(command: string, options?: { cwd?: string; failOnS
 
     if (!options.shell || options.shell == 'none') {
         for (const line of commandLines) {
+            if (line.trim() == '') continue;
+
             info(`Executing command: ${line}`)
 
             const result = await runCommandWithTimeout(line, {
