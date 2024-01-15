@@ -18,8 +18,8 @@ import { inspect } from 'util';
 
 const delayedSymbol = Symbol('delayed');
 
-process.on('SIGINT', function () {
-});
+process.on('SIGINT', function () {});
+process.on('SIGBREAK', function () {});
 
 //
 
