@@ -43567,7 +43567,7 @@ try {
     if (j) {
         B = !1;
         try {
-            L.downloadArtifact(P, k), B = !0;
+            await L.downloadArtifact(P, k), B = !0;
         } catch (e) {
             if (e && 'object' == typeof e && 'message' in e && ('Unable to find any artifacts for the associated workflow' == e.message || e.message == `Unable to find an artifact with the name: ${P}`)) B = !1;
             else throw e;
