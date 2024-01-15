@@ -65,7 +65,7 @@ function withLogGroup(message: string): Disposable {
     if (loadTarballArtifactIfExists) {
         ok = false;
         try {
-            artifactClient.downloadArtifact(tarballArtifactName, tarballRoot);
+            await artifactClient.downloadArtifact(tarballArtifactName, tarballRoot);
             ok = true;
         } catch (err) {
             if (err && typeof err === 'object' && 'message' in err && (err.message == 'Unable to find any artifacts for the associated workflow' || err.message == `Unable to find an artifact with the name: ${tarballArtifactName}`)) {
