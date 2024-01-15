@@ -38,7 +38,8 @@ jobs:
     - run: pnpm install
       working-directory: multistep
 
-    - run: npm run build
+    - run: rollup -c --bundleConfigAsCjs
+      working-directory: multistep
 
     - run: |
         git config --global user.name 'github-actions'

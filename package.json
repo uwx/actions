@@ -4,9 +4,6 @@
     "@actions/glob": "^0.4.0",
     "generate-ctrl-c-event": "^2.0.1"
   },
-  "scripts": {
-    "build": "cd multistep & rollup -c --bundleConfigAsCjs & cd .."
-  },
   "devDependencies": {
     "@actions/artifact": "^1.1.2",
     "@actions/cache": "^3.2.2",
