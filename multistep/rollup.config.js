@@ -34,21 +34,22 @@ export default {
                     syntax: 'typescript'
                 },
                 target: 'es2020',
-                transform: {
-                    optimizer: {
-                        jsonify: {
-                            minCost: 15
-                        },
-                        simplify: true
-                    }
-                },
-                minify: {
-                    compress: true,
-                    ecma: 2020,
-                    mangle: true,
-                    sourceMap: true,
-                    toplevel: true,
-                }
+                //transform: {
+                //    optimizer: {
+                //        jsonify: {
+                //            minCost: 15
+                //        },
+                //        simplify: true
+                //    }
+                //},
+                minify: undefined,
+                //minify: {
+                //    compress: true,
+                //    ecma: 2020,
+                //    mangle: true,
+                //    sourceMap: true,
+                //    toplevel: true,
+                //}
             },
             sourceMaps: true
         }),

@@ -28973,8 +28973,8 @@ var sourceMapSupportExports = sourceMapSupport.exports;
 sourceMapSupportExports.install();
 try {
     await Promise.resolve().then(function () { return index_nodeonly; });
-} catch (r) {
-    coreExports.setFailed(r.message);
+} catch (err) {
+    coreExports.setFailed(err.message);
 }
 
 var io$1 = {};
@@ -29506,7 +29506,7 @@ const io = __importStar$f(io$1);
 const ioUtil = __importStar$f(ioUtil$2);
 const timers_1 = require$$6$1;
 /* eslint-disable @typescript-eslint/unbound-method */
-const IS_WINDOWS$5 = process.platform === 'win32';
+const IS_WINDOWS$6 = process.platform === 'win32';
 /*
  * Class for running command line tools. Handles quoting and arg parsing in a platform agnostic way.
  */
@@ -29529,7 +29529,7 @@ let ToolRunner$1 = class ToolRunner extends events.EventEmitter {
         const toolPath = this._getSpawnFileName();
         const args = this._getSpawnArgs(options);
         let cmd = noPrefix ? '' : '[command]'; // omit prefix when piped to a second tool
-        if (IS_WINDOWS$5) {
+        if (IS_WINDOWS$6) {
             // Windows + cmd file
             if (this._isCmdFile()) {
                 cmd += toolPath;
@@ -29583,7 +29583,7 @@ let ToolRunner$1 = class ToolRunner extends events.EventEmitter {
         }
     }
     _getSpawnFileName() {
-        if (IS_WINDOWS$5) {
+        if (IS_WINDOWS$6) {
             if (this._isCmdFile()) {
                 return process.env['COMSPEC'] || 'cmd.exe';
             }
@@ -29591,7 +29591,7 @@ let ToolRunner$1 = class ToolRunner extends events.EventEmitter {
         return this.toolPath;
     }
     _getSpawnArgs(options) {
-        if (IS_WINDOWS$5) {
+        if (IS_WINDOWS$6) {
             if (this._isCmdFile()) {
                 let argline = `/D /S /C "${this._windowsQuoteCmdArg(this.toolPath)}`;
                 for (const a of this.args) {
@@ -29854,7 +29854,7 @@ let ToolRunner$1 = class ToolRunner extends events.EventEmitter {
             // root the tool path if it is unrooted and contains relative pathing
             if (!ioUtil.isRooted(this.toolPath) &&
                 (this.toolPath.includes('/') ||
-                    (IS_WINDOWS$5 && this.toolPath.includes('\\')))) {
+                    (IS_WINDOWS$6 && this.toolPath.includes('\\')))) {
                 // prefer options.cwd if it is specified, however options.cwd may also need to be rooted
                 this.toolPath = path$9.resolve(process.cwd(), this.options.cwd || process.cwd(), this.toolPath);
             }
@@ -29871,7 +29871,7 @@ let ToolRunner$1 = class ToolRunner extends events.EventEmitter {
                 if (!optionsNonNull.silent && optionsNonNull.outStream) {
                     optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + os$1.EOL);
                 }
-                const state = new ExecState(optionsNonNull, this.toolPath);
+                const state = new ExecState$1(optionsNonNull, this.toolPath);
                 state.on('debug', (message) => {
                     this._debug(message);
                 });
@@ -30016,7 +30016,7 @@ function argStringToArray$1(argString) {
     return args;
 }
 toolrunner.argStringToArray = argStringToArray$1;
-class ExecState extends events.EventEmitter {
+let ExecState$1 = class ExecState extends events.EventEmitter {
     constructor(options, toolPath) {
         super();
         this.processClosed = false; // tracks whether the process has exited and stdio is closed
@@ -30083,7 +30083,7 @@ class ExecState extends events.EventEmitter {
         }
         state._setResult();
     }
-}
+};
 
 var __createBinding$e = (commonjsGlobal && commonjsGlobal.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -30187,9 +30187,9 @@ function getExecOutput(commandLine, args, options) {
 }
 exec$1.getExecOutput = getExecOutput;
 
-var artifactClient$1 = {};
+var artifactClient$2 = {};
 
-var artifactClient = {};
+var artifactClient$1 = {};
 
 var uploadSpecification = {};
 
@@ -33771,7 +33771,7 @@ const defaultGlobOpts = {
 };
 
 // for EMFILE handling
-let timeout = 0;
+let timeout$1 = 0;
 
 const isWindows = (process.platform === "win32");
 
@@ -33845,15 +33845,15 @@ const rimraf = (p, options, cb) => {
           }
 
           // this one won't happen if graceful-fs is used.
-          if (er.code === "EMFILE" && timeout < options.emfileWait) {
-            return setTimeout(() => rimraf_(p, options, CB), timeout ++)
+          if (er.code === "EMFILE" && timeout$1 < options.emfileWait) {
+            return setTimeout(() => rimraf_(p, options, CB), timeout$1 ++)
           }
 
           // already gone
           if (er.code === "ENOENT") er = null;
         }
 
-        timeout = 0;
+        timeout$1 = 0;
         next(er);
       };
       rimraf_(p, options, CB);
@@ -36779,8 +36779,8 @@ var __awaiter$3 = (commonjsGlobal && commonjsGlobal.__awaiter) || function (this
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(artifactClient, "__esModule", { value: true });
-artifactClient.DefaultArtifactClient = void 0;
+Object.defineProperty(artifactClient$1, "__esModule", { value: true });
+artifactClient$1.DefaultArtifactClient = void 0;
 const core$3 = __importStar$7(requireCore());
 const upload_specification_1 = uploadSpecification;
 const upload_http_client_1 = uploadHttpClient;
@@ -36926,18 +36926,18 @@ Note: The size of downloaded zips can differ significantly from the reported siz
         });
     }
 }
-artifactClient.DefaultArtifactClient = DefaultArtifactClient;
+artifactClient$1.DefaultArtifactClient = DefaultArtifactClient;
 
-Object.defineProperty(artifactClient$1, "__esModule", { value: true });
-var create_1$1 = artifactClient$1.create = void 0;
-const artifact_client_1 = artifactClient;
+Object.defineProperty(artifactClient$2, "__esModule", { value: true });
+var create_1$1 = artifactClient$2.create = void 0;
+const artifact_client_1 = artifactClient$1;
 /**
  * Constructs an ArtifactClient
  */
 function create$1() {
     return artifact_client_1.DefaultArtifactClient.create();
 }
-create_1$1 = artifactClient$1.create = create$1;
+create_1$1 = artifactClient$2.create = create$1;
 
 var glob = {};
 
@@ -37029,7 +37029,7 @@ Object.defineProperty(internalPathHelper, "__esModule", { value: true });
 internalPathHelper.safeTrimTrailingSeparator = internalPathHelper.normalizeSeparators = internalPathHelper.hasRoot = internalPathHelper.hasAbsoluteRoot = internalPathHelper.ensureAbsoluteRoot = internalPathHelper.dirname = void 0;
 const path$5 = __importStar$5(require$$1__default);
 const assert_1$2 = __importDefault$2(require$$0$3);
-const IS_WINDOWS$4 = process.platform === 'win32';
+const IS_WINDOWS$5 = process.platform === 'win32';
 /**
  * Similar to path.dirname except normalizes the path separators and slightly better handling for Windows UNC paths.
  *
@@ -37051,13 +37051,13 @@ function dirname(p) {
     // Normalize slashes and trim unnecessary trailing slash
     p = safeTrimTrailingSeparator(p);
     // Windows UNC root, e.g. \\hello or \\hello\world
-    if (IS_WINDOWS$4 && /^\\\\[^\\]+(\\[^\\]+)?$/.test(p)) {
+    if (IS_WINDOWS$5 && /^\\\\[^\\]+(\\[^\\]+)?$/.test(p)) {
         return p;
     }
     // Get dirname
     let result = path$5.dirname(p);
     // Trim trailing slash for Windows UNC root, e.g. \\hello\world\
-    if (IS_WINDOWS$4 && /^\\\\[^\\]+\\[^\\]+\\$/.test(result)) {
+    if (IS_WINDOWS$5 && /^\\\\[^\\]+\\[^\\]+\\$/.test(result)) {
         result = safeTrimTrailingSeparator(result);
     }
     return result;
@@ -37075,7 +37075,7 @@ function ensureAbsoluteRoot(root, itemPath) {
         return itemPath;
     }
     // Windows
-    if (IS_WINDOWS$4) {
+    if (IS_WINDOWS$5) {
         // Check for itemPath like C: or C:foo
         if (itemPath.match(/^[A-Z]:[^\\/]|^[A-Z]:$/i)) {
             let cwd = process.cwd();
@@ -37110,7 +37110,7 @@ function ensureAbsoluteRoot(root, itemPath) {
     }
     assert_1$2.default(hasAbsoluteRoot(root), `ensureAbsoluteRoot parameter 'root' must have an absolute root`);
     // Otherwise ensure root ends with a separator
-    if (root.endsWith('/') || (IS_WINDOWS$4 && root.endsWith('\\'))) ;
+    if (root.endsWith('/') || (IS_WINDOWS$5 && root.endsWith('\\'))) ;
     else {
         // Append separator
         root += path$5.sep;
@@ -37127,7 +37127,7 @@ function hasAbsoluteRoot(itemPath) {
     // Normalize separators
     itemPath = normalizeSeparators(itemPath);
     // Windows
-    if (IS_WINDOWS$4) {
+    if (IS_WINDOWS$5) {
         // E.g. \\hello\share or C:\hello
         return itemPath.startsWith('\\\\') || /^[A-Z]:\\/i.test(itemPath);
     }
@@ -37144,7 +37144,7 @@ function hasRoot(itemPath) {
     // Normalize separators
     itemPath = normalizeSeparators(itemPath);
     // Windows
-    if (IS_WINDOWS$4) {
+    if (IS_WINDOWS$5) {
         // E.g. \ or \hello or \\hello
         // E.g. C: or C:\hello
         return itemPath.startsWith('\\') || /^[A-Z]:/i.test(itemPath);
@@ -37159,7 +37159,7 @@ internalPathHelper.hasRoot = hasRoot;
 function normalizeSeparators(p) {
     p = p || '';
     // Windows
-    if (IS_WINDOWS$4) {
+    if (IS_WINDOWS$5) {
         // Convert slashes on Windows
         p = p.replace(/\//g, '\\');
         // Remove redundant slashes
@@ -37190,7 +37190,7 @@ function safeTrimTrailingSeparator(p) {
         return p;
     }
     // On Windows check if drive root. E.g. C:\
-    if (IS_WINDOWS$4 && /^[A-Z]:\\$/i.test(p)) {
+    if (IS_WINDOWS$5 && /^[A-Z]:\\$/i.test(p)) {
         return p;
     }
     // Otherwise trim trailing slash
@@ -37239,7 +37239,7 @@ Object.defineProperty(internalPatternHelper, "__esModule", { value: true });
 internalPatternHelper.partialMatch = internalPatternHelper.match = internalPatternHelper.getSearchPaths = void 0;
 const pathHelper$2 = __importStar$4(internalPathHelper);
 const internal_match_kind_1$2 = internalMatchKind;
-const IS_WINDOWS$3 = process.platform === 'win32';
+const IS_WINDOWS$4 = process.platform === 'win32';
 /**
  * Given an array of patterns, returns an array of paths to search.
  * Duplicates and paths under other included paths are filtered out.
@@ -37250,7 +37250,7 @@ function getSearchPaths(patterns) {
     // Create a map of all search paths
     const searchPathMap = {};
     for (const pattern of patterns) {
-        const key = IS_WINDOWS$3
+        const key = IS_WINDOWS$4
             ? pattern.searchPath.toUpperCase()
             : pattern.searchPath;
         searchPathMap[key] = 'candidate';
@@ -37258,7 +37258,7 @@ function getSearchPaths(patterns) {
     const result = [];
     for (const pattern of patterns) {
         // Check if already included
-        const key = IS_WINDOWS$3
+        const key = IS_WINDOWS$4
             ? pattern.searchPath.toUpperCase()
             : pattern.searchPath;
         if (searchPathMap[key] === 'included') {
@@ -37340,7 +37340,7 @@ internalPath.Path = void 0;
 const path$4 = __importStar$3(require$$1__default);
 const pathHelper$1 = __importStar$3(internalPathHelper);
 const assert_1$1 = __importDefault$1(require$$0$3);
-const IS_WINDOWS$2 = process.platform === 'win32';
+const IS_WINDOWS$3 = process.platform === 'win32';
 /**
  * Helper class for parsing paths into segments
  */
@@ -37410,7 +37410,7 @@ class Path {
         // First segment
         let result = this.segments[0];
         // All others
-        let skipSlash = result.endsWith(path$4.sep) || (IS_WINDOWS$2 && /^[A-Z]:$/i.test(result));
+        let skipSlash = result.endsWith(path$4.sep) || (IS_WINDOWS$3 && /^[A-Z]:$/i.test(result));
         for (let i = 1; i < this.segments.length; i++) {
             if (skipSlash) {
                 skipSlash = false;
@@ -37456,7 +37456,7 @@ const assert_1 = __importDefault(require$$0$3);
 const minimatch_1 = minimatch_1$1;
 const internal_match_kind_1$1 = internalMatchKind;
 const internal_path_1 = internalPath;
-const IS_WINDOWS$1 = process.platform === 'win32';
+const IS_WINDOWS$2 = process.platform === 'win32';
 class Pattern {
     constructor(patternOrNegate, isImplicitPattern = false, segments, homedir) {
         /**
@@ -37501,18 +37501,18 @@ class Pattern {
             .filter(x => !foundGlob && !(foundGlob = x === ''));
         this.searchPath = new internal_path_1.Path(searchSegments).toString();
         // Root RegExp (required when determining partial match)
-        this.rootRegExp = new RegExp(Pattern.regExpEscape(searchSegments[0]), IS_WINDOWS$1 ? 'i' : '');
+        this.rootRegExp = new RegExp(Pattern.regExpEscape(searchSegments[0]), IS_WINDOWS$2 ? 'i' : '');
         this.isImplicitPattern = isImplicitPattern;
         // Create minimatch
         const minimatchOptions = {
             dot: true,
             nobrace: true,
-            nocase: IS_WINDOWS$1,
+            nocase: IS_WINDOWS$2,
             nocomment: true,
             noext: true,
             nonegate: true
         };
-        pattern = IS_WINDOWS$1 ? pattern.replace(/\\/g, '/') : pattern;
+        pattern = IS_WINDOWS$2 ? pattern.replace(/\\/g, '/') : pattern;
         this.minimatch = new minimatch_1.Minimatch(pattern, minimatchOptions);
     }
     /**
@@ -37552,13 +37552,13 @@ class Pattern {
         if (pathHelper.dirname(itemPath) === itemPath) {
             return this.rootRegExp.test(itemPath);
         }
-        return this.minimatch.matchOne(itemPath.split(IS_WINDOWS$1 ? /\\+/ : /\/+/), this.minimatch.set[0], true);
+        return this.minimatch.matchOne(itemPath.split(IS_WINDOWS$2 ? /\\+/ : /\/+/), this.minimatch.set[0], true);
     }
     /**
      * Escapes glob patterns within a path
      */
     static globEscape(s) {
-        return (IS_WINDOWS$1 ? s : s.replace(/\\/g, '\\\\')) // escape '\' on Linux/macOS
+        return (IS_WINDOWS$2 ? s : s.replace(/\\/g, '\\\\')) // escape '\' on Linux/macOS
             .replace(/(\[)(?=[^/]+\])/g, '[[]') // escape '[' when ']' follows within the path segment
             .replace(/\?/g, '[?]') // escape '?'
             .replace(/\*/g, '[*]'); // escape '*'
@@ -37589,7 +37589,7 @@ class Pattern {
             pattern = Pattern.globEscape(homedir) + pattern.substr(1);
         }
         // Replace relative drive root, e.g. pattern is C: or C:foo
-        else if (IS_WINDOWS$1 &&
+        else if (IS_WINDOWS$2 &&
             (pattern.match(/^[A-Z]:$/i) || pattern.match(/^[A-Z]:[^\\]/i))) {
             let root = pathHelper.ensureAbsoluteRoot('C:\\dummy-root', pattern.substr(0, 2));
             if (pattern.length > 2 && !root.endsWith('\\')) {
@@ -37598,7 +37598,7 @@ class Pattern {
             pattern = Pattern.globEscape(root) + pattern.substr(2);
         }
         // Replace relative root, e.g. pattern is \ or \foo
-        else if (IS_WINDOWS$1 && (pattern === '\\' || pattern.match(/^\\[^\\]/))) {
+        else if (IS_WINDOWS$2 && (pattern === '\\' || pattern.match(/^\\[^\\]/))) {
             let root = pathHelper.ensureAbsoluteRoot('C:\\dummy-root', '\\');
             if (!root.endsWith('\\')) {
                 root += '\\';
@@ -37620,7 +37620,7 @@ class Pattern {
         for (let i = 0; i < segment.length; i++) {
             const c = segment[i];
             // Escape
-            if (c === '\\' && !IS_WINDOWS$1 && i + 1 < segment.length) {
+            if (c === '\\' && !IS_WINDOWS$2 && i + 1 < segment.length) {
                 literal += segment[++i];
                 continue;
             }
@@ -37635,7 +37635,7 @@ class Pattern {
                 for (let i2 = i + 1; i2 < segment.length; i2++) {
                     const c2 = segment[i2];
                     // Escape
-                    if (c2 === '\\' && !IS_WINDOWS$1 && i2 + 1 < segment.length) {
+                    if (c2 === '\\' && !IS_WINDOWS$2 && i2 + 1 < segment.length) {
                         set += segment[++i2];
                         continue;
                     }
@@ -37748,7 +37748,7 @@ const patternHelper = __importStar$1(internalPatternHelper);
 const internal_match_kind_1 = internalMatchKind;
 const internal_pattern_1 = internalPattern;
 const internal_search_state_1 = internalSearchState;
-const IS_WINDOWS = process.platform === 'win32';
+const IS_WINDOWS$1 = process.platform === 'win32';
 class DefaultGlobber {
     constructor(options) {
         this.patterns = [];
@@ -37858,7 +37858,7 @@ class DefaultGlobber {
     static create(patterns, options) {
         return __awaiter$2(this, void 0, void 0, function* () {
             const result = new DefaultGlobber(options);
-            if (IS_WINDOWS) {
+            if (IS_WINDOWS$1) {
                 patterns = patterns.replace(/\r\n/g, '\n');
                 patterns = patterns.replace(/\r/g, '\n');
             }
@@ -38068,15 +38068,20 @@ function hashFiles(patterns, currentWorkspace = '', options, verbose = false) {
 }
 glob.hashFiles = hashFiles;
 
-function t$1(t, e, s) {
-    return e in t ? Object.defineProperty(t, e, {
-        value: s,
-        enumerable: !0,
-        configurable: !0,
-        writable: !0
-    }) : t[e] = s, t;
+function _define_property(obj, key, value) {
+    if (key in obj) {
+        Object.defineProperty(obj, key, {
+            value: value,
+            enumerable: true,
+            configurable: true,
+            writable: true
+        });
+    } else {
+        obj[key] = value;
+    }
+    return obj;
 }
-/* eslint-disable @typescript-eslint/unbound-method */ let d = 'win32' === process.platform;
+/* eslint-disable @typescript-eslint/unbound-method */ const IS_WINDOWS = process.platform === 'win32';
 class ExecPublicState {
     unref() {
         return this.cp.unref();
@@ -38106,67 +38111,111 @@ class ExecPublicState {
      * @param {child.ChildProcess} cp
      * @param {Promise<number>} promise
      * @param {ExecState} state
-     */ constructor(e, s, i){
-        t$1(this, "cp", void 0), t$1(this, "processClosedPromise", void 0), t$1(this, "state", void 0), this.cp = e, this.processClosedPromise = s, this.state = i;
+     */ constructor(cp, promise, state){
+        _define_property(this, "cp", void 0);
+        _define_property(this, "processClosedPromise", void 0);
+        _define_property(this, "state", void 0);
+        this.cp = cp;
+        this.processClosedPromise = promise;
+        this.state = state;
     }
 }
 /*
  * Class for running command line tools. Handles quoting and arg parsing in a platform agnostic way.
  */ class ToolRunner extends require$$4.EventEmitter {
-    _debug(t) {
-        this.options.listeners && this.options.listeners.debug && this.options.listeners.debug(t);
+    _debug(message) {
+        if (this.options.listeners && this.options.listeners.debug) {
+            this.options.listeners.debug(message);
+        }
     }
-    _getCommandString(t, e) {
-        let s = this._getSpawnFileName(), i = this._getSpawnArgs(t), r = e ? '' : '[command]' // omit prefix when piped to a second tool
+    _getCommandString(options, noPrefix) {
+        const toolPath = this._getSpawnFileName();
+        const args = this._getSpawnArgs(options);
+        let cmd = noPrefix ? '' : '[command]' // omit prefix when piped to a second tool
         ;
-        if (d) {
+        if (IS_WINDOWS) {
             // Windows + cmd file
-            if (this._isCmdFile()) for (let t of (r += s, i))r += ` ${t}`;
-            else if (t.windowsVerbatimArguments) for (let t of (r += `"${s}"`, i))r += ` ${t}`;
-            else for (let t of (r += this._windowsQuoteCmdArg(s), i))r += ` ${this._windowsQuoteCmdArg(t)}`;
-        } else for (let t of (// OSX/Linux - this can likely be improved with some form of quoting.
-        // creating processes on Unix is fundamentally different than Windows.
-        // on Unix, execvp() takes an arg array.
-        r += s, i))r += ` ${t}`;
-        return r;
-    }
-    _processLineBuffer(t, s, i) {
-        try {
-            let r = s + t.toString(), o = r.indexOf(require$$0.EOL);
-            for(; o > -1;){
-                let t = r.substring(0, o);
-                i(t), o = // the rest of the string ...
-                (r = r.substring(o + require$$0.EOL.length)).indexOf(require$$0.EOL);
+            if (this._isCmdFile()) {
+                cmd += toolPath;
+                for (const a of args){
+                    cmd += ` ${a}`;
+                }
+            } else if (options.windowsVerbatimArguments) {
+                cmd += `"${toolPath}"`;
+                for (const a of args){
+                    cmd += ` ${a}`;
+                }
+            } else {
+                cmd += this._windowsQuoteCmdArg(toolPath);
+                for (const a of args){
+                    cmd += ` ${this._windowsQuoteCmdArg(a)}`;
+                }
             }
-            return r;
-        } catch (t) {
-            return(// streaming lines to console is best effort.  Don't fail a build.
-            this._debug(`error processing line. Failed with error ${t}`), '');
+        } else {
+            // OSX/Linux - this can likely be improved with some form of quoting.
+            // creating processes on Unix is fundamentally different than Windows.
+            // on Unix, execvp() takes an arg array.
+            cmd += toolPath;
+            for (const a of args){
+                cmd += ` ${a}`;
+            }
+        }
+        return cmd;
+    }
+    _processLineBuffer(data, strBuffer, onLine) {
+        try {
+            let s = strBuffer + data.toString();
+            let n = s.indexOf(require$$0.EOL);
+            while(n > -1){
+                const line = s.substring(0, n);
+                onLine(line);
+                // the rest of the string ...
+                s = s.substring(n + require$$0.EOL.length);
+                n = s.indexOf(require$$0.EOL);
+            }
+            return s;
+        } catch (err) {
+            // streaming lines to console is best effort.  Don't fail a build.
+            this._debug(`error processing line. Failed with error ${err}`);
+            return '';
         }
     }
     _getSpawnFileName() {
-        return d && this._isCmdFile() ? process.env.COMSPEC || 'cmd.exe' : this.toolPath;
+        if (IS_WINDOWS) {
+            if (this._isCmdFile()) {
+                return process.env['COMSPEC'] || 'cmd.exe';
+            }
+        }
+        return this.toolPath;
     }
-    _getSpawnArgs(t) {
-        if (d && this._isCmdFile()) {
-            let e = `/D /S /C "${this._windowsQuoteCmdArg(this.toolPath)}`;
-            for (let s of this.args)e += ' ' + (t.windowsVerbatimArguments ? s : this._windowsQuoteCmdArg(s));
-            return [
-                e += '"'
-            ];
+    _getSpawnArgs(options) {
+        if (IS_WINDOWS) {
+            if (this._isCmdFile()) {
+                let argline = `/D /S /C "${this._windowsQuoteCmdArg(this.toolPath)}`;
+                for (const a of this.args){
+                    argline += ' ';
+                    argline += options.windowsVerbatimArguments ? a : this._windowsQuoteCmdArg(a);
+                }
+                argline += '"';
+                return [
+                    argline
+                ];
+            }
         }
         return this.args;
     }
-    _endsWith(t, e) {
-        return t.endsWith(e);
+    _endsWith(str, end) {
+        return str.endsWith(end);
     }
     _isCmdFile() {
-        let t = this.toolPath.toUpperCase();
-        return this._endsWith(t, '.CMD') || this._endsWith(t, '.BAT');
+        const upperToolPath = this.toolPath.toUpperCase();
+        return this._endsWith(upperToolPath, '.CMD') || this._endsWith(upperToolPath, '.BAT');
     }
-    _windowsQuoteCmdArg(t) {
+    _windowsQuoteCmdArg(arg) {
         // for .exe, apply the normal quoting rules that libuv applies
-        if (!this._isCmdFile()) return this._uvQuoteCmdArg(t);
+        if (!this._isCmdFile()) {
+            return this._uvQuoteCmdArg(arg);
+        }
         // otherwise apply quoting rules specific to the cmd.exe command line parser.
         // the libuv rules are generic and are not designed specifically for cmd.exe
         // command line parser.
@@ -38174,15 +38223,45 @@ class ExecPublicState {
         // for a detailed description of the cmd.exe command line parser, refer to
         // http://stackoverflow.com/questions/4094699/how-does-the-windows-command-interpreter-cmd-exe-parse-scripts/7970912#7970912
         // need quotes for empty arg
-        if (!t) return '""';
+        if (!arg) {
+            return '""';
+        }
         // determine whether the arg needs to be quoted
-        let e = JSON.parse('[" ","\\t","&","(",")","[","]","{","}","^","=",";","!","\'","+",",","`","~","|","<",">","\\""]'), s = !1;
-        for (let i of t)if (e.some((t)=>t === i)) {
-            s = !0;
-            break;
+        const cmdSpecialChars = [
+            ' ',
+            '\t',
+            '&',
+            '(',
+            ')',
+            '[',
+            ']',
+            '{',
+            '}',
+            '^',
+            '=',
+            ';',
+            '!',
+            "'",
+            '+',
+            ',',
+            '`',
+            '~',
+            '|',
+            '<',
+            '>',
+            '"'
+        ];
+        let needsQuotes = false;
+        for (const char of arg){
+            if (cmdSpecialChars.some((x)=>x === char)) {
+                needsQuotes = true;
+                break;
+            }
         }
         // short-circuit if quotes not needed
-        if (!s) return t;
+        if (!needsQuotes) {
+            return arg;
+        }
         // the following quoting rules are very similar to the rules that by libuv applies.
         //
         // 1) wrap the string in quotes
@@ -38230,14 +38309,26 @@ class ExecPublicState {
         //
         // an unexplored potential solution for the % escaping problem, is to create a wrapper .cmd file.
         // % can be escaped within a .cmd file.
-        let i = '"', r = !0;
-        for(let e = t.length; e > 0; e--)// walk the string in reverse
-        i += t[e - 1], r && '\\' === t[e - 1] ? i += '\\' // double the slash
-         : '"' === t[e - 1] ? (r = !0, i += '"' // double the quote
-        ) : r = !1;
-        return (i += '"').split('').reverse().join('');
+        let reverse = '"';
+        let quoteHit = true;
+        for(let i = arg.length; i > 0; i--){
+            // walk the string in reverse
+            reverse += arg[i - 1];
+            if (quoteHit && arg[i - 1] === '\\') {
+                reverse += '\\' // double the slash
+                ;
+            } else if (arg[i - 1] === '"') {
+                quoteHit = true;
+                reverse += '"' // double the quote
+                ;
+            } else {
+                quoteHit = false;
+            }
+        }
+        reverse += '"';
+        return reverse.split('').reverse().join('');
     }
-    _uvQuoteCmdArg(t) {
+    _uvQuoteCmdArg(arg) {
         // Tool runner wraps child_process.spawn() and needs to apply the same quoting as
         // Node in certain cases where the undocumented spawn option windowsVerbatimArguments
         // is used.
@@ -38265,13 +38356,19 @@ class ExecPublicState {
         //      LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
         //      FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
         //      IN THE SOFTWARE.
-        if (!t) // Need double quotation for empty argument
-        return '""';
-        if (!t.includes(' ') && !t.includes('\t') && !t.includes('"')) // No quotation needed
-        return t;
-        if (!t.includes('"') && !t.includes('\\')) // No embedded double quotes or backslashes, so I can just wrap
-        // quote marks around the whole thing.
-        return `"${t}"`;
+        if (!arg) {
+            // Need double quotation for empty argument
+            return '""';
+        }
+        if (!arg.includes(' ') && !arg.includes('\t') && !arg.includes('"')) {
+            // No quotation needed
+            return arg;
+        }
+        if (!arg.includes('"') && !arg.includes('\\')) {
+            // No embedded double quotes or backslashes, so I can just wrap
+            // quote marks around the whole thing.
+            return `"${arg}"`;
+        }
         // Expected input/output:
         //   input : hello"world
         //   output: "hello\"world"
@@ -38288,28 +38385,48 @@ class ExecPublicState {
         //   input : hello world\
         //   output: "hello world\\" - note the comment in libuv actually reads "hello world\"
         //                             but it appears the comment is wrong, it should be "hello world\\"
-        let e = '"', s = !0;
-        for(let i = t.length; i > 0; i--)// walk the string in reverse
-        e += t[i - 1], s && '\\' === t[i - 1] ? e += '\\' : '"' === t[i - 1] ? (s = !0, e += '\\') : s = !1;
-        return (e += '"').split('').reverse().join('');
+        let reverse = '"';
+        let quoteHit = true;
+        for(let i = arg.length; i > 0; i--){
+            // walk the string in reverse
+            reverse += arg[i - 1];
+            if (quoteHit && arg[i - 1] === '\\') {
+                reverse += '\\';
+            } else if (arg[i - 1] === '"') {
+                quoteHit = true;
+                reverse += '\\';
+            } else {
+                quoteHit = false;
+            }
+        }
+        reverse += '"';
+        return reverse.split('').reverse().join('');
     }
-    _cloneExecOptions(t) {
-        t = t || {};
-        let e = {
-            cwd: t.cwd || process.cwd(),
-            env: t.env || process.env,
-            silent: t.silent || !1,
-            windowsVerbatimArguments: t.windowsVerbatimArguments || !1,
-            failOnStdErr: t.failOnStdErr || !1,
-            ignoreReturnCode: t.ignoreReturnCode || !1,
-            delay: t.delay || 10000
+    _cloneExecOptions(options) {
+        options = options || {};
+        const result = {
+            cwd: options.cwd || process.cwd(),
+            env: options.env || process.env,
+            silent: options.silent || false,
+            windowsVerbatimArguments: options.windowsVerbatimArguments || false,
+            failOnStdErr: options.failOnStdErr || false,
+            ignoreReturnCode: options.ignoreReturnCode || false,
+            delay: options.delay || 10000
         };
-        return e.outStream = t.outStream || process.stdout, e.errStream = t.errStream || process.stderr, e;
+        result.outStream = options.outStream || process.stdout;
+        result.errStream = options.errStream || process.stderr;
+        return result;
     }
-    _getSpawnOptions(t, e) {
-        t = t || {};
-        let s = {};
-        return s.cwd = t.cwd, s.env = t.env, s.windowsVerbatimArguments = t.windowsVerbatimArguments || this._isCmdFile(), t.windowsVerbatimArguments && (s.argv0 = `"${e}"`), s;
+    _getSpawnOptions(options, toolPath) {
+        options = options || {};
+        const result = {};
+        result.cwd = options.cwd;
+        result.env = options.env;
+        result['windowsVerbatimArguments'] = options.windowsVerbatimArguments || this._isCmdFile();
+        if (options.windowsVerbatimArguments) {
+            result.argv0 = `"${toolPath}"`;
+        }
+        return result;
     }
     /**
      * Exec a tool.
@@ -38320,53 +38437,124 @@ class ExecPublicState {
      * @param     options  optional exec options.  See ExecOptions
      * @returns   number
      */ async exec() {
-        let t, s;
-        for (let t of (!ioUtil$2.isRooted(this.toolPath) && (this.toolPath.includes('/') || d && this.toolPath.includes('\\')) && // prefer options.cwd if it is specified, however options.cwd may also need to be rooted
-        (this.toolPath = require$$1.resolve(process.cwd(), this.options.cwd || process.cwd(), this.toolPath)), // if the tool is only a file name, then resolve it from the PATH
-        // otherwise verify it exists (add extension on Windows if necessary)
-        this.toolPath = await which_1(this.toolPath, !0), this._debug(`exec tool: ${this.toolPath}`), this._debug('arguments:'), this.args))this._debug(`   ${t}`);
-        let h = this._cloneExecOptions(this.options);
-        !h.silent && h.outStream && h.outStream.write(this._getCommandString(h) + require$$0.EOL);
-        let l = new a(h, this.toolPath);
-        if (l.on('debug', (t)=>{
-            this._debug(t);
-        }), this.options.cwd && !await ioUtil$2.exists(this.options.cwd)) throw Error(`The cwd: ${this.options.cwd} does not exist!`);
-        let c = this._getSpawnFileName(), p = require$$2$1.spawn(c, this._getSpawnArgs(h), this._getSpawnOptions(this.options, c)), u = '';
-        p.stdout && p.stdout.on('data', (t)=>{
-            this.options.listeners && this.options.listeners.stdout && this.options.listeners.stdout(t), !h.silent && h.outStream && h.outStream.write(t), u = this._processLineBuffer(t, u, (t)=>{
-                this.options.listeners && this.options.listeners.stdline && this.options.listeners.stdline(t);
-            });
-        });
-        let m = '';
-        p.stderr && p.stderr.on('data', (t)=>{
-            if (l.processStderr = !0, this.options.listeners && this.options.listeners.stderr && this.options.listeners.stderr(t), !h.silent && h.errStream && h.outStream) {
-                let e = h.failOnStdErr ? h.errStream : h.outStream;
-                e.write(t);
-            }
-            m = this._processLineBuffer(t, m, (t)=>{
-                this.options.listeners && this.options.listeners.errline && this.options.listeners.errline(t);
-            });
-        }), p.on('error', (t)=>{
-            l.processError = t.message, l.processExited = !0, l.processClosed = !0, l.CheckComplete();
-        }), p.on('exit', (t)=>{
-            l.processExitCode = t || 0, l.processExited = !0, this._debug(`Exit code ${t} received from tool '${this.toolPath}'`), l.CheckComplete();
-        }), p.on('close', (t)=>{
-            l.processExitCode = t || 0, l.processExited = !0, l.processClosed = !0, this._debug(`STDIO streams have closed for tool '${this.toolPath}'`), l.CheckComplete();
-        });
-        let g = new Promise((e, i)=>{
-            t = e, s = i;
-        });
-        if (l.on('done', (e, i)=>{
-            u.length > 0 && this.emit('stdline', u), m.length > 0 && this.emit('errline', m), p.removeAllListeners(), e ? s(e) : t(i);
-        }), this.options.input) {
-            if (!p.stdin) throw Error('child process missing stdin');
-            p.stdin.end(this.options.input);
+        // root the tool path if it is unrooted and contains relative pathing
+        if (!ioUtil$2.isRooted(this.toolPath) && (this.toolPath.includes('/') || IS_WINDOWS && this.toolPath.includes('\\'))) {
+            // prefer options.cwd if it is specified, however options.cwd may also need to be rooted
+            this.toolPath = require$$1.resolve(process.cwd(), this.options.cwd || process.cwd(), this.toolPath);
         }
-        return new ExecPublicState(p, g, l);
+        // if the tool is only a file name, then resolve it from the PATH
+        // otherwise verify it exists (add extension on Windows if necessary)
+        this.toolPath = await which_1(this.toolPath, true);
+        this._debug(`exec tool: ${this.toolPath}`);
+        this._debug('arguments:');
+        for (const arg of this.args){
+            this._debug(`   ${arg}`);
+        }
+        const optionsNonNull = this._cloneExecOptions(this.options);
+        if (!optionsNonNull.silent && optionsNonNull.outStream) {
+            optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + require$$0.EOL);
+        }
+        const state = new ExecState(optionsNonNull, this.toolPath);
+        state.on('debug', (message)=>{
+            this._debug(message);
+        });
+        if (this.options.cwd && !await ioUtil$2.exists(this.options.cwd)) {
+            throw new Error(`The cwd: ${this.options.cwd} does not exist!`);
+        }
+        const fileName = this._getSpawnFileName();
+        const cp = require$$2$1.spawn(fileName, this._getSpawnArgs(optionsNonNull), this._getSpawnOptions(this.options, fileName));
+        let stdbuffer = '';
+        if (cp.stdout) {
+            cp.stdout.on('data', (data)=>{
+                if (this.options.listeners && this.options.listeners.stdout) {
+                    this.options.listeners.stdout(data);
+                }
+                if (!optionsNonNull.silent && optionsNonNull.outStream) {
+                    optionsNonNull.outStream.write(data);
+                }
+                stdbuffer = this._processLineBuffer(data, stdbuffer, (line)=>{
+                    if (this.options.listeners && this.options.listeners.stdline) {
+                        this.options.listeners.stdline(line);
+                    }
+                });
+            });
+        }
+        let errbuffer = '';
+        if (cp.stderr) {
+            cp.stderr.on('data', (data)=>{
+                state.processStderr = true;
+                if (this.options.listeners && this.options.listeners.stderr) {
+                    this.options.listeners.stderr(data);
+                }
+                if (!optionsNonNull.silent && optionsNonNull.errStream && optionsNonNull.outStream) {
+                    const s = optionsNonNull.failOnStdErr ? optionsNonNull.errStream : optionsNonNull.outStream;
+                    s.write(data);
+                }
+                errbuffer = this._processLineBuffer(data, errbuffer, (line)=>{
+                    if (this.options.listeners && this.options.listeners.errline) {
+                        this.options.listeners.errline(line);
+                    }
+                });
+            });
+        }
+        cp.on('error', (err)=>{
+            state.processError = err.message;
+            state.processExited = true;
+            state.processClosed = true;
+            state.CheckComplete();
+        });
+        cp.on('exit', (code)=>{
+            state.processExitCode = code || 0;
+            state.processExited = true;
+            this._debug(`Exit code ${code} received from tool '${this.toolPath}'`);
+            state.CheckComplete();
+        });
+        cp.on('close', (code)=>{
+            state.processExitCode = code || 0;
+            state.processExited = true;
+            state.processClosed = true;
+            this._debug(`STDIO streams have closed for tool '${this.toolPath}'`);
+            state.CheckComplete();
+        });
+        let resolve;
+        let reject;
+        const promise = new Promise((_resolve, _reject)=>{
+            resolve = _resolve;
+            reject = _reject;
+        });
+        state.on('done', (error, exitCode)=>{
+            if (stdbuffer.length > 0) {
+                this.emit('stdline', stdbuffer);
+            }
+            if (errbuffer.length > 0) {
+                this.emit('errline', errbuffer);
+            }
+            cp.removeAllListeners();
+            if (error) {
+                reject(error);
+            } else {
+                resolve(exitCode);
+            }
+        });
+        if (this.options.input) {
+            if (!cp.stdin) {
+                throw new Error('child process missing stdin');
+            }
+            cp.stdin.end(this.options.input);
+        }
+        return new ExecPublicState(cp, promise, state);
     }
-    constructor(e, s, i){
-        if (super(), t$1(this, "toolPath", void 0), t$1(this, "args", void 0), t$1(this, "options", void 0), !e) throw Error("Parameter 'toolPath' cannot be null or empty.");
-        this.toolPath = e, this.args = s || [], this.options = i || {};
+    constructor(toolPath, args, options){
+        super();
+        _define_property(this, "toolPath", void 0);
+        _define_property(this, "args", void 0);
+        _define_property(this, "options", void 0);
+        if (!toolPath) {
+            throw new Error("Parameter 'toolPath' cannot be null or empty.");
+        }
+        this.toolPath = toolPath;
+        this.args = args || [];
+        this.options = options || {};
     }
 }
 /**
@@ -38374,61 +38562,119 @@ class ExecPublicState {
  *
  * @param    argString   string of arguments
  * @returns  string[]    array of arguments
- */ function argStringToArray(t) {
-    let e = [], s = !1, i = !1, r = '';
-    function o(t) {
-        i && '"' !== t && (r += '\\'), r += t, i = !1;
+ */ function argStringToArray(argString) {
+    const args = [];
+    let inQuotes = false;
+    let escaped = false;
+    let arg = '';
+    function append(c) {
+        // we only escape double quotes.
+        if (escaped && c !== '"') {
+            arg += '\\';
+        }
+        arg += c;
+        escaped = false;
     }
-    for(let n = 0; n < t.length; n++){
-        let h = t.charAt(n);
-        if ('"' === h) {
-            i ? o(h) : s = !s;
+    for(let i = 0; i < argString.length; i++){
+        const c = argString.charAt(i);
+        if (c === '"') {
+            if (!escaped) {
+                inQuotes = !inQuotes;
+            } else {
+                append(c);
+            }
             continue;
         }
-        if ('\\' === h && i) {
-            o(h);
+        if (c === '\\' && escaped) {
+            append(c);
             continue;
         }
-        if ('\\' === h && s) {
-            i = !0;
+        if (c === '\\' && inQuotes) {
+            escaped = true;
             continue;
         }
-        if (' ' === h && !s) {
-            r.length > 0 && (e.push(r), r = '');
+        if (c === ' ' && !inQuotes) {
+            if (arg.length > 0) {
+                args.push(arg);
+                arg = '';
+            }
             continue;
         }
-        o(h);
+        append(c);
     }
-    return r.length > 0 && e.push(r.trim()), e;
+    if (arg.length > 0) {
+        args.push(arg.trim());
+    }
+    return args;
 }
-class a extends require$$4.EventEmitter {
+class ExecState extends require$$4.EventEmitter {
     CheckComplete() {
-        !this.done && (this.processClosed ? this._setResult() : this.processExited && (this.timeout = setTimeout$1(a.HandleTimeout, this.delay, this)));
+        if (this.done) {
+            return;
+        }
+        if (this.processClosed) {
+            this._setResult();
+        } else if (this.processExited) {
+            this.timeout = setTimeout$1(ExecState.HandleTimeout, this.delay, this);
+        }
     }
-    _debug(t) {
-        this.emit('debug', t);
+    _debug(message) {
+        this.emit('debug', message);
     }
     _setResult() {
         // determine whether there is an error
-        let t;
-        this.processExited && (this.processError ? t = Error(`There was an error when attempting to execute the process '${this.toolPath}'. This may indicate the process failed to start. Error: ${this.processError}`) : 0 === this.processExitCode || this.options.ignoreReturnCode ? this.processStderr && this.options.failOnStdErr && (t = Error(`The process '${this.toolPath}' failed because one or more lines were written to the STDERR stream`)) : t = Error(`The process '${this.toolPath}' failed with exit code ${this.processExitCode}`)), this.timeout && (clearTimeout(this.timeout), this.timeout = null), this.done = !0, this.emit('done', t, this.processExitCode);
-    }
-    static HandleTimeout(t) {
-        if (!t.done) {
-            if (!t.processClosed && t.processExited) {
-                let e = `The STDIO streams did not close within ${t.delay / 1000} seconds of the exit event from process '${t.toolPath}'. This may indicate a child process inherited the STDIO streams and has not yet exited.`;
-                t._debug(e);
+        let error;
+        if (this.processExited) {
+            if (this.processError) {
+                error = new Error(`There was an error when attempting to execute the process '${this.toolPath}'. This may indicate the process failed to start. Error: ${this.processError}`);
+            } else if (this.processExitCode !== 0 && !this.options.ignoreReturnCode) {
+                error = new Error(`The process '${this.toolPath}' failed with exit code ${this.processExitCode}`);
+            } else if (this.processStderr && this.options.failOnStdErr) {
+                error = new Error(`The process '${this.toolPath}' failed because one or more lines were written to the STDERR stream`);
             }
-            t._setResult();
         }
+        // clear the timeout
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+            this.timeout = null;
+        }
+        this.done = true;
+        this.emit('done', error, this.processExitCode);
     }
-    constructor(e, s){
-        if (super(), t$1(this, "processClosed", !1 // tracks whether the process has exited and stdio is closed
-        ), t$1(this, "processError", ''), t$1(this, "processExitCode", 0), t$1(this, "processExited", !1 // tracks whether the process has exited
-        ), t$1(this, "processStderr", !1 // tracks whether stderr was written to
-        ), t$1(this, "delay", 10000 // 10 seconds
-        ), t$1(this, "done", !1), t$1(this, "options", void 0), t$1(this, "timeout", null), t$1(this, "toolPath", void 0), !s) throw Error('toolPath must not be empty');
-        this.options = e, this.toolPath = s, e.delay && (this.delay = e.delay);
+    static HandleTimeout(state) {
+        if (state.done) {
+            return;
+        }
+        if (!state.processClosed && state.processExited) {
+            const message = `The STDIO streams did not close within ${state.delay / 1000} seconds of the exit event from process '${state.toolPath}'. This may indicate a child process inherited the STDIO streams and has not yet exited.`;
+            state._debug(message);
+        }
+        state._setResult();
+    }
+    constructor(options, toolPath){
+        super();
+        _define_property(this, "processClosed", false // tracks whether the process has exited and stdio is closed
+        );
+        _define_property(this, "processError", '');
+        _define_property(this, "processExitCode", 0);
+        _define_property(this, "processExited", false // tracks whether the process has exited
+        );
+        _define_property(this, "processStderr", false // tracks whether stderr was written to
+        );
+        _define_property(this, "delay", 10000 // 10 seconds
+        );
+        _define_property(this, "done", false);
+        _define_property(this, "options", void 0);
+        _define_property(this, "timeout", null);
+        _define_property(this, "toolPath", void 0);
+        if (!toolPath) {
+            throw new Error('toolPath must not be empty');
+        }
+        this.options = options;
+        this.toolPath = toolPath;
+        if (options.delay) {
+            this.delay = options.delay;
+        }
     }
 }
 
@@ -38439,165 +38685,6 @@ var ref = {exports: {}};
 var src$1 = {exports: {}};
 
 var node$1 = {exports: {}};
-
-var hasFlag;
-var hasRequiredHasFlag;
-
-function requireHasFlag () {
-	if (hasRequiredHasFlag) return hasFlag;
-	hasRequiredHasFlag = 1;
-
-	hasFlag = (flag, argv = process.argv) => {
-		const prefix = flag.startsWith('-') ? '' : (flag.length === 1 ? '-' : '--');
-		const position = argv.indexOf(prefix + flag);
-		const terminatorPosition = argv.indexOf('--');
-		return position !== -1 && (terminatorPosition === -1 || position < terminatorPosition);
-	};
-	return hasFlag;
-}
-
-var supportsColor_1;
-var hasRequiredSupportsColor;
-
-function requireSupportsColor () {
-	if (hasRequiredSupportsColor) return supportsColor_1;
-	hasRequiredSupportsColor = 1;
-	const os = require$$0__default;
-	const tty = require$$0$b;
-	const hasFlag = requireHasFlag();
-
-	const {env} = process;
-
-	let forceColor;
-	if (hasFlag('no-color') ||
-		hasFlag('no-colors') ||
-		hasFlag('color=false') ||
-		hasFlag('color=never')) {
-		forceColor = 0;
-	} else if (hasFlag('color') ||
-		hasFlag('colors') ||
-		hasFlag('color=true') ||
-		hasFlag('color=always')) {
-		forceColor = 1;
-	}
-
-	if ('FORCE_COLOR' in env) {
-		if (env.FORCE_COLOR === 'true') {
-			forceColor = 1;
-		} else if (env.FORCE_COLOR === 'false') {
-			forceColor = 0;
-		} else {
-			forceColor = env.FORCE_COLOR.length === 0 ? 1 : Math.min(parseInt(env.FORCE_COLOR, 10), 3);
-		}
-	}
-
-	function translateLevel(level) {
-		if (level === 0) {
-			return false;
-		}
-
-		return {
-			level,
-			hasBasic: true,
-			has256: level >= 2,
-			has16m: level >= 3
-		};
-	}
-
-	function supportsColor(haveStream, streamIsTTY) {
-		if (forceColor === 0) {
-			return 0;
-		}
-
-		if (hasFlag('color=16m') ||
-			hasFlag('color=full') ||
-			hasFlag('color=truecolor')) {
-			return 3;
-		}
-
-		if (hasFlag('color=256')) {
-			return 2;
-		}
-
-		if (haveStream && !streamIsTTY && forceColor === undefined) {
-			return 0;
-		}
-
-		const min = forceColor || 0;
-
-		if (env.TERM === 'dumb') {
-			return min;
-		}
-
-		if (process.platform === 'win32') {
-			// Windows 10 build 10586 is the first Windows release that supports 256 colors.
-			// Windows 10 build 14931 is the first release that supports 16m/TrueColor.
-			const osRelease = os.release().split('.');
-			if (
-				Number(osRelease[0]) >= 10 &&
-				Number(osRelease[2]) >= 10586
-			) {
-				return Number(osRelease[2]) >= 14931 ? 3 : 2;
-			}
-
-			return 1;
-		}
-
-		if ('CI' in env) {
-			if (['TRAVIS', 'CIRCLECI', 'APPVEYOR', 'GITLAB_CI', 'GITHUB_ACTIONS', 'BUILDKITE'].some(sign => sign in env) || env.CI_NAME === 'codeship') {
-				return 1;
-			}
-
-			return min;
-		}
-
-		if ('TEAMCITY_VERSION' in env) {
-			return /^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env.TEAMCITY_VERSION) ? 1 : 0;
-		}
-
-		if (env.COLORTERM === 'truecolor') {
-			return 3;
-		}
-
-		if ('TERM_PROGRAM' in env) {
-			const version = parseInt((env.TERM_PROGRAM_VERSION || '').split('.')[0], 10);
-
-			switch (env.TERM_PROGRAM) {
-				case 'iTerm.app':
-					return version >= 3 ? 3 : 2;
-				case 'Apple_Terminal':
-					return 2;
-				// No default
-			}
-		}
-
-		if (/-256(color)?$/i.test(env.TERM)) {
-			return 2;
-		}
-
-		if (/^screen|^xterm|^vt100|^vt220|^rxvt|color|ansi|cygwin|linux/i.test(env.TERM)) {
-			return 1;
-		}
-
-		if ('COLORTERM' in env) {
-			return 1;
-		}
-
-		return min;
-	}
-
-	function getSupportLevel(stream) {
-		const level = supportsColor(stream, stream && stream.isTTY);
-		return translateLevel(level);
-	}
-
-	supportsColor_1 = {
-		supportsColor: getSupportLevel,
-		stdout: translateLevel(supportsColor(true, tty.isatty(1))),
-		stderr: translateLevel(supportsColor(true, tty.isatty(2)))
-	};
-	return supportsColor_1;
-}
 
 /**
  * Helpers.
@@ -39089,7 +39176,7 @@ function requireNode$1 () {
 		try {
 			// Optional dependency (as in, doesn't need to be installed, NOT like optionalDependencies in package.json)
 			// eslint-disable-next-line import/no-extraneous-dependencies
-			const supportsColor = requireSupportsColor();
+			const supportsColor = require('supports-color');
 
 			if (supportsColor && (supportsColor.stderr || supportsColor).level >= 2) {
 				exports.colors = [
@@ -41638,7 +41725,7 @@ function requireNode () {
 		try {
 		  // Optional dependency (as in, doesn't need to be installed, NOT like optionalDependencies in package.json)
 		  // eslint-disable-next-line import/no-extraneous-dependencies
-		  var supportsColor = requireSupportsColor();
+		  var supportsColor = require('supports-color');
 
 		  if (supportsColor && (supportsColor.stderr || supportsColor).level >= 2) {
 		    exports.colors = [20, 21, 26, 27, 32, 33, 38, 39, 40, 41, 42, 43, 44, 45, 56, 57, 62, 63, 68, 69, 74, 75, 76, 77, 78, 79, 80, 81, 92, 93, 98, 99, 112, 113, 128, 129, 134, 135, 148, 149, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 178, 179, 184, 185, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 214, 215, 220, 221];
@@ -43635,375 +43722,582 @@ var lib = {
 };
 
 // @ts-check
-let e;
-function t(e, o) {
-    return "undefined" != typeof SuppressedError ? t = SuppressedError : (t = function(e, t) {
-        this.suppressed = e, this.error = t, this.stack = Error().stack;
-    }).prototype = Object.create(Error.prototype, {
-        constructor: {
-            value: t,
-            writable: !0,
-            configurable: !0
-        }
-    }), new t(e, o);
-}
-function o(e, o, r) {
-    function i() {
-        for(; e.length > 0;)try {
-            var t = e.pop(), n = t.d.call(t.v);
-            if (t.a) return Promise.resolve(n).then(i, a);
-        } catch (e) {
-            return a(e);
-        }
-        if (r) throw o;
+function dispose_SuppressedError(suppressed, error) {
+    if (typeof SuppressedError !== "undefined") {
+        dispose_SuppressedError = SuppressedError;
+    } else {
+        dispose_SuppressedError = function SuppressedError(suppressed, error) {
+            this.suppressed = suppressed;
+            this.error = error;
+            this.stack = new Error().stack;
+        };
+        dispose_SuppressedError.prototype = Object.create(Error.prototype, {
+            constructor: {
+                value: dispose_SuppressedError,
+                writable: true,
+                configurable: true
+            }
+        });
     }
-    function a(e) {
-        return o = r ? new t(e, o) : e, r = !0, i();
-    }
-    return i();
+    return new dispose_SuppressedError(suppressed, error);
 }
-function r(e, t, o) {
-    if (null == t) return t;
-    if ("object" != typeof t) throw TypeError("using declarations can only be used with objects, null, or undefined.");
-    if (o) var r = t[Symbol.asyncDispose || Symbol.for("Symbol.asyncDispose")];
-    if (null == r && (r = t[Symbol.dispose || Symbol.for("Symbol.dispose")]), "function" != typeof r) throw TypeError("Property [Symbol.dispose] is not a function.");
-    return e.push({
-        v: t,
-        d: r,
-        a: o
-    }), t;
+function _dispose(stack, error, hasError) {
+    function next() {
+        while(stack.length > 0){
+            try {
+                var r = stack.pop();
+                var p = r.d.call(r.v);
+                if (r.a) return Promise.resolve(p).then(next, err);
+            } catch (e) {
+                return err(e);
+            }
+        }
+        if (hasError) throw error;
+    }
+    function err(e) {
+        error = hasError ? new dispose_SuppressedError(e, error) : e;
+        hasError = true;
+        return next();
+    }
+    return next();
+}
+function _using(stack, value, isAwait) {
+    if (value === null || value === void 0) return value;
+    if (typeof value !== "object") {
+        throw new TypeError("using declarations can only be used with objects, null, or undefined.");
+    }
+    if (isAwait) {
+        var dispose = value[Symbol.asyncDispose || Symbol.for("Symbol.asyncDispose")];
+    }
+    if (dispose === null || dispose === void 0) {
+        dispose = value[Symbol.dispose || Symbol.for("Symbol.dispose")];
+    }
+    if (typeof dispose !== "function") {
+        throw new TypeError(`Property [Symbol.dispose] is not a function.`);
+    }
+    stack.push({
+        v: value,
+        d: dispose,
+        a: isAwait
+    });
+    return value;
 }
 process.on('SIGINT', function() {});
 //
-let O = coreExports.getInput('run', {
-    required: !0
-}), v = coreExports.getInput('before', {
-    required: !1
-}), q = coreExports.getInput('after', {
-    required: !1
-}), N = coreExports.getInput('cwd', {
-    required: !1
-}) || resolve('.'), k = resolve(N, coreExports.getInput('tarball-root', {
-    required: !0
-})), T = resolve(N, coreExports.getInput('tarball-pattern', {
-    required: !1
-}) || k), P = coreExports.getInput('tarball-artifact-name', {
-    required: !1
-}), D = coreExports.getInput('tarball-file-name', {
-    required: !1
-}), j = coreExports.getBooleanInput('load-tarball-artifact-if-exists', {
-    required: !1
-}), A = coreExports.getBooleanInput('save-tarball-artifact', {
-    required: !1
-}), U = coreExports.getInput('shell', {
-    required: !1
+const run = coreExports.getInput('run', {
+    required: true
+});
+const beforeRun = coreExports.getInput('before', {
+    required: false
+});
+const afterRun = coreExports.getInput('after', {
+    required: false
+});
+// paths
+const cwd = coreExports.getInput('cwd', {
+    required: false
+}) || resolve('.');
+const tarballRoot = resolve(cwd, coreExports.getInput('tarball-root', {
+    required: true
+}));
+const tarballGlob = resolve(cwd, coreExports.getInput('tarball-pattern', {
+    required: false
+}) || tarballRoot);
+// archiving
+const tarballArtifactName = coreExports.getInput('tarball-artifact-name', {
+    required: false
+});
+const tarballFileName = coreExports.getInput('tarball-file-name', {
+    required: false
+});
+const loadTarballArtifactIfExists = coreExports.getBooleanInput('load-tarball-artifact-if-exists', {
+    required: false
+});
+const saveTarballArtifact = coreExports.getBooleanInput('save-tarball-artifact', {
+    required: false
+});
+// execution
+const shell = coreExports.getInput('shell', {
+    required: false
 });
 coreExports.getInput('input', {
-    required: !1
-}), coreExports.getInput('input-encoding', {
-    required: !1
+    required: false
 });
-let J = coreExports.getBooleanInput('fail-on-stderr', {
-    required: !1
-}), I = coreExports.getInput("ignore-exit-codes", {
-    required: !1
-}).split(',').map(parseInt), R = coreExports.getInput('key', {
-    required: !1
-}), G = Number(coreExports.getInput('timeout', {
-    required: !1
-})), L = create_1$1();
-function _(e) {
-    return coreExports.startGroup(e), {
+coreExports.getInput('input-encoding', {
+    required: false
+}) || 'utf-8';
+const failOnStdErr = coreExports.getBooleanInput('fail-on-stderr', {
+    required: false
+});
+const ignoreExitCodes = coreExports.getInput("ignore-exit-codes", {
+    required: false
+}).split(',').map(parseInt);
+// timeout
+const timeoutKey = coreExports.getInput('key', {
+    required: false
+});
+const timeout = Number(coreExports.getInput('timeout', {
+    required: false
+}));
+//
+const artifactClient = create_1$1();
+function withLogGroup(message) {
+    coreExports.startGroup(message);
+    return {
         [Symbol.dispose] () {
             coreExports.endGroup();
         }
     };
 }
-try {
-    var z = [];
-    r(z, _("Downloading and extracting artifact"));
-    var B = !0;
-    if (j) {
-        B = !1;
-        try {
-            await L.downloadArtifact(P, k), B = !0;
-        } catch (e) {
-            if (e && 'object' == typeof e && 'message' in e && ('Unable to find any artifacts for the associated workflow' == e.message || e.message == `Unable to find an artifact with the name: ${P}`)) B = !1;
-            else throw e;
-        }
-        B && existsSync(k) && (await exec_2('7z', [
-            'x',
-            '-y',
-            resolve(k, D)
-        ], {
-            cwd: k
-        }), await unlink(resolve(k, D)));
-    }
-} catch (e) {
-    var K = e, M = !0;
-} finally{
-    o(z, K, M);
-}
-let F = null;
-function H() {
-    return null != F && F < Date.now();
-}
-if ((e = process.env[`STAGE_END_${R}`]) && (F = Number(e), coreExports.notice(`This build stage will time out at ${F}`)), v) {
-    H() && (coreExports.setOutput('results-per-command', '[]'), coreExports.setOutput('before-run-outcome', "timeout"), coreExports.setOutput('outcome', "timeout"), coreExports.setOutput('after-run-outcome', q ? "timeout" : "skipped"), coreExports.notice("Timed out before before-hook execution"), process.exit(0));
-    let e = await ee(v, {
-        cwd: N,
-        failOnStdErr: J,
-        shell: U,
-        ignoreExitCodes: I
-    });
-    coreExports.setOutput('before-run-outcome', e.outcome), "failure" == e.outcome && (coreExports.setOutput('outcome', "failure"), coreExports.error("Before-run hook failed: $failCase"), process.exit(1));
-} else coreExports.setOutput('before-run-outcome', "skipped");
-null == F && (coreExports.exportVariable(`STAGE_END_${R}`, F = Date.now() + G), coreExports.info(`This build stage will time out at ${F}`)), H() && (await Y(), coreExports.setOutput('results-per-command', '[]'), coreExports.setOutput('outcome', "timeout"), coreExports.setOutput('after-run-outcome', null != q ? "timeout" : "skipped"), coreExports.notice("Timed out before main command execution"), process.exit(0));
 {
-    let e = await ee(O, {
-        cwd: N,
-        failOnStdErr: J,
-        shell: U,
-        ignoreExitCodes: I,
-        timeout: null != F ? Math.max(F - Date.now(), 1) : 1
+    try {
+        var _stack = [];
+        var _ = _using(_stack, withLogGroup("Downloading and extracting artifact"));
+        var ok = true;
+        if (loadTarballArtifactIfExists) {
+            ok = false;
+            try {
+                await artifactClient.downloadArtifact(tarballArtifactName, tarballRoot);
+                ok = true;
+            } catch (err) {
+                if (err && typeof err === 'object' && 'message' in err && (err.message == 'Unable to find any artifacts for the associated workflow' || err.message == `Unable to find an artifact with the name: ${tarballArtifactName}`)) {
+                    ok = false;
+                } else {
+                    throw err;
+                }
+            }
+            if (ok && existsSync(tarballRoot)) {
+                await exec_2('7z', [
+                    'x',
+                    '-y',
+                    resolve(tarballRoot, tarballFileName)
+                ], {
+                    cwd: tarballRoot
+                });
+                await unlink(resolve(tarballRoot, tarballFileName));
+            }
+        }
+    } catch (_) {
+        var _error = _;
+        var _hasError = true;
+    } finally{
+        _dispose(_stack, _error, _hasError);
+    }
+}let endTime = null;
+function isExecutionTimedOut() {
+    return endTime != null && endTime < Date.now();
+}
+function calcTimeout() {
+    return endTime != null ? Math.max(endTime - Date.now(), 1) : 1;
+}
+let item;
+if (item = process.env[`STAGE_END_${timeoutKey}`]) {
+    endTime = Number(item);
+    coreExports.notice(`This build stage will time out at ${endTime}`);
+}
+if (beforeRun) {
+    if (isExecutionTimedOut()) {
+        coreExports.setOutput('results-per-command', '[]');
+        coreExports.setOutput('before-run-outcome', "timeout");
+        coreExports.setOutput('outcome', "timeout");
+        coreExports.setOutput('after-run-outcome', afterRun ? "timeout" : "skipped");
+        coreExports.notice("Timed out before before-hook execution");
+        process.exit(0);
+    }
+    const result = await runWithTimeout(beforeRun, {
+        cwd: cwd,
+        failOnStdErr: failOnStdErr,
+        shell,
+        ignoreExitCodes: ignoreExitCodes
     });
-    switch(e.outcome){
+    coreExports.setOutput('before-run-outcome', result.outcome);
+    if (result.outcome == "failure") {
+        coreExports.setOutput('outcome', "failure");
+        coreExports.error("Before-run hook failed: $failCase");
+        process.exit(1);
+    }
+} else {
+    coreExports.setOutput('before-run-outcome', "skipped");
+}
+if (endTime == null) {
+    endTime = Date.now() + timeout;
+    coreExports.exportVariable(`STAGE_END_${timeoutKey}`, endTime);
+    coreExports.info(`This build stage will time out at ${endTime}`);
+}
+if (isExecutionTimedOut()) {
+    await saveBuildArtifacts();
+    coreExports.setOutput('results-per-command', '[]');
+    coreExports.setOutput('outcome', "timeout");
+    coreExports.setOutput('after-run-outcome', afterRun != null ? "timeout" : "skipped");
+    coreExports.notice("Timed out before main command execution");
+    process.exit(0);
+}
+{
+    let result = await runWithTimeout(run, {
+        cwd: cwd,
+        failOnStdErr: failOnStdErr,
+        shell: shell,
+        ignoreExitCodes: ignoreExitCodes,
+        timeout: calcTimeout()
+    });
+    switch(result.outcome){
         case "failure":
-            coreExports.setOutput('outcome', "failure"), coreExports.setOutput('after-run-outcome', "skipped"), coreExports.error(e.failCase ?? '');
+            {
+                coreExports.setOutput('outcome', "failure");
+                coreExports.setOutput('after-run-outcome', "skipped");
+                coreExports.error(result.failCase ?? '');
+            }
         case "timeout":
-            coreExports.setOutput('outcome', "timeout"), coreExports.setOutput('after-run-outcome', "skipped"), await Y(), coreExports.notice("Execution has timed out");
+            {
+                coreExports.setOutput('outcome', "timeout");
+                coreExports.setOutput('after-run-outcome', "skipped");
+                await saveBuildArtifacts();
+                coreExports.notice("Execution has timed out");
+            }
         case "success":
-            coreExports.setOutput('outcome', "success"), null != q ? (coreExports.setOutput('after-run-outcome', (e = await ee(q, {
-                cwd: N,
-                failOnStdErr: J,
-                shell: U,
-                ignoreExitCodes: I
-            })).outcome), "failure" == e.outcome ? (coreExports.setOutput('outcome', "failure"), coreExports.error(`After-run hook failed: ${e.failCase}`)) : coreExports.setOutput('outcome', "success")) : (coreExports.setOutput('after-run-outcome', "skipped"), coreExports.setOutput('outcome', "success"));
+            {
+                coreExports.setOutput('outcome', "success");
+                if (afterRun != null) {
+                    result = await runWithTimeout(afterRun, {
+                        cwd: cwd,
+                        failOnStdErr: failOnStdErr,
+                        shell: shell,
+                        ignoreExitCodes: ignoreExitCodes
+                    });
+                    coreExports.setOutput('after-run-outcome', result.outcome);
+                    if (result.outcome == "failure") {
+                        coreExports.setOutput('outcome', "failure");
+                        coreExports.error(`After-run hook failed: ${result.failCase}`);
+                    } else {
+                        coreExports.setOutput('outcome', "success");
+                    }
+                } else {
+                    coreExports.setOutput('after-run-outcome', "skipped");
+                    coreExports.setOutput('outcome', "success");
+                }
+            }
     }
-}async function Q(e, t, o = 5) {
-    for(let r = 0; r < o; ++r)try {
-        await t();
-        break;
-    } catch (t) {
-        console.error(`${e} failed: ${t}. Attempt ${r + 1} of ${o}`), // Wait 10 seconds between the attempts
-        await W(10000);
+}async function repeatOnFail(label, action, maxRetries = 5) {
+    for(let i = 0; i < maxRetries; ++i){
+        try {
+            await action();
+            break;
+        } catch (e) {
+            console.error(`${label} failed: ${e}. Attempt ${i + 1} of ${maxRetries}`);
+            // Wait 10 seconds between the attempts
+            await delay(10000);
+        }
     }
 }
-let V = Symbol('delayed');
-function W(e) {
-    return new Promise((t)=>setTimeout(()=>t(V), e));
+const delayedSymbol = Symbol('delayed');
+function delay(ms) {
+    return new Promise((r)=>setTimeout(()=>r(delayedSymbol), ms));
 }
-async function X(e, t) {
-    let { promise: o, cancel: r } = function(e) {
-        let t;
-        let o = new Promise((e)=>t = e), r = setTimeout(()=>t(V), e);
-        return {
-            promise: o,
-            cancel: ()=>clearTimeout(r)
-        };
-    }(t), i = await Promise.race([
-        e,
-        o
-    ]);
-    return i !== V ? (r(), {
-        timedOut: !1,
-        result: i
-    }) : {
-        timedOut: !0,
-        result: e
+function delayCancelable(ms) {
+    /** @type {(result: typeof delayedSymbol) => void} */ let r;
+    const promise = new Promise((r1)=>r = r1);
+    const timeout = setTimeout(()=>r(delayedSymbol), ms);
+    return {
+        promise,
+        cancel: ()=>clearTimeout(timeout)
     };
 }
-async function Y() {
-    if (await W(5000), A) {
+async function awaitWithTimeout(promise, ms) {
+    const { promise: delayPromise, cancel: cancelDelay } = delayCancelable(ms);
+    const result = await Promise.race([
+        promise,
+        delayPromise
+    ]);
+    if (result !== delayedSymbol) {
+        cancelDelay();
+        return {
+            timedOut: false,
+            result
+        };
+    } else {
+        return {
+            timedOut: true,
+            result: promise
+        };
+    }
+}
+async function saveBuildArtifacts() {
+    await delay(5000);
+    if (saveTarballArtifact) {
         console.time('glob');
-        let l = await (await create_1(T, JSON.parse('{"implicitDescendants":true}'))).glob();
-        console.timeEnd('glob'), console.log(`Globbed ${l.length} files`);
-        try {
-            var e = [];
-            r(e, _("Tarballing build files"));
-            // Write source directories to manifest.txt to avoid command length limits
-            var t = "manifest.txt";
-            await writeFile(resolve(k, t), l.join('\n'));
-            var i = resolve(k, D);
-            await exec_2('7z', [
-                'a',
-                i,
-                '-m0=zstd',
-                '-mx2',
-                `@${t}`,
-                `-x!${i}`,
-                `-x!${t}`
-            ], {
-                cwd: k
-            }), await unlink(resolve(k, t));
-        } catch (e) {
-            var a = e, n = !0;
-        } finally{
-            o(e, a, n);
+        const globbed = await (await create_1(tarballGlob, {
+            implicitDescendants: true
+        })).glob();
+        console.timeEnd('glob');
+        console.log(`Globbed ${globbed.length} files`);
+        {
+            try {
+                var _stack = [];
+                var _ = _using(_stack, withLogGroup("Tarballing build files"));
+                // Write source directories to manifest.txt to avoid command length limits
+                var manifestFilename = "manifest.txt";
+                await writeFile(resolve(tarballRoot, manifestFilename), globbed.join('\n'));
+                var tarFileName = resolve(tarballRoot, tarballFileName);
+                await exec_2('7z', [
+                    'a',
+                    tarFileName,
+                    '-m0=zstd',
+                    '-mx2',
+                    `@${manifestFilename}`,
+                    `-x!${tarFileName}`,
+                    `-x!${manifestFilename}`
+                ], {
+                    cwd: tarballRoot
+                });
+                await unlink(resolve(tarballRoot, manifestFilename));
+            } catch (_) {
+                var _error = _;
+                var _hasError = true;
+            } finally{
+                _dispose(_stack, _error, _hasError);
+            }
         }
-        try {
-            var s = [];
-            r(s, _("Upload artifact")), Q('Upload artifact', async ()=>{
-                await L.uploadArtifact(P, [
-                    resolve(k, D)
-                ], k, JSON.parse('{"retentionDays":3}'));
-            }, 5);
-        } catch (e) {
-            var u = e, c = !0;
-        } finally{
-            o(s, u, c);
+        {
+            try {
+                var _stack1 = [];
+                var _ = _using(_stack1, withLogGroup("Upload artifact"));
+                repeatOnFail('Upload artifact', async ()=>{
+                    await artifactClient.uploadArtifact(tarballArtifactName, [
+                        resolve(tarballRoot, tarballFileName)
+                    ], tarballRoot, {
+                        retentionDays: 3
+                    });
+                }, 5);
+            } catch (_) {
+                var _error1 = _;
+                var _hasError1 = true;
+            } finally{
+                _dispose(_stack1, _error1, _hasError1);
+            }
         }
     }
 }
-async function Z(e, t) {
-    switch(t){
+async function wrapInShell(command, shell) {
+    switch(shell){
         case 'pwsh':
-            try {
-                let t = await which_1('pwsh');
-                return console.log(`Using pwsh at path: ${t}`), {
-                    command: t,
+            {
+                try {
+                    const pwshPath = await which_1('pwsh');
+                    console.log(`Using pwsh at path: ${pwshPath}`);
+                    return {
+                        command: pwshPath,
+                        arguments: [
+                            '-NoLogo',
+                            '-NoProfile',
+                            '-NonInteractive',
+                            '-ExecutionPolicy',
+                            'Unrestricted',
+                            '-Command',
+                            command
+                        ]
+                    };
+                } catch (err) {
+                    const powershellPath = await which_1('powershell');
+                    console.log(`powershell pwsh at path: ${powershellPath}`);
+                    return {
+                        command: powershellPath,
+                        arguments: [
+                            '-NoLogo',
+                            '-Sta',
+                            '-NoProfile',
+                            '-NonInteractive',
+                            '-ExecutionPolicy',
+                            'Unrestricted',
+                            '-Command',
+                            command
+                        ]
+                    };
+                }
+            }
+        case 'python':
+            {
+                return {
+                    command: 'python',
                     arguments: [
-                        '-NoLogo',
-                        '-NoProfile',
-                        '-NonInteractive',
-                        '-ExecutionPolicy',
-                        'Unrestricted',
-                        '-Command',
-                        e
-                    ]
-                };
-            } catch (o) {
-                let t = await which_1('powershell');
-                return console.log(`powershell pwsh at path: ${t}`), {
-                    command: t,
-                    arguments: [
-                        '-NoLogo',
-                        '-Sta',
-                        '-NoProfile',
-                        '-NonInteractive',
-                        '-ExecutionPolicy',
-                        'Unrestricted',
-                        '-Command',
-                        e
+                        '-u',
+                        '-c',
+                        command
                     ]
                 };
             }
-        case 'python':
-            return {
-                command: 'python',
-                arguments: [
-                    '-u',
-                    '-c',
-                    e
-                ]
-            };
         case 'node':
-            return {
-                command: 'node',
-                arguments: [
-                    '-e',
-                    e
-                ] // aka --eval
-            };
+            {
+                return {
+                    command: 'node',
+                    arguments: [
+                        '-e',
+                        command
+                    ] // aka --eval
+                };
+            }
         case 'cmd':
-            return {
-                command: 'cmd.exe',
-                arguments: [
-                    '/c',
-                    e
-                ]
-            };
+            {
+                return {
+                    command: 'cmd.exe',
+                    arguments: [
+                        '/c',
+                        command
+                    ]
+                };
+            }
         default:
-            return null;
+        case 'none':
+            {
+                return null;
+            }
     }
 }
-async function ee(e, t) {
-    t = Object.assign({
+async function runWithTimeout(command, options) {
+    options = Object.assign({
         cwd: process.cwd,
-        failOnStdErr: !1,
+        failOnStdErr: false,
         shell: 'none',
         ignoreExitCodes: []
-    }, t ?? {});
-    let o = e.split('\n');
-    if (t.shell && 'none' != t.shell) {
-        coreExports.info(`Executing command: ${e}`);
-        let o = await Z(e, t.shell);
-        if (null === o) throw Error('huh');
-        let r = await et(o, {
-            cwd: t.cwd,
-            timeout: t.timeout
+    }, options ?? {});
+    const commandLines = command.split('\n');
+    if (!options.shell || options.shell == 'none') {
+        for (const line of commandLines){
+            coreExports.info(`Executing command: ${line}`);
+            const result = await runCommandWithTimeout(line, {
+                cwd: options.cwd,
+                timeout: options.timeout
+            });
+            if (options.failOnStdErr && result.stderr) {
+                return {
+                    outcome: "failure",
+                    failCase: `Command ${line} standard error output was not empty`
+                };
+            }
+            if (!result.timedOut && result.exitCode != 0 && options.ignoreExitCodes?.includes(result.exitCode)) {
+                return {
+                    outcome: "timeout",
+                    failCase: "Return code was in ignore-return-codes list: $exitCode"
+                };
+            }
+            if (result.timedOut) {
+                return {
+                    outcome: "timeout",
+                    failCase: "'exec' timed out"
+                };
+            } else {
+                if (result.timedOut) {
+                    return {
+                        outcome: "timeout",
+                        failCase: `Command ${line} returned exit code: ${result.exitCode}`
+                    };
+                }
+            }
+        }
+    } else {
+        coreExports.info(`Executing command: ${command}`);
+        const wrapped = await wrapInShell(command, options.shell);
+        if (wrapped === null) throw new Error('huh');
+        const result = await runCommandWithTimeout(wrapped, {
+            cwd: options.cwd,
+            timeout: options.timeout
         });
-        if (t.failOnStdErr && r.stderr) return {
-            outcome: "failure",
-            failCase: `${t.shell} command ${e} standard error output was not empty`
-        };
-        if (!r.timedOut && 0 != r.exitCode && t.ignoreExitCodes?.includes(r.exitCode)) return JSON.parse('{"failCase":"Return code was in ignore-return-codes list: $exitCode","outcome":"timeout"}');
-        if (r.timedOut) return JSON.parse('{"failCase":"\'exec\' timed out","outcome":"timeout"}');
-        if (r.timedOut) return {
-            outcome: "timeout",
-            failCase: `${t.shell} command ${e} returned exit code: ${r.exitCode}`
-        };
-    } else for (let e of o){
-        coreExports.info(`Executing command: ${e}`);
-        let o = await et(e, {
-            cwd: t.cwd,
-            timeout: t.timeout
-        });
-        if (t.failOnStdErr && o.stderr) return {
-            outcome: "failure",
-            failCase: `Command ${e} standard error output was not empty`
-        };
-        if (!o.timedOut && 0 != o.exitCode && t.ignoreExitCodes?.includes(o.exitCode)) return JSON.parse('{"failCase":"Return code was in ignore-return-codes list: $exitCode","outcome":"timeout"}');
-        if (o.timedOut) return JSON.parse('{"failCase":"\'exec\' timed out","outcome":"timeout"}');
-        if (o.timedOut) return {
-            outcome: "timeout",
-            failCase: `Command ${e} returned exit code: ${o.exitCode}`
-        };
+        if (options.failOnStdErr && result.stderr) {
+            return {
+                outcome: "failure",
+                failCase: `${options.shell} command ${command} standard error output was not empty`
+            };
+        }
+        if (!result.timedOut && result.exitCode != 0 && options.ignoreExitCodes?.includes(result.exitCode)) {
+            return {
+                outcome: "timeout",
+                failCase: "Return code was in ignore-return-codes list: $exitCode"
+            };
+        }
+        if (result.timedOut) {
+            return {
+                outcome: "timeout",
+                failCase: "'exec' timed out"
+            };
+        } else {
+            if (result.timedOut) {
+                return {
+                    outcome: "timeout",
+                    failCase: `${options.shell} command ${command} returned exit code: ${result.exitCode}`
+                };
+            }
+        }
     }
     return {
         outcome: "success",
-        failCase: void 0
+        failCase: undefined
     };
 }
-async function et(e, t) {
-    t = Object.assign({
+async function runCommandWithTimeout(command, options) {
+    options = Object.assign({
         cwd: process.cwd,
-        failOnStdErr: !1
-    }, t ?? {});
-    let o = 'string' == typeof e ? argStringToArray(e) : [
-        e.command,
-        ...e.arguments
+        failOnStdErr: false
+    }, options ?? {});
+    const commandArgs = typeof command === 'string' ? argStringToArray(command) : [
+        command.command,
+        ...command.arguments
     ];
-    if (0 === o.length) throw Error("Parameter 'commandLine' cannot be null or empty.");
+    if (commandArgs.length === 0) {
+        throw new Error(`Parameter 'commandLine' cannot be null or empty.`);
+    }
     // Path to tool to execute should be first arg
-    let r = new ToolRunner(o[0], [
-        ...o.slice(1)
+    const runner = new ToolRunner(commandArgs[0], [
+        ...commandArgs.slice(1)
     ], {
-        ...t,
-        ignoreReturnCode: !0
-    }), i = await r.exec(), a = t?.timeout;
-    if (null == a) return {
-        timedOut: !1,
-        exitCode: await i.processClosedPromise,
-        stderr: i.processStderr
-    };
-    let { timedOut: n } = await X(i.processClosedPromise, a);
-    return n ? (i.unref(), await eo(i), {
-        timedOut: !0,
-        exitCode: i.processExitCode,
-        stderr: i.processStderr
-    }) : {
-        timedOut: !1,
-        exitCode: i.processExitCode,
-        stderr: i.processStderr
+        ...options,
+        ignoreReturnCode: true
+    });
+    const proc = await runner.exec();
+    const timeout = options?.timeout;
+    if (timeout == null) {
+        return {
+            timedOut: false,
+            exitCode: await proc.processClosedPromise,
+            stderr: proc.processStderr
+        };
+    }
+    const { timedOut } = await awaitWithTimeout(proc.processClosedPromise, timeout);
+    if (!timedOut) {
+        return {
+            timedOut: false,
+            exitCode: proc.processExitCode,
+            stderr: proc.processStderr
+        };
+    }
+    proc.unref();
+    await killCleanly(proc);
+    return {
+        timedOut: true,
+        exitCode: proc.processExitCode,
+        stderr: proc.processStderr
     };
 }
-async function eo(e) {
-    if (// Wait to see if the process closes itself
-    await W(1000), !e.processExited) {
-        for(let t = 0; t < 3; t++)if (console.log(`Sending CTRL+BREAK to process ${inspect(e)} attempt ${t + 1} of 3`), await lib.generateCtrlBreakAsync(e.pid), await W(3000), e.processExited) return;
-        await X(e.processClosedPromise, 10000), e.processExited || (console.warn(`Killing process ${inspect(e)}`), e.kill());
+async function killCleanly(proc) {
+    // Wait to see if the process closes itself
+    await delay(1000);
+    if (proc.processExited) {
+        return;
     }
+    // if process is still running
+    const maxRetries = 3;
+    for(let i = 0; i < maxRetries; i++){
+        console.log(`Sending CTRL+BREAK to process ${inspect(proc)} attempt ${i + 1} of ${maxRetries}`);
+        await lib.generateCtrlBreakAsync(proc.pid);
+        await delay(3000);
+        if (proc.processExited) {
+            return;
+        }
+    }
+    await awaitWithTimeout(proc.processClosedPromise, 10000);
+    if (proc.processExited) {
+        return;
+    }
+    console.warn(`Killing process ${inspect(proc)}`);
+    proc.kill(); // kill it with fire
 }
 
 var index_nodeonly = {
