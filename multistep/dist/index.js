@@ -44073,15 +44073,15 @@ async function runScript() {
         endTime = Number(item);
         coreExports.notice(`This build stage will time out at ${endTime}`);
     }
+    if (isExecutionTimedOut()) {
+        coreExports.setOutput('results-per-command', '[]');
+        coreExports.setOutput('before-run-outcome', beforeRun ? "timeout" : "skipped");
+        coreExports.setOutput('outcome', "timeout");
+        coreExports.setOutput('after-run-outcome', afterRun ? "timeout" : "skipped");
+        coreExports.notice("Timed out before start");
+        process.exit(0);
+    }
     if (beforeRun) {
-        if (isExecutionTimedOut()) {
-            coreExports.setOutput('results-per-command', '[]');
-            coreExports.setOutput('before-run-outcome', "timeout");
-            coreExports.setOutput('outcome', "timeout");
-            coreExports.setOutput('after-run-outcome', afterRun ? "timeout" : "skipped");
-            coreExports.notice("Timed out before before-hook execution");
-            process.exit(0);
-        }
         const result = await runWithTimeout(beforeRun, {
             cwd: cwd,
             failOnStdErr: failOnStdErr,
@@ -44104,7 +44104,9 @@ async function runScript() {
         coreExports.info(`This build stage will time out at ${endTime}`);
     }
     if (isExecutionTimedOut()) {
-        await saveBuildArtifacts();
+        if (beforeRun) {
+            await saveBuildArtifacts();
+        }
         coreExports.setOutput('results-per-command', '[]');
         coreExports.setOutput('outcome', "timeout");
         coreExports.setOutput('after-run-outcome', afterRun != null ? "timeout" : "skipped");
