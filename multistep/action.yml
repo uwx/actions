@@ -60,7 +60,7 @@ inputs:
   key:
     description: Used for splitting timed actions across multiple steps, while inheriting the same timeout. All stage actions with the same key within a job \
       will timeout when the timeout for the first action with a key is reached.
-    required: false
+    required: true
 outputs:
   results-per-command:
     description: JSON-stringified array of exit codes ordered per command (each line in 'run'), or a 'timeout' instead of an entry if execution timed out.
