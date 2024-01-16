@@ -127,6 +127,8 @@ async function runScript() {
             ignoreExitCodes: ignoreExitCodes
         });
 
+        console.log('Finished before-run:', result);
+
         setOutput('before-run-outcome', result.outcome)
         if (result.outcome == ExecutionResult.Failure) {
             setOutput('outcome', ExecutionResult.Failure);
@@ -156,11 +158,13 @@ async function runScript() {
     {
         let result = await runWithTimeout(run, {cwd: cwd, failOnStdErr: failOnStdErr, shell: shell, ignoreExitCodes: ignoreExitCodes, timeout: calcTimeout()});
 
+        console.log('Finished run command:', result);
+
         switch (result.outcome) {
             case ExecutionResult.Failure: {
                 setOutput('outcome', ExecutionResult.Failure);
                 setOutput('after-run-outcome', ExecutionResult.Skipped);
-                error(result.failCase ?? '');
+                error('Run failed: ' + result.failCase ?? '');
             }
             case ExecutionResult.Timeout: {
                 setOutput('outcome', ExecutionResult.Timeout);
@@ -173,6 +177,8 @@ async function runScript() {
 
                 if (afterRun != null) {
                     result = await runWithTimeout(afterRun, { cwd: cwd, failOnStdErr: failOnStdErr, shell: shell, ignoreExitCodes: ignoreExitCodes});
+
+                    console.log('Finished after-run:', result);
 
                     setOutput('after-run-outcome', result.outcome);
                     if (result.outcome == ExecutionResult.Failure) {
@@ -231,6 +237,8 @@ async function runScript() {
 
     async function saveBuildArtifacts() {
         await delay(5000);
+
+        console.log('Saving build artifacts');
 
         if (saveTarballArtifact) {
             console.time('glob');
@@ -457,6 +465,7 @@ async function runScript() {
         // Wait to see if the process closes itself
         await delay(1000);
         if (proc.processExited) {
+            console.log('Process closed by itself');
             return;
         }
 
@@ -468,17 +477,20 @@ async function runScript() {
             await delay(3000);
 
             if (proc.processExited) {
+                console.log('Exited process successfully');
                 return;
             }
         }
 
         await awaitWithTimeout(proc.processClosedPromise, 10_000);
         if (proc.processExited) {
+            console.log('Exited process successfully');
             return;
         }
 
         console.warn(`Killing process ${inspect(proc)}`);
         proc.kill(); // kill it with fire
+        console.log('Killed process');
     }
 }
 
