@@ -44358,24 +44358,23 @@ async function runScript() {
                         failCase: `Command ${line} standard error output was not empty`
                     };
                 }
-                if (!result.timedOut && result.exitCode != 0 && options.ignoreExitCodes?.includes(result.exitCode)) {
-                    return {
-                        outcome: "timeout",
-                        failCase: "Return code was in ignore-return-codes list: $exitCode"
-                    };
-                }
                 if (result.timedOut) {
                     return {
                         outcome: "timeout",
                         failCase: "'exec' timed out"
                     };
-                } else {
-                    if (result.timedOut) {
+                }
+                if (result.exitCode != 0) {
+                    if (options.ignoreExitCodes?.includes(result.exitCode)) {
                         return {
                             outcome: "timeout",
-                            failCase: `Command ${line} returned exit code: ${result.exitCode}`
+                            failCase: `Return code was in ignore-return-codes list: ${result.exitCode}`
                         };
                     }
+                    return {
+                        outcome: "failure",
+                        failCase: `Command ${line} returned exit code: ${result.exitCode}`
+                    };
                 }
             }
         } else {
@@ -44392,24 +44391,23 @@ async function runScript() {
                     failCase: `${options.shell} command ${command} standard error output was not empty`
                 };
             }
-            if (!result.timedOut && result.exitCode != 0 && options.ignoreExitCodes?.includes(result.exitCode)) {
-                return {
-                    outcome: "timeout",
-                    failCase: "Return code was in ignore-return-codes list: $exitCode"
-                };
-            }
             if (result.timedOut) {
                 return {
                     outcome: "timeout",
                     failCase: "'exec' timed out"
                 };
-            } else {
-                if (result.timedOut) {
+            }
+            if (result.exitCode != 0) {
+                if (options.ignoreExitCodes?.includes(result.exitCode)) {
                     return {
                         outcome: "timeout",
-                        failCase: `${options.shell} command ${command} returned exit code: ${result.exitCode}`
+                        failCase: `Return code was in ignore-return-codes list: ${result.exitCode}`
                     };
                 }
+                return {
+                    outcome: "failure",
+                    failCase: `${options.shell} command ${command}  returned exit code: ${result.exitCode}`
+                };
             }
         }
         return {
