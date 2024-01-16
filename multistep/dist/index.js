@@ -44088,6 +44088,7 @@ async function runScript() {
             shell,
             ignoreExitCodes: ignoreExitCodes
         });
+        console.log('Finished before-run:', result);
         coreExports.setOutput('before-run-outcome', result.outcome);
         if (result.outcome == "failure") {
             coreExports.setOutput('outcome', "failure");
@@ -44118,12 +44119,13 @@ async function runScript() {
             ignoreExitCodes: ignoreExitCodes,
             timeout: calcTimeout()
         });
+        console.log('Finished run command:', result);
         switch(result.outcome){
             case "failure":
                 {
                     coreExports.setOutput('outcome', "failure");
                     coreExports.setOutput('after-run-outcome', "skipped");
-                    coreExports.error(result.failCase ?? '');
+                    coreExports.error(('Run failed: ' + result.failCase) ?? '');
                 }
             case "timeout":
                 {
@@ -44142,6 +44144,7 @@ async function runScript() {
                             shell: shell,
                             ignoreExitCodes: ignoreExitCodes
                         });
+                        console.log('Finished after-run:', result);
                         coreExports.setOutput('after-run-outcome', result.outcome);
                         if (result.outcome == "failure") {
                             coreExports.setOutput('outcome', "failure");
@@ -44201,6 +44204,7 @@ async function runScript() {
     }
     async function saveBuildArtifacts() {
         await delay(5000);
+        console.log('Saving build artifacts');
         if (saveTarballArtifact) {
             console.time('glob');
             const globbed = await (await create_1(tarballGlob, {
@@ -44459,6 +44463,7 @@ async function runScript() {
         // Wait to see if the process closes itself
         await delay(1000);
         if (proc.processExited) {
+            console.log('Process closed by itself');
             return;
         }
         // if process is still running
@@ -44468,15 +44473,18 @@ async function runScript() {
             await lib.generateCtrlBreakAsync(proc.pid);
             await delay(3000);
             if (proc.processExited) {
+                console.log('Exited process successfully');
                 return;
             }
         }
         await awaitWithTimeout(proc.processClosedPromise, 10000);
         if (proc.processExited) {
+            console.log('Exited process successfully');
             return;
         }
         console.warn(`Killing process ${require$$0$2.inspect(proc)}`);
         proc.kill(); // kill it with fire
+        console.log('Killed process');
     }
 }
 (async ()=>{
