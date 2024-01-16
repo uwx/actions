@@ -365,24 +365,23 @@ async function runScript() {
                     };
                 }
 
-                if (!result.timedOut && result.exitCode != 0 && options.ignoreExitCodes?.includes(result.exitCode)) {
-                    return {
-                        outcome: ExecutionResult.Timeout,
-                        failCase: "Return code was in ignore-return-codes list: $exitCode"
-                    };
-                }
-
                 if (result.timedOut) {
                     return {
                         outcome: ExecutionResult.Timeout,
                         failCase: "'exec' timed out",
                     }
-                } else {
-                    if (result.timedOut) {
+                }
+
+                if (result.exitCode != 0) {
+                    if (options.ignoreExitCodes?.includes(result.exitCode)) {
                         return {
                             outcome: ExecutionResult.Timeout,
-                            failCase: `Command ${line} returned exit code: ${result.exitCode}`,
-                        }
+                            failCase: `Return code was in ignore-return-codes list: ${result.exitCode}`
+                        };
+                    }
+                    return {
+                        outcome: ExecutionResult.Failure,
+                        failCase: `Command ${line} returned exit code: ${result.exitCode}`,
                     }
                 }
             }
@@ -405,24 +404,23 @@ async function runScript() {
                 };
             }
 
-            if (!result.timedOut && result.exitCode != 0 && options.ignoreExitCodes?.includes(result.exitCode)) {
-                return {
-                    outcome: ExecutionResult.Timeout,
-                    failCase: "Return code was in ignore-return-codes list: $exitCode"
-                };
-            }
-
             if (result.timedOut) {
                 return {
                     outcome: ExecutionResult.Timeout,
                     failCase: "'exec' timed out",
                 }
-            } else {
-                if (result.timedOut) {
+            }
+
+            if (result.exitCode != 0) {
+                if (options.ignoreExitCodes?.includes(result.exitCode)) {
                     return {
                         outcome: ExecutionResult.Timeout,
-                        failCase: `${options.shell} command ${command} returned exit code: ${result.exitCode}`,
-                    }
+                        failCase: `Return code was in ignore-return-codes list: ${result.exitCode}`
+                    };
+                }
+                return {
+                    outcome: ExecutionResult.Failure,
+                    failCase: `${options.shell} command ${command}  returned exit code: ${result.exitCode}`,
                 }
             }
         }
