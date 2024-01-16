@@ -110,16 +110,16 @@ async function runScript() {
         Skipped = "skipped",
     }
 
-    if (beforeRun) {
-        if (isExecutionTimedOut()) {
-            setOutput('results-per-command', '[]');
-            setOutput('before-run-outcome', ExecutionResult.Timeout);
-            setOutput('outcome', ExecutionResult.Timeout);
-            setOutput('after-run-outcome', (afterRun ? ExecutionResult.Timeout : ExecutionResult.Skipped));
-            notice("Timed out before before-hook execution");
-            process.exit(0);
-        }
+    if (isExecutionTimedOut()) {
+        setOutput('results-per-command', '[]');
+        setOutput('before-run-outcome', (beforeRun ? ExecutionResult.Timeout : ExecutionResult.Skipped));
+        setOutput('outcome', ExecutionResult.Timeout);
+        setOutput('after-run-outcome', (afterRun ? ExecutionResult.Timeout : ExecutionResult.Skipped));
+        notice("Timed out before start");
+        process.exit(0);
+    }
 
+    if (beforeRun) {
         const result = await runWithTimeout(beforeRun, {
             cwd: cwd,
             failOnStdErr: failOnStdErr,
@@ -146,7 +146,9 @@ async function runScript() {
     }
 
     if (isExecutionTimedOut()) {
-        await saveBuildArtifacts();
+        if (beforeRun) { // DON'T SAVE IF THERE'S NOTHING TO SAVE.
+            await saveBuildArtifacts();
+        }
 
         setOutput('results-per-command', '[]');
         setOutput('outcome', ExecutionResult.Timeout);
