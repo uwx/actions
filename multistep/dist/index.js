@@ -44218,7 +44218,7 @@ async function runScript() {
                     var _ = _using(_stack, withLogGroup("Tarballing build files"));
                     // Write source directories to manifest.txt to avoid command length limits
                     var manifestFilename = "manifest.txt";
-                    await promises.writeFile(win32.resolve(tarballRoot, manifestFilename), globbed.join('\n'));
+                    await promises.writeFile(win32.resolve(tarballRoot, manifestFilename), globbed.map((e)=>win32.relative(tarballRoot, e)).join('\n'));
                     var tarFileName = win32.resolve(tarballRoot, tarballFileName);
                     await exec_2('7z', [
                         'a',
