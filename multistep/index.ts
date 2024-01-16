@@ -7,7 +7,7 @@ import { rmRF, which, mv } from '@actions/io';
 import { exec as _exec, exec } from '@actions/exec';
 import { create as createArtifact } from '@actions/artifact';
 import { create as createGlob } from '@actions/glob';
-import { join, resolve } from 'path/win32';
+import { join, relative, resolve } from 'path/win32';
 import { existsSync } from 'fs';
 
 import { unlink, writeFile } from 'fs/promises';
@@ -252,7 +252,7 @@ async function runScript() {
                 using _ = withLogGroup("Tarballing build files")
                 // Write source directories to manifest.txt to avoid command length limits
                 let manifestFilename = "manifest.txt"
-                await writeFile(resolve(tarballRoot, manifestFilename), globbed.join('\n'));
+                await writeFile(resolve(tarballRoot, manifestFilename), globbed.map(e => relative(tarballRoot, e)).join('\n'));
 
                 let tarFileName = resolve(tarballRoot, tarballFileName);
                 await exec('7z', ['a', tarFileName, '-m0=zstd', '-mx2', `@${manifestFilename}`, `-x!${tarFileName}`, `-x!${manifestFilename}`], { cwd: tarballRoot });
