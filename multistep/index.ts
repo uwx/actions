@@ -23,6 +23,8 @@ process.on('SIGBREAK', function () {});
 
 //
 
+type Shell = 'none' | 'pwsh' | 'cmd' | 'python' | 'node';
+
 const run = getInput('run', { required: true });
 const beforeRun = getInput('before', { required: false });
 const afterRun = getInput('after', { required: false });
@@ -81,7 +83,11 @@ async function runScript() {
             }
 
             if (ok && existsSync(tarballRoot)) {
-                await exec('7z', ['x', '-y', resolve(tarballRoot, tarballFileName)], { cwd: tarballRoot });
+                const exitCode = await exec('7z', ['x', '-y', resolve(tarballRoot, tarballFileName)], { cwd: tarballRoot, ignoreReturnCode: true });                if (exitCode == 2) throw new Error('7z: Fatal error');
+                if (exitCode == 7) throw new Error('7z: Command line error');
+                if (exitCode == 8) throw new Error('7z: Not enough memory for operation');
+                if (exitCode == 255) throw new Error('7z: User stopped the process');
+
                 await unlink(resolve(tarballRoot, tarballFileName));
             }
         }
@@ -212,8 +218,6 @@ async function runScript() {
         }
     }
 
-    type Shell = 'none' | 'pwsh' | 'cmd' | 'python' | 'node';
-
     function delay(ms: number): Promise<typeof delayedSymbol> {
         return new Promise(r => setTimeout(() => r(delayedSymbol), ms));
     }
@@ -257,7 +261,11 @@ async function runScript() {
                 await writeFile(resolve(tarballRoot, manifestFilename), globbed.map(e => relative(tarballRoot, e)).join('\n'));
 
                 let tarFileName = resolve(tarballRoot, tarballFileName);
-                await exec('7z', ['a', tarFileName, '-m0=zstd', '-mx2', `@${manifestFilename}`, `-x!${tarFileName}`, `-x!${manifestFilename}`], { cwd: tarballRoot });
+                const exitCode = await exec('7z', ['a', tarFileName, '-m0=zstd', '-mx2', `@${manifestFilename}`, `-x!${tarFileName}`, `-x!${manifestFilename}`], { cwd: tarballRoot, ignoreReturnCode: true });
+                if (exitCode == 2) throw new Error('7z: Fatal error');
+                if (exitCode == 7) throw new Error('7z: Command line error');
+                if (exitCode == 8) throw new Error('7z: Not enough memory for operation');
+                if (exitCode == 255) throw new Error('7z: User stopped the process');
 
                 await unlink(resolve(tarballRoot, manifestFilename));
             }
