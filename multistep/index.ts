@@ -369,14 +369,14 @@ async function runScript() {
                 if (options.failOnStdErr && result.stderr) {
                     return {
                         outcome: ExecutionResult.Failure,
-                        failCase: `Command ${line} standard error output was not empty`
+                        failCase: `Command "${line}" standard error output was not empty`
                     };
                 }
 
                 if (result.timedOut) {
                     return {
                         outcome: ExecutionResult.Timeout,
-                        failCase: "'exec' timed out",
+                        failCase: `Command "${line}" timed out`,
                     }
                 }
 
@@ -384,12 +384,12 @@ async function runScript() {
                     if (options.ignoreExitCodes?.includes(result.exitCode)) {
                         return {
                             outcome: ExecutionResult.Timeout,
-                            failCase: `Return code was in ignore-return-codes list: ${result.exitCode}`
+                            failCase: `Command "${line}" return code was in ignore-return-codes list: ${result.exitCode}`
                         };
                     }
                     return {
                         outcome: ExecutionResult.Failure,
-                        failCase: `Command ${line} returned exit code: ${result.exitCode}`,
+                        failCase: `Command "${line}" returned exit code: ${result.exitCode}`,
                     }
                 }
             }
@@ -408,14 +408,14 @@ async function runScript() {
             if (options.failOnStdErr && result.stderr) {
                 return {
                     outcome: ExecutionResult.Failure,
-                    failCase: `${options.shell} command ${command} standard error output was not empty`
+                    failCase: `${options.shell} command "${command}" standard error output was not empty`
                 };
             }
 
             if (result.timedOut) {
                 return {
                     outcome: ExecutionResult.Timeout,
-                    failCase: "'exec' timed out",
+                    failCase:`${options.shell} command "${command}" timed out`,
                 }
             }
 
@@ -423,12 +423,12 @@ async function runScript() {
                 if (options.ignoreExitCodes?.includes(result.exitCode)) {
                     return {
                         outcome: ExecutionResult.Timeout,
-                        failCase: `Return code was in ignore-return-codes list: ${result.exitCode}`
+                        failCase: `${options.shell} command "${command}" return code was in ignore-return-codes list: ${result.exitCode}`
                     };
                 }
                 return {
                     outcome: ExecutionResult.Failure,
-                    failCase: `${options.shell} command ${command}  returned exit code: ${result.exitCode}`,
+                    failCase: `${options.shell} command "${command}"  returned exit code: ${result.exitCode}`,
                 }
             }
         }
