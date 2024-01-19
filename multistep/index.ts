@@ -249,7 +249,7 @@ async function runScript() {
         if (saveTarballArtifact) {
             console.time('glob');
 
-            const globbed = await (await createGlob(tarballGlob, { implicitDescendants: true })).glob();
+            const globbed = await (await createGlob(tarballGlob, { implicitDescendants: true, omitBrokenSymbolicLinks: false, followSymbolicLinks: false })).glob();
 
             console.timeEnd('glob');
             console.log(`Globbed ${globbed.length} files`);
