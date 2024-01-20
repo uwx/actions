@@ -158,7 +158,7 @@ async function runScript() {
 
         setOutput('results-per-command', '[]');
         setOutput('outcome', ExecutionResult.Timeout);
-        setOutput('after-run-outcome', afterRun != null ? ExecutionResult.Timeout : ExecutionResult.Skipped);
+        setOutput('after-run-outcome', afterRun ? ExecutionResult.Timeout : ExecutionResult.Skipped);
         notice("Timed out before main command execution")
         process.exit(0);
     }
@@ -173,17 +173,21 @@ async function runScript() {
                 setOutput('outcome', ExecutionResult.Failure);
                 setOutput('after-run-outcome', ExecutionResult.Skipped);
                 error('Run failed: ' + result.failCase ?? '');
+
+                break;
             }
             case ExecutionResult.Timeout: {
                 setOutput('outcome', ExecutionResult.Timeout);
                 setOutput('after-run-outcome', ExecutionResult.Skipped);
                 await saveBuildArtifacts();
                 notice("Execution has timed out");
+
+                break;
             }
             case ExecutionResult.Success: {
                 setOutput('outcome', ExecutionResult.Success);
 
-                if (afterRun != null) {
+                if (afterRun) {
                     result = await runWithTimeout(afterRun, { cwd: cwd, failOnStdErr: failOnStdErr, shell: shell, ignoreExitCodes: ignoreExitCodes});
 
                     console.log('Finished after-run:', result);
@@ -201,6 +205,8 @@ async function runScript() {
                     setOutput('after-run-outcome', ExecutionResult.Skipped);
                     setOutput('outcome', ExecutionResult.Success);
                 }
+
+                break;
             }
         }
     }
