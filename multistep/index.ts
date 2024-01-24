@@ -138,7 +138,7 @@ async function runScript() {
         setOutput('before-run-outcome', result.outcome)
         if (result.outcome == ExecutionResult.Failure) {
             setOutput('outcome', ExecutionResult.Failure);
-            error("Before-run hook failed: $failCase");
+            error(`Before-run hook failed: ${result.failCase}`);
             process.exit(1);
         }
     } else {
@@ -172,7 +172,8 @@ async function runScript() {
             case ExecutionResult.Failure: {
                 setOutput('outcome', ExecutionResult.Failure);
                 setOutput('after-run-outcome', ExecutionResult.Skipped);
-                error('Run failed: ' + result.failCase ?? '');
+                error(`Run failed: ${result.failCase ?? ''}`);
+                process.exit(1);
 
                 break;
             }
