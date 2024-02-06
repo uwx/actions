@@ -38699,7 +38699,7 @@ var ref = {exports: {}};
 
 var src$1 = {exports: {}};
 
-var node$1 = {exports: {}};
+var browser$1 = {exports: {}};
 
 /**
  * Helpers.
@@ -39154,281 +39154,6 @@ function requireCommon$1 () {
 	return common$1;
 }
 
-/**
- * Module dependencies.
- */
-
-var hasRequiredNode$1;
-
-function requireNode$1 () {
-	if (hasRequiredNode$1) return node$1.exports;
-	hasRequiredNode$1 = 1;
-	(function (module, exports) {
-		const tty = require$$0$b;
-		const util = require$$0$2;
-
-		/**
-		 * This is the Node.js implementation of `debug()`.
-		 */
-
-		exports.init = init;
-		exports.log = log;
-		exports.formatArgs = formatArgs;
-		exports.save = save;
-		exports.load = load;
-		exports.useColors = useColors;
-		exports.destroy = util.deprecate(
-			() => {},
-			'Instance method `debug.destroy()` is deprecated and no longer does anything. It will be removed in the next major version of `debug`.'
-		);
-
-		/**
-		 * Colors.
-		 */
-
-		exports.colors = [6, 2, 3, 4, 5, 1];
-
-		try {
-			// Optional dependency (as in, doesn't need to be installed, NOT like optionalDependencies in package.json)
-			// eslint-disable-next-line import/no-extraneous-dependencies
-			const supportsColor = require('supports-color');
-
-			if (supportsColor && (supportsColor.stderr || supportsColor).level >= 2) {
-				exports.colors = [
-					20,
-					21,
-					26,
-					27,
-					32,
-					33,
-					38,
-					39,
-					40,
-					41,
-					42,
-					43,
-					44,
-					45,
-					56,
-					57,
-					62,
-					63,
-					68,
-					69,
-					74,
-					75,
-					76,
-					77,
-					78,
-					79,
-					80,
-					81,
-					92,
-					93,
-					98,
-					99,
-					112,
-					113,
-					128,
-					129,
-					134,
-					135,
-					148,
-					149,
-					160,
-					161,
-					162,
-					163,
-					164,
-					165,
-					166,
-					167,
-					168,
-					169,
-					170,
-					171,
-					172,
-					173,
-					178,
-					179,
-					184,
-					185,
-					196,
-					197,
-					198,
-					199,
-					200,
-					201,
-					202,
-					203,
-					204,
-					205,
-					206,
-					207,
-					208,
-					209,
-					214,
-					215,
-					220,
-					221
-				];
-			}
-		} catch (error) {
-			// Swallow - we only care if `supports-color` is available; it doesn't have to be.
-		}
-
-		/**
-		 * Build up the default `inspectOpts` object from the environment variables.
-		 *
-		 *   $ DEBUG_COLORS=no DEBUG_DEPTH=10 DEBUG_SHOW_HIDDEN=enabled node script.js
-		 */
-
-		exports.inspectOpts = Object.keys(process.env).filter(key => {
-			return /^debug_/i.test(key);
-		}).reduce((obj, key) => {
-			// Camel-case
-			const prop = key
-				.substring(6)
-				.toLowerCase()
-				.replace(/_([a-z])/g, (_, k) => {
-					return k.toUpperCase();
-				});
-
-			// Coerce string value into JS value
-			let val = process.env[key];
-			if (/^(yes|on|true|enabled)$/i.test(val)) {
-				val = true;
-			} else if (/^(no|off|false|disabled)$/i.test(val)) {
-				val = false;
-			} else if (val === 'null') {
-				val = null;
-			} else {
-				val = Number(val);
-			}
-
-			obj[prop] = val;
-			return obj;
-		}, {});
-
-		/**
-		 * Is stdout a TTY? Colored output is enabled when `true`.
-		 */
-
-		function useColors() {
-			return 'colors' in exports.inspectOpts ?
-				Boolean(exports.inspectOpts.colors) :
-				tty.isatty(process.stderr.fd);
-		}
-
-		/**
-		 * Adds ANSI color escape codes if enabled.
-		 *
-		 * @api public
-		 */
-
-		function formatArgs(args) {
-			const {namespace: name, useColors} = this;
-
-			if (useColors) {
-				const c = this.color;
-				const colorCode = '\u001B[3' + (c < 8 ? c : '8;5;' + c);
-				const prefix = `  ${colorCode};1m${name} \u001B[0m`;
-
-				args[0] = prefix + args[0].split('\n').join('\n' + prefix);
-				args.push(colorCode + 'm+' + module.exports.humanize(this.diff) + '\u001B[0m');
-			} else {
-				args[0] = getDate() + name + ' ' + args[0];
-			}
-		}
-
-		function getDate() {
-			if (exports.inspectOpts.hideDate) {
-				return '';
-			}
-			return new Date().toISOString() + ' ';
-		}
-
-		/**
-		 * Invokes `util.format()` with the specified arguments and writes to stderr.
-		 */
-
-		function log(...args) {
-			return process.stderr.write(util.format(...args) + '\n');
-		}
-
-		/**
-		 * Save `namespaces`.
-		 *
-		 * @param {String} namespaces
-		 * @api private
-		 */
-		function save(namespaces) {
-			if (namespaces) {
-				process.env.DEBUG = namespaces;
-			} else {
-				// If you set a process.env field to null or undefined, it gets cast to the
-				// string 'null' or 'undefined'. Just delete instead.
-				delete process.env.DEBUG;
-			}
-		}
-
-		/**
-		 * Load `namespaces`.
-		 *
-		 * @return {String} returns the previously persisted debug modes
-		 * @api private
-		 */
-
-		function load() {
-			return process.env.DEBUG;
-		}
-
-		/**
-		 * Init logic for `debug` instances.
-		 *
-		 * Create a new `inspectOpts` object in case `useColors` is set
-		 * differently for a particular `debug` instance.
-		 */
-
-		function init(debug) {
-			debug.inspectOpts = {};
-
-			const keys = Object.keys(exports.inspectOpts);
-			for (let i = 0; i < keys.length; i++) {
-				debug.inspectOpts[keys[i]] = exports.inspectOpts[keys[i]];
-			}
-		}
-
-		module.exports = requireCommon$1()(exports);
-
-		const {formatters} = module.exports;
-
-		/**
-		 * Map %o to `util.inspect()`, all on a single line.
-		 */
-
-		formatters.o = function (v) {
-			this.inspectOpts.colors = this.useColors;
-			return util.inspect(v, this.inspectOpts)
-				.split('\n')
-				.map(str => str.trim())
-				.join(' ');
-		};
-
-		/**
-		 * Map %O to `util.inspect()`, allowing multiple lines if needed.
-		 */
-
-		formatters.O = function (v) {
-			this.inspectOpts.colors = this.useColors;
-			return util.inspect(v, this.inspectOpts);
-		}; 
-	} (node$1, node$1.exports));
-	return node$1.exports;
-}
-
-var browser$1 = {exports: {}};
-
 /* eslint-env browser */
 
 var hasRequiredBrowser$1;
@@ -39706,6 +39431,440 @@ function requireBrowser$1 () {
 		}; 
 	} (browser$1, browser$1.exports));
 	return browser$1.exports;
+}
+
+var node$1 = {exports: {}};
+
+var hasFlag;
+var hasRequiredHasFlag;
+
+function requireHasFlag () {
+	if (hasRequiredHasFlag) return hasFlag;
+	hasRequiredHasFlag = 1;
+
+	hasFlag = (flag, argv = process.argv) => {
+		const prefix = flag.startsWith('-') ? '' : (flag.length === 1 ? '-' : '--');
+		const position = argv.indexOf(prefix + flag);
+		const terminatorPosition = argv.indexOf('--');
+		return position !== -1 && (terminatorPosition === -1 || position < terminatorPosition);
+	};
+	return hasFlag;
+}
+
+var supportsColor_1;
+var hasRequiredSupportsColor;
+
+function requireSupportsColor () {
+	if (hasRequiredSupportsColor) return supportsColor_1;
+	hasRequiredSupportsColor = 1;
+	const os = require$$0;
+	const tty = require$$0$b;
+	const hasFlag = requireHasFlag();
+
+	const {env} = process;
+
+	let forceColor;
+	if (hasFlag('no-color') ||
+		hasFlag('no-colors') ||
+		hasFlag('color=false') ||
+		hasFlag('color=never')) {
+		forceColor = 0;
+	} else if (hasFlag('color') ||
+		hasFlag('colors') ||
+		hasFlag('color=true') ||
+		hasFlag('color=always')) {
+		forceColor = 1;
+	}
+
+	if ('FORCE_COLOR' in env) {
+		if (env.FORCE_COLOR === 'true') {
+			forceColor = 1;
+		} else if (env.FORCE_COLOR === 'false') {
+			forceColor = 0;
+		} else {
+			forceColor = env.FORCE_COLOR.length === 0 ? 1 : Math.min(parseInt(env.FORCE_COLOR, 10), 3);
+		}
+	}
+
+	function translateLevel(level) {
+		if (level === 0) {
+			return false;
+		}
+
+		return {
+			level,
+			hasBasic: true,
+			has256: level >= 2,
+			has16m: level >= 3
+		};
+	}
+
+	function supportsColor(haveStream, streamIsTTY) {
+		if (forceColor === 0) {
+			return 0;
+		}
+
+		if (hasFlag('color=16m') ||
+			hasFlag('color=full') ||
+			hasFlag('color=truecolor')) {
+			return 3;
+		}
+
+		if (hasFlag('color=256')) {
+			return 2;
+		}
+
+		if (haveStream && !streamIsTTY && forceColor === undefined) {
+			return 0;
+		}
+
+		const min = forceColor || 0;
+
+		if (env.TERM === 'dumb') {
+			return min;
+		}
+
+		if (process.platform === 'win32') {
+			// Windows 10 build 10586 is the first Windows release that supports 256 colors.
+			// Windows 10 build 14931 is the first release that supports 16m/TrueColor.
+			const osRelease = os.release().split('.');
+			if (
+				Number(osRelease[0]) >= 10 &&
+				Number(osRelease[2]) >= 10586
+			) {
+				return Number(osRelease[2]) >= 14931 ? 3 : 2;
+			}
+
+			return 1;
+		}
+
+		if ('CI' in env) {
+			if (['TRAVIS', 'CIRCLECI', 'APPVEYOR', 'GITLAB_CI', 'GITHUB_ACTIONS', 'BUILDKITE'].some(sign => sign in env) || env.CI_NAME === 'codeship') {
+				return 1;
+			}
+
+			return min;
+		}
+
+		if ('TEAMCITY_VERSION' in env) {
+			return /^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env.TEAMCITY_VERSION) ? 1 : 0;
+		}
+
+		if (env.COLORTERM === 'truecolor') {
+			return 3;
+		}
+
+		if ('TERM_PROGRAM' in env) {
+			const version = parseInt((env.TERM_PROGRAM_VERSION || '').split('.')[0], 10);
+
+			switch (env.TERM_PROGRAM) {
+				case 'iTerm.app':
+					return version >= 3 ? 3 : 2;
+				case 'Apple_Terminal':
+					return 2;
+				// No default
+			}
+		}
+
+		if (/-256(color)?$/i.test(env.TERM)) {
+			return 2;
+		}
+
+		if (/^screen|^xterm|^vt100|^vt220|^rxvt|color|ansi|cygwin|linux/i.test(env.TERM)) {
+			return 1;
+		}
+
+		if ('COLORTERM' in env) {
+			return 1;
+		}
+
+		return min;
+	}
+
+	function getSupportLevel(stream) {
+		const level = supportsColor(stream, stream && stream.isTTY);
+		return translateLevel(level);
+	}
+
+	supportsColor_1 = {
+		supportsColor: getSupportLevel,
+		stdout: translateLevel(supportsColor(true, tty.isatty(1))),
+		stderr: translateLevel(supportsColor(true, tty.isatty(2)))
+	};
+	return supportsColor_1;
+}
+
+/**
+ * Module dependencies.
+ */
+
+var hasRequiredNode$1;
+
+function requireNode$1 () {
+	if (hasRequiredNode$1) return node$1.exports;
+	hasRequiredNode$1 = 1;
+	(function (module, exports) {
+		const tty = require$$0$b;
+		const util = require$$0$2;
+
+		/**
+		 * This is the Node.js implementation of `debug()`.
+		 */
+
+		exports.init = init;
+		exports.log = log;
+		exports.formatArgs = formatArgs;
+		exports.save = save;
+		exports.load = load;
+		exports.useColors = useColors;
+		exports.destroy = util.deprecate(
+			() => {},
+			'Instance method `debug.destroy()` is deprecated and no longer does anything. It will be removed in the next major version of `debug`.'
+		);
+
+		/**
+		 * Colors.
+		 */
+
+		exports.colors = [6, 2, 3, 4, 5, 1];
+
+		try {
+			// Optional dependency (as in, doesn't need to be installed, NOT like optionalDependencies in package.json)
+			// eslint-disable-next-line import/no-extraneous-dependencies
+			const supportsColor = requireSupportsColor();
+
+			if (supportsColor && (supportsColor.stderr || supportsColor).level >= 2) {
+				exports.colors = [
+					20,
+					21,
+					26,
+					27,
+					32,
+					33,
+					38,
+					39,
+					40,
+					41,
+					42,
+					43,
+					44,
+					45,
+					56,
+					57,
+					62,
+					63,
+					68,
+					69,
+					74,
+					75,
+					76,
+					77,
+					78,
+					79,
+					80,
+					81,
+					92,
+					93,
+					98,
+					99,
+					112,
+					113,
+					128,
+					129,
+					134,
+					135,
+					148,
+					149,
+					160,
+					161,
+					162,
+					163,
+					164,
+					165,
+					166,
+					167,
+					168,
+					169,
+					170,
+					171,
+					172,
+					173,
+					178,
+					179,
+					184,
+					185,
+					196,
+					197,
+					198,
+					199,
+					200,
+					201,
+					202,
+					203,
+					204,
+					205,
+					206,
+					207,
+					208,
+					209,
+					214,
+					215,
+					220,
+					221
+				];
+			}
+		} catch (error) {
+			// Swallow - we only care if `supports-color` is available; it doesn't have to be.
+		}
+
+		/**
+		 * Build up the default `inspectOpts` object from the environment variables.
+		 *
+		 *   $ DEBUG_COLORS=no DEBUG_DEPTH=10 DEBUG_SHOW_HIDDEN=enabled node script.js
+		 */
+
+		exports.inspectOpts = Object.keys(process.env).filter(key => {
+			return /^debug_/i.test(key);
+		}).reduce((obj, key) => {
+			// Camel-case
+			const prop = key
+				.substring(6)
+				.toLowerCase()
+				.replace(/_([a-z])/g, (_, k) => {
+					return k.toUpperCase();
+				});
+
+			// Coerce string value into JS value
+			let val = process.env[key];
+			if (/^(yes|on|true|enabled)$/i.test(val)) {
+				val = true;
+			} else if (/^(no|off|false|disabled)$/i.test(val)) {
+				val = false;
+			} else if (val === 'null') {
+				val = null;
+			} else {
+				val = Number(val);
+			}
+
+			obj[prop] = val;
+			return obj;
+		}, {});
+
+		/**
+		 * Is stdout a TTY? Colored output is enabled when `true`.
+		 */
+
+		function useColors() {
+			return 'colors' in exports.inspectOpts ?
+				Boolean(exports.inspectOpts.colors) :
+				tty.isatty(process.stderr.fd);
+		}
+
+		/**
+		 * Adds ANSI color escape codes if enabled.
+		 *
+		 * @api public
+		 */
+
+		function formatArgs(args) {
+			const {namespace: name, useColors} = this;
+
+			if (useColors) {
+				const c = this.color;
+				const colorCode = '\u001B[3' + (c < 8 ? c : '8;5;' + c);
+				const prefix = `  ${colorCode};1m${name} \u001B[0m`;
+
+				args[0] = prefix + args[0].split('\n').join('\n' + prefix);
+				args.push(colorCode + 'm+' + module.exports.humanize(this.diff) + '\u001B[0m');
+			} else {
+				args[0] = getDate() + name + ' ' + args[0];
+			}
+		}
+
+		function getDate() {
+			if (exports.inspectOpts.hideDate) {
+				return '';
+			}
+			return new Date().toISOString() + ' ';
+		}
+
+		/**
+		 * Invokes `util.format()` with the specified arguments and writes to stderr.
+		 */
+
+		function log(...args) {
+			return process.stderr.write(util.format(...args) + '\n');
+		}
+
+		/**
+		 * Save `namespaces`.
+		 *
+		 * @param {String} namespaces
+		 * @api private
+		 */
+		function save(namespaces) {
+			if (namespaces) {
+				process.env.DEBUG = namespaces;
+			} else {
+				// If you set a process.env field to null or undefined, it gets cast to the
+				// string 'null' or 'undefined'. Just delete instead.
+				delete process.env.DEBUG;
+			}
+		}
+
+		/**
+		 * Load `namespaces`.
+		 *
+		 * @return {String} returns the previously persisted debug modes
+		 * @api private
+		 */
+
+		function load() {
+			return process.env.DEBUG;
+		}
+
+		/**
+		 * Init logic for `debug` instances.
+		 *
+		 * Create a new `inspectOpts` object in case `useColors` is set
+		 * differently for a particular `debug` instance.
+		 */
+
+		function init(debug) {
+			debug.inspectOpts = {};
+
+			const keys = Object.keys(exports.inspectOpts);
+			for (let i = 0; i < keys.length; i++) {
+				debug.inspectOpts[keys[i]] = exports.inspectOpts[keys[i]];
+			}
+		}
+
+		module.exports = requireCommon$1()(exports);
+
+		const {formatters} = module.exports;
+
+		/**
+		 * Map %o to `util.inspect()`, all on a single line.
+		 */
+
+		formatters.o = function (v) {
+			this.inspectOpts.colors = this.useColors;
+			return util.inspect(v, this.inspectOpts)
+				.split('\n')
+				.map(str => str.trim())
+				.join(' ');
+		};
+
+		/**
+		 * Map %O to `util.inspect()`, allowing multiple lines if needed.
+		 */
+
+		formatters.O = function (v) {
+			this.inspectOpts.colors = this.useColors;
+			return util.inspect(v, this.inspectOpts);
+		}; 
+	} (node$1, node$1.exports));
+	return node$1.exports;
 }
 
 /**
@@ -41449,7 +41608,7 @@ function requireRef () {
 
 var src = {exports: {}};
 
-var node = {exports: {}};
+var browser = {exports: {}};
 
 var common;
 var hasRequiredCommon;
@@ -41707,193 +41866,6 @@ function requireCommon () {
 	return common;
 }
 
-var hasRequiredNode;
-
-function requireNode () {
-	if (hasRequiredNode) return node.exports;
-	hasRequiredNode = 1;
-	(function (module, exports) {
-
-		/**
-		 * Module dependencies.
-		 */
-		var tty = require$$0$b;
-
-		var util = require$$0$2;
-		/**
-		 * This is the Node.js implementation of `debug()`.
-		 */
-
-
-		exports.init = init;
-		exports.log = log;
-		exports.formatArgs = formatArgs;
-		exports.save = save;
-		exports.load = load;
-		exports.useColors = useColors;
-		/**
-		 * Colors.
-		 */
-
-		exports.colors = [6, 2, 3, 4, 5, 1];
-
-		try {
-		  // Optional dependency (as in, doesn't need to be installed, NOT like optionalDependencies in package.json)
-		  // eslint-disable-next-line import/no-extraneous-dependencies
-		  var supportsColor = require('supports-color');
-
-		  if (supportsColor && (supportsColor.stderr || supportsColor).level >= 2) {
-		    exports.colors = [20, 21, 26, 27, 32, 33, 38, 39, 40, 41, 42, 43, 44, 45, 56, 57, 62, 63, 68, 69, 74, 75, 76, 77, 78, 79, 80, 81, 92, 93, 98, 99, 112, 113, 128, 129, 134, 135, 148, 149, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 178, 179, 184, 185, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 214, 215, 220, 221];
-		  }
-		} catch (error) {} // Swallow - we only care if `supports-color` is available; it doesn't have to be.
-
-		/**
-		 * Build up the default `inspectOpts` object from the environment variables.
-		 *
-		 *   $ DEBUG_COLORS=no DEBUG_DEPTH=10 DEBUG_SHOW_HIDDEN=enabled node script.js
-		 */
-
-
-		exports.inspectOpts = Object.keys(process.env).filter(function (key) {
-		  return /^debug_/i.test(key);
-		}).reduce(function (obj, key) {
-		  // Camel-case
-		  var prop = key.substring(6).toLowerCase().replace(/_([a-z])/g, function (_, k) {
-		    return k.toUpperCase();
-		  }); // Coerce string value into JS value
-
-		  var val = process.env[key];
-
-		  if (/^(yes|on|true|enabled)$/i.test(val)) {
-		    val = true;
-		  } else if (/^(no|off|false|disabled)$/i.test(val)) {
-		    val = false;
-		  } else if (val === 'null') {
-		    val = null;
-		  } else {
-		    val = Number(val);
-		  }
-
-		  obj[prop] = val;
-		  return obj;
-		}, {});
-		/**
-		 * Is stdout a TTY? Colored output is enabled when `true`.
-		 */
-
-		function useColors() {
-		  return 'colors' in exports.inspectOpts ? Boolean(exports.inspectOpts.colors) : tty.isatty(process.stderr.fd);
-		}
-		/**
-		 * Adds ANSI color escape codes if enabled.
-		 *
-		 * @api public
-		 */
-
-
-		function formatArgs(args) {
-		  var name = this.namespace,
-		      useColors = this.useColors;
-
-		  if (useColors) {
-		    var c = this.color;
-		    var colorCode = "\x1B[3" + (c < 8 ? c : '8;5;' + c);
-		    var prefix = "  ".concat(colorCode, ";1m").concat(name, " \x1B[0m");
-		    args[0] = prefix + args[0].split('\n').join('\n' + prefix);
-		    args.push(colorCode + 'm+' + module.exports.humanize(this.diff) + "\x1B[0m");
-		  } else {
-		    args[0] = getDate() + name + ' ' + args[0];
-		  }
-		}
-
-		function getDate() {
-		  if (exports.inspectOpts.hideDate) {
-		    return '';
-		  }
-
-		  return new Date().toISOString() + ' ';
-		}
-		/**
-		 * Invokes `util.format()` with the specified arguments and writes to stderr.
-		 */
-
-
-		function log() {
-		  return process.stderr.write(util.format.apply(util, arguments) + '\n');
-		}
-		/**
-		 * Save `namespaces`.
-		 *
-		 * @param {String} namespaces
-		 * @api private
-		 */
-
-
-		function save(namespaces) {
-		  if (namespaces) {
-		    process.env.DEBUG = namespaces;
-		  } else {
-		    // If you set a process.env field to null or undefined, it gets cast to the
-		    // string 'null' or 'undefined'. Just delete instead.
-		    delete process.env.DEBUG;
-		  }
-		}
-		/**
-		 * Load `namespaces`.
-		 *
-		 * @return {String} returns the previously persisted debug modes
-		 * @api private
-		 */
-
-
-		function load() {
-		  return process.env.DEBUG;
-		}
-		/**
-		 * Init logic for `debug` instances.
-		 *
-		 * Create a new `inspectOpts` object in case `useColors` is set
-		 * differently for a particular `debug` instance.
-		 */
-
-
-		function init(debug) {
-		  debug.inspectOpts = {};
-		  var keys = Object.keys(exports.inspectOpts);
-
-		  for (var i = 0; i < keys.length; i++) {
-		    debug.inspectOpts[keys[i]] = exports.inspectOpts[keys[i]];
-		  }
-		}
-
-		module.exports = requireCommon()(exports);
-		var formatters = module.exports.formatters;
-		/**
-		 * Map %o to `util.inspect()`, all on a single line.
-		 */
-
-		formatters.o = function (v) {
-		  this.inspectOpts.colors = this.useColors;
-		  return util.inspect(v, this.inspectOpts)
-		    .split('\n')
-		    .map(function (str) { return str.trim(); })
-		    .join(' ');
-		};
-		/**
-		 * Map %O to `util.inspect()`, allowing multiple lines if needed.
-		 */
-
-
-		formatters.O = function (v) {
-		  this.inspectOpts.colors = this.useColors;
-		  return util.inspect(v, this.inspectOpts);
-		}; 
-	} (node, node.exports));
-	return node.exports;
-}
-
-var browser = {exports: {}};
-
 var hasRequiredBrowser;
 
 function requireBrowser () {
@@ -42080,6 +42052,193 @@ function requireBrowser () {
 		}; 
 	} (browser, browser.exports));
 	return browser.exports;
+}
+
+var node = {exports: {}};
+
+var hasRequiredNode;
+
+function requireNode () {
+	if (hasRequiredNode) return node.exports;
+	hasRequiredNode = 1;
+	(function (module, exports) {
+
+		/**
+		 * Module dependencies.
+		 */
+		var tty = require$$0$b;
+
+		var util = require$$0$2;
+		/**
+		 * This is the Node.js implementation of `debug()`.
+		 */
+
+
+		exports.init = init;
+		exports.log = log;
+		exports.formatArgs = formatArgs;
+		exports.save = save;
+		exports.load = load;
+		exports.useColors = useColors;
+		/**
+		 * Colors.
+		 */
+
+		exports.colors = [6, 2, 3, 4, 5, 1];
+
+		try {
+		  // Optional dependency (as in, doesn't need to be installed, NOT like optionalDependencies in package.json)
+		  // eslint-disable-next-line import/no-extraneous-dependencies
+		  var supportsColor = requireSupportsColor();
+
+		  if (supportsColor && (supportsColor.stderr || supportsColor).level >= 2) {
+		    exports.colors = [20, 21, 26, 27, 32, 33, 38, 39, 40, 41, 42, 43, 44, 45, 56, 57, 62, 63, 68, 69, 74, 75, 76, 77, 78, 79, 80, 81, 92, 93, 98, 99, 112, 113, 128, 129, 134, 135, 148, 149, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 178, 179, 184, 185, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 214, 215, 220, 221];
+		  }
+		} catch (error) {} // Swallow - we only care if `supports-color` is available; it doesn't have to be.
+
+		/**
+		 * Build up the default `inspectOpts` object from the environment variables.
+		 *
+		 *   $ DEBUG_COLORS=no DEBUG_DEPTH=10 DEBUG_SHOW_HIDDEN=enabled node script.js
+		 */
+
+
+		exports.inspectOpts = Object.keys(process.env).filter(function (key) {
+		  return /^debug_/i.test(key);
+		}).reduce(function (obj, key) {
+		  // Camel-case
+		  var prop = key.substring(6).toLowerCase().replace(/_([a-z])/g, function (_, k) {
+		    return k.toUpperCase();
+		  }); // Coerce string value into JS value
+
+		  var val = process.env[key];
+
+		  if (/^(yes|on|true|enabled)$/i.test(val)) {
+		    val = true;
+		  } else if (/^(no|off|false|disabled)$/i.test(val)) {
+		    val = false;
+		  } else if (val === 'null') {
+		    val = null;
+		  } else {
+		    val = Number(val);
+		  }
+
+		  obj[prop] = val;
+		  return obj;
+		}, {});
+		/**
+		 * Is stdout a TTY? Colored output is enabled when `true`.
+		 */
+
+		function useColors() {
+		  return 'colors' in exports.inspectOpts ? Boolean(exports.inspectOpts.colors) : tty.isatty(process.stderr.fd);
+		}
+		/**
+		 * Adds ANSI color escape codes if enabled.
+		 *
+		 * @api public
+		 */
+
+
+		function formatArgs(args) {
+		  var name = this.namespace,
+		      useColors = this.useColors;
+
+		  if (useColors) {
+		    var c = this.color;
+		    var colorCode = "\x1B[3" + (c < 8 ? c : '8;5;' + c);
+		    var prefix = "  ".concat(colorCode, ";1m").concat(name, " \x1B[0m");
+		    args[0] = prefix + args[0].split('\n').join('\n' + prefix);
+		    args.push(colorCode + 'm+' + module.exports.humanize(this.diff) + "\x1B[0m");
+		  } else {
+		    args[0] = getDate() + name + ' ' + args[0];
+		  }
+		}
+
+		function getDate() {
+		  if (exports.inspectOpts.hideDate) {
+		    return '';
+		  }
+
+		  return new Date().toISOString() + ' ';
+		}
+		/**
+		 * Invokes `util.format()` with the specified arguments and writes to stderr.
+		 */
+
+
+		function log() {
+		  return process.stderr.write(util.format.apply(util, arguments) + '\n');
+		}
+		/**
+		 * Save `namespaces`.
+		 *
+		 * @param {String} namespaces
+		 * @api private
+		 */
+
+
+		function save(namespaces) {
+		  if (namespaces) {
+		    process.env.DEBUG = namespaces;
+		  } else {
+		    // If you set a process.env field to null or undefined, it gets cast to the
+		    // string 'null' or 'undefined'. Just delete instead.
+		    delete process.env.DEBUG;
+		  }
+		}
+		/**
+		 * Load `namespaces`.
+		 *
+		 * @return {String} returns the previously persisted debug modes
+		 * @api private
+		 */
+
+
+		function load() {
+		  return process.env.DEBUG;
+		}
+		/**
+		 * Init logic for `debug` instances.
+		 *
+		 * Create a new `inspectOpts` object in case `useColors` is set
+		 * differently for a particular `debug` instance.
+		 */
+
+
+		function init(debug) {
+		  debug.inspectOpts = {};
+		  var keys = Object.keys(exports.inspectOpts);
+
+		  for (var i = 0; i < keys.length; i++) {
+		    debug.inspectOpts[keys[i]] = exports.inspectOpts[keys[i]];
+		  }
+		}
+
+		module.exports = requireCommon()(exports);
+		var formatters = module.exports.formatters;
+		/**
+		 * Map %o to `util.inspect()`, all on a single line.
+		 */
+
+		formatters.o = function (v) {
+		  this.inspectOpts.colors = this.useColors;
+		  return util.inspect(v, this.inspectOpts)
+		    .split('\n')
+		    .map(function (str) { return str.trim(); })
+		    .join(' ');
+		};
+		/**
+		 * Map %O to `util.inspect()`, allowing multiple lines if needed.
+		 */
+
+
+		formatters.O = function (v) {
+		  this.inspectOpts.colors = this.useColors;
+		  return util.inspect(v, this.inspectOpts);
+		}; 
+	} (node, node.exports));
+	return node.exports;
 }
 
 var hasRequiredSrc;
