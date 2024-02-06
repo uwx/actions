@@ -5,7 +5,7 @@ import 'source-map-support/register';
 import { getBooleanInput, getInput, setOutput, group, setFailed, endGroup, startGroup, notice, info, error, exportVariable } from '@actions/core';
 import { rmRF, which, mv } from '@actions/io';
 import { exec as _exec, exec } from '@actions/exec';
-import { create as createArtifact } from '@actions/artifact';
+import artifactClient, { ArtifactNotFoundError } from '@actions/artifact';
 import { create as createGlob } from '@actions/glob';
 import { join, relative, resolve } from 'path/win32';
 import { existsSync } from 'fs';
@@ -36,6 +36,8 @@ const tarballGlob = resolve(cwd, getInput('tarball-pattern', { required: false }
 
 // archiving
 const tarballArtifactName = getInput('tarball-artifact-name', { required: false });
+const tarballInputArtifactName = getInput('tarball-input-artifact-name', { required: false }) || tarballArtifactName;
+const tarballOutputArtifactName = getInput('tarball-output-artifact-name', { required: false }) || tarballArtifactName;
 const tarballFileName = getInput('tarball-file-name', { required: false });
 const loadTarballArtifactIfExists = getBooleanInput('load-tarball-artifact-if-exists', { required: false });
 const saveTarballArtifact = getBooleanInput('save-tarball-artifact', { required: false });
@@ -50,9 +52,6 @@ const ignoreExitCodes = getInput("ignore-exit-codes", { required: false }).split
 // timeout
 const timeoutKey = getInput('key', { required: false });
 const timeout = Number(getInput('timeout', { required: false }));
-
-//
-const artifactClient = createArtifact();
 
 function withLogGroup(message: string): Disposable {
     startGroup(message);
@@ -72,10 +71,13 @@ async function runScript() {
         if (loadTarballArtifactIfExists) {
             ok = false;
             try {
-                await artifactClient.downloadArtifact(tarballArtifactName, tarballRoot);
+                const arti = await artifactClient.getArtifact(tarballInputArtifactName);
+                await artifactClient.downloadArtifact(arti.artifact.id, {
+                    path: tarballRoot
+                });
                 ok = true;
             } catch (err) {
-                if (err && typeof err === 'object' && 'message' in err && (err.message == 'Unable to find any artifacts for the associated workflow' || err.message == `Unable to find an artifact with the name: ${tarballArtifactName}`)) {
+                if (err instanceof ArtifactNotFoundError) {
                     ok = false;
                 } else {
                     throw err;
@@ -278,10 +280,58 @@ async function runScript() {
             }
 
             {
+                using _ = withLogGroup("Delete old step artifact")
+
+                async function artifactExists(name: string) {
+                    try {
+                        await artifactClient.getArtifact(name);
+                        return true;
+                    } catch (err) {
+                        if (err instanceof ArtifactNotFoundError) {
+                            return false;
+                        }
+                        try {
+                            await artifactClient.getArtifact(name);
+                            return true;
+                        } catch (err) {
+                            if (err instanceof ArtifactNotFoundError) {
+                                return false;
+                            }
+                            try {
+                                await artifactClient.getArtifact(name);
+                                return true;
+                            } catch (err) {
+                                if (err instanceof ArtifactNotFoundError) {
+                                    return false;
+                                }
+                                try {
+                                    await artifactClient.getArtifact(name);
+                                    return true;
+                                } catch (err) {
+                                    if (err instanceof ArtifactNotFoundError) {
+                                        return false;
+                                    }
+                                    throw err;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (await artifactExists(tarballInputArtifactName)) {
+                    repeatOnFail('Delete old step artifact', async () => {
+                        await artifactClient.deleteArtifact(tarballInputArtifactName);
+                    }, 5);
+                } else {
+                    console.log(`No artifact called ${tarballInputArtifactName} to delete :D`)
+                }
+            }
+
+            {
                 using _ = withLogGroup("Upload artifact")
 
                 repeatOnFail('Upload artifact', async () => {
-                    await artifactClient.uploadArtifact(tarballArtifactName, [resolve(tarballRoot, tarballFileName)], tarballRoot, {
+                    await artifactClient.uploadArtifact(tarballOutputArtifactName, [resolve(tarballRoot, tarballFileName)], tarballRoot, {
                         retentionDays: 3
                     });
                 }, 5);

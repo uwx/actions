@@ -1,9 +1,15 @@
-name: 'Stage'
-description: 'Stage build'
+name: Stage
+description: Stage build
 inputs:
   tarball-artifact-name:
     description: Name of the artifact used to store stage progress
     default: build-artifact
+    required: false
+  tarball-input-artifact-name:
+    description: Name of the artifact containing stage progress that will be uploaded
+    required: false
+  tarball-output-artifact-name:
+    description: Name of the artifact in which stage progress will be uploaded
     required: false
   tarball-file-name:
     description: File name (on disk) of the artifact used to store stage progress
