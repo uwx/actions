@@ -300,9 +300,9 @@ export const main = async ({
 
   // Calculate paths that use temp diractory
 
-  const TMP_PATH = await fs.mkdtemp(
-    path.join(env.TEMP_DIR ?? tmpdir(), 'git-publish-subdir-action-')
-  );
+  const d = path.join(env.TEMP_DIR ?? tmpdir(), 'git-publish-subdir-action-');
+  await fs.mkdir(path.dirname(d), { recursive: true });
+  const TMP_PATH = await fs.mkdtemp(d);
   const REPO_TEMP = path.join(TMP_PATH, 'repo');
   const SSH_AUTH_SOCK = path.join(TMP_PATH, 'ssh_agent.sock');
 
