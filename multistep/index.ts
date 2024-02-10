@@ -15,11 +15,12 @@ import { ExecPublicState, ToolRunner, argStringToArray } from './execx.ts';
 
 import { generateCtrlBreakAsync } from 'generate-ctrl-c-event';
 import { inspect } from 'util';
+import stream from 'stream';
 
 const delayedSymbol = Symbol('delayed');
 
-process.on('SIGINT', function () {});
-process.on('SIGBREAK', function () {});
+process.on('SIGINT', function () { });
+process.on('SIGBREAK', function () { });
 
 //
 
@@ -30,7 +31,7 @@ const beforeRun = getInput('before', { required: false });
 const afterRun = getInput('after', { required: false });
 
 // paths
-const cwd = getInput('cwd', { required: false}) || resolve('.');
+const cwd = getInput('cwd', { required: false }) || resolve('.');
 const tarballRoot = resolve(cwd, getInput('tarball-root', { required: true }))
 const tarballGlob = resolve(cwd, getInput('tarball-pattern', { required: false }) || tarballRoot);
 
@@ -85,12 +86,41 @@ async function runScript() {
             }
 
             if (ok && existsSync(tarballRoot)) {
-                const exitCode = await exec('7z', ['x', '-y', resolve(tarballRoot, tarballFileName)], { cwd: tarballRoot, ignoreReturnCode: true });                if (exitCode == 2) throw new Error('7z: Fatal error');
-                if (exitCode == 7) throw new Error('7z: Command line error');
-                if (exitCode == 8) throw new Error('7z: Not enough memory for operation');
-                if (exitCode == 255) throw new Error('7z: User stopped the process');
+                for (let i = 0; i < 5; ++i) {
+                    try {
+                        let repeat = false;
 
-                await unlink(resolve(tarballRoot, tarballFileName));
+                        class EchoStream extends stream.Writable {
+                            _write(chunk: any, encoding: BufferEncoding, callback: (error?: Error | null) => void) {
+                                if (chunk instanceof Buffer) {
+                                    chunk.toString(encoding);
+                                }
+                                if ((chunk as string).includes('The process cannot access the file because it is being used by another process')) {
+                                    repeat = true;
+                                }
+                                process.stdout._write(chunk, encoding, callback);
+                            }
+                        }
+
+                        const exitCode = await exec('7z', ['x', '-y', resolve(tarballRoot, tarballFileName)], { cwd: tarballRoot, ignoreReturnCode: true });
+                        if (exitCode == 2) {
+                            if (repeat) continue;
+
+                            throw new Error('7z: Fatal error');
+                        }
+                        if (exitCode == 7) throw new Error('7z: Command line error');
+                        if (exitCode == 8) throw new Error('7z: Not enough memory for operation');
+                        if (exitCode == 255) throw new Error('7z: User stopped the process');
+
+                        await unlink(resolve(tarballRoot, tarballFileName));
+
+                        break;
+                    } catch (e) {
+                        console.error(`Tarball extraction failed: ${e}. Attempt ${i + 1} of ${5}`);
+                        // Wait 10 seconds between the attempts
+                        await delay(10000);
+                    }
+                }
             }
         }
     }
@@ -166,7 +196,7 @@ async function runScript() {
     }
 
     {
-        let result = await runWithTimeout(run, {cwd: cwd, failOnStdErr: failOnStdErr, shell: shell, ignoreExitCodes: ignoreExitCodes, timeout: calcTimeout()});
+        let result = await runWithTimeout(run, { cwd: cwd, failOnStdErr: failOnStdErr, shell: shell, ignoreExitCodes: ignoreExitCodes, timeout: calcTimeout() });
 
         console.log('Finished run command:', result);
 
@@ -191,7 +221,7 @@ async function runScript() {
                 setOutput('outcome', ExecutionResult.Success);
 
                 if (afterRun) {
-                    result = await runWithTimeout(afterRun, { cwd: cwd, failOnStdErr: failOnStdErr, shell: shell, ignoreExitCodes: ignoreExitCodes});
+                    result = await runWithTimeout(afterRun, { cwd: cwd, failOnStdErr: failOnStdErr, shell: shell, ignoreExitCodes: ignoreExitCodes });
 
                     console.log('Finished after-run:', result);
 
@@ -472,7 +502,7 @@ async function runScript() {
             if (result.timedOut) {
                 return {
                     outcome: ExecutionResult.Timeout,
-                    failCase:`${options.shell} command "${command}" timed out`,
+                    failCase: `${options.shell} command "${command}" timed out`,
                 }
             }
 
@@ -537,7 +567,7 @@ async function runScript() {
         // if process is still running
         const maxRetries = 3;
         for (let i = 0; i < maxRetries; i++) { // attempt to send ctrl+break
-            console.log(`Sending CTRL+BREAK to process ${inspect(proc)} attempt ${i+1} of ${maxRetries}`);
+            console.log(`Sending CTRL+BREAK to process ${inspect(proc)} attempt ${i + 1} of ${maxRetries}`);
             await generateCtrlBreakAsync(proc.pid);
             await delay(3000);
 
