@@ -40,6 +40,8 @@ const tarballArtifactName = getInput('tarball-artifact-name', { required: false 
 const tarballInputArtifactName = getInput('tarball-input-artifact-name', { required: false }) || tarballArtifactName;
 const tarballOutputArtifactName = getInput('tarball-output-artifact-name', { required: false }) || tarballArtifactName;
 const tarballFileName = getInput('tarball-file-name', { required: false });
+const tarballInputFileName = getInput('tarball-input-file-name', { required: false }) || tarballFileName;
+const tarballOutputFileName = getInput('tarball-output-file-name', { required: false }) || tarballFileName;
 const loadTarballArtifactIfExists = getBooleanInput('load-tarball-artifact-if-exists', { required: false });
 const saveTarballArtifact = getBooleanInput('save-tarball-artifact', { required: false });
 
@@ -102,7 +104,7 @@ async function runScript() {
                             }
                         }
 
-                        const exitCode = await exec('7z', ['x', '-y', resolve(tarballRoot, tarballFileName)], { cwd: tarballRoot, ignoreReturnCode: true });
+                        const exitCode = await exec('7z', ['x', '-y', resolve(tarballRoot, tarballInputFileName)], { cwd: tarballRoot, ignoreReturnCode: true });
                         if (exitCode == 2) {
                             if (repeat) continue;
 
@@ -112,7 +114,7 @@ async function runScript() {
                         if (exitCode == 8) throw new Error('7z: Not enough memory for operation');
                         if (exitCode == 255) throw new Error('7z: User stopped the process');
 
-                        await unlink(resolve(tarballRoot, tarballFileName));
+                        await unlink(resolve(tarballRoot, tarballInputFileName));
 
                         break;
                     } catch (e) {
@@ -299,7 +301,7 @@ async function runScript() {
                 let manifestFilename = "manifest.txt"
                 await writeFile(resolve(tarballRoot, manifestFilename), globbed.map(e => relative(tarballRoot, e)).join('\n'));
 
-                let tarFileName = resolve(tarballRoot, tarballFileName);
+                let tarFileName = resolve(tarballRoot, tarballOutputFileName);
                 const exitCode = await exec('7z', ['a', tarFileName, '-m0=zstd', '-mx2', `@${manifestFilename}`, `-x!${tarFileName}`, `-x!${manifestFilename}`], { cwd: tarballRoot, ignoreReturnCode: true });
                 if (exitCode == 2) throw new Error('7z: Fatal error');
                 if (exitCode == 7) throw new Error('7z: Command line error');
@@ -361,7 +363,7 @@ async function runScript() {
                 using _ = withLogGroup("Upload artifact")
 
                 repeatOnFail('Upload artifact', async () => {
-                    await artifactClient.uploadArtifact(tarballOutputArtifactName, [resolve(tarballRoot, tarballFileName)], tarballRoot, {
+                    await artifactClient.uploadArtifact(tarballOutputArtifactName, [resolve(tarballRoot, tarballOutputFileName)], tarballRoot, {
                         retentionDays: 3
                     });
                 }, 5);
